@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Database File ###
+src/main/resources/DatabaseContextFile.xml

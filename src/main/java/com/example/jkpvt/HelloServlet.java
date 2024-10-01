@@ -16,10 +16,13 @@ public class HelloServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
 
+        request.setAttribute("name", "John");
+
         // Hello
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>" + message + "</h1>");
+        out.println("<h2>" + request.getAttribute("name") + "</h2>");
         out.println("</body></html>");
     }
 
