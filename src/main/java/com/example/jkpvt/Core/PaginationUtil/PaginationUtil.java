@@ -25,9 +25,6 @@ public class PaginationUtil {
             if(pageOffset < 0)pageOffset = 0;
             else pageOffset = (pageOffset) * pageSize;
 
-            // Enable caching for the query (optional)
-             query.setHint("org.hibernate.cacheable", true);
-
             // Apply pagination
             query.setFirstResult(pageOffset);  // Set the offset
             query.setMaxResults(pageSize);     // Set the limit

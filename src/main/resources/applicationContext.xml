@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <!-- Enable autowire -->
     <context:annotation-config/>
@@ -14,6 +13,10 @@
     <!-- Enable JPA repositories -->
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
+
+    <!-- Enable caching -->
+    <cache:annotation-driven />
+    <!-- /Enable caching -->
 
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
@@ -31,6 +34,7 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="format_sql">false</prop>
+                <prop key="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform</prop>
 
                 <!-- EhCache configuration -->
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
@@ -69,5 +73,14 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <!-- CacheManager bean definition -->
+    <bean id="cacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
+        <constructor-arg ref="jCacheManager"/>
+    </bean>
+
+    <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
+        <property name="cacheManagerUri" value="classpath:XMLConfiguration/ehCache.xml"/>
+    </bean>
 
 </beans>
