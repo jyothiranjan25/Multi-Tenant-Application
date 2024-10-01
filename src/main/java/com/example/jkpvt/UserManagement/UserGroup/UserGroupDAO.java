@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface UserGroupDAO {
     List<UserGroupDTO> get(UserGroupDTO userGroupDTO);
+    boolean filterUserGroupDTO(UserGroupDTO dto, UserGroupDTO filter);
 }

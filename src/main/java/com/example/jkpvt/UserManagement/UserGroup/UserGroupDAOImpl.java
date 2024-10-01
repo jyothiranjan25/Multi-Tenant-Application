@@ -65,4 +65,24 @@ public class UserGroupDAOImpl implements UserGroupDAO {
         }
         return predicates;
     }
+
+    public boolean filterUserGroupDTO(UserGroupDTO dto, UserGroupDTO filter) {
+        boolean matches = true;
+        if (filter.getId() != null) {
+            matches = matches && Objects.equals(dto.getId(), filter.getId());
+        }
+        if (filter.getGroupName() != null) {
+            matches = matches && dto.getGroupName().equalsIgnoreCase(filter.getGroupName());
+        }
+        if (filter.getGroupDescription() != null) {
+            matches = matches && dto.getGroupDescription().equalsIgnoreCase(filter.getGroupDescription());
+        }
+        if (filter.getQualifiedName() != null) {
+            matches = matches && dto.getQualifiedName().equalsIgnoreCase(filter.getQualifiedName());
+        }
+        if (filter.getParentId() != null) {
+            matches = matches && Objects.equals(dto.getParentId(), filter.getParentId());
+        }
+        return matches;
+    }
 }
