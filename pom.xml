@@ -271,6 +271,16 @@
         </dependency>
         <!-- /Redis dependencies -->
 
+        <!-- Lombok dependencies -->
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- /Lombok dependencies -->
+
         <!-- MapStruct dependencies -->
         <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
         <dependency>
@@ -287,16 +297,6 @@
             <scope>provided</scope>
         </dependency>
         <!-- /MapStruct dependencies -->
-
-        <!-- Lombok dependencies -->
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- /Lombok dependencies -->
 
         <!-- EhCache dependencies -->
         <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
@@ -408,6 +408,13 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapStruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

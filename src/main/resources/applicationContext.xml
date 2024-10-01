@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <!-- Enable autowire -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.example.jkpvt" />
+    <!-- /Enable autowire -->
+
+    <!-- Enable JPA repositories -->
+    <jpa:repositories base-package="com.example.jkpvt"/>
+    <!-- /Enable JPA repositories -->
+
+
 
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
@@ -36,5 +49,14 @@
 
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Register the GsonHttpMessageConverter -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+                <property name="gson" ref="gson"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
 </beans>
