@@ -16,6 +16,7 @@ import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 @Configuration
 @EnableWebMvc
 public class GsonConfig implements WebMvcConfigurer {
+
     @Bean
     public Gson gson() {
         // Create a GsonBuilder to configure Gson
