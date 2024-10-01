@@ -3,7 +3,6 @@ package com.example.jkpvt.UserManagement.AppUserRoles;
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.AppUser.AppUser;
 import com.example.jkpvt.UserManagement.AppUser.AppUserService;
-import com.example.jkpvt.UserManagement.Modules.ModulesListener;
 import com.example.jkpvt.UserManagement.Roles.Roles;
 import com.example.jkpvt.UserManagement.Roles.RolesService;
 import jakarta.persistence.PrePersist;
@@ -12,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import javax.management.relation.Role;
 import java.util.List;
 
 @Component
