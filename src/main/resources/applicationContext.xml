@@ -15,8 +15,6 @@
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
 
-
-
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
 
@@ -33,6 +31,19 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="format_sql">false</prop>
+
+                <!-- EhCache configuration -->
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</prop>
+                <prop key="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</prop>
+                <prop key="hibernate.javax.cache.uri">classpath:XMLConfiguration/ehCache.xml</prop>
+                <prop key="hibernate.javax.cache.missing_cache_strategy">create</prop>
+
+                <!-- Envers configuration -->
+                <prop key="org.hibernate.envers.audit_table_suffix">_AUD</prop>
+                <prop key="org.hibernate.envers.store_data_at_delete">true</prop>
             </props>
         </property>
     </bean>

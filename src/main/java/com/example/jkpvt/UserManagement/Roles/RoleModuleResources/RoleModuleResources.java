@@ -13,9 +13,9 @@ import org.hibernate.envers.Audited;
 @Setter
 @Entity
 @Table(name = "role_module_resources")
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-//@Audited
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Audited
 public class RoleModuleResources {
 
     @Id

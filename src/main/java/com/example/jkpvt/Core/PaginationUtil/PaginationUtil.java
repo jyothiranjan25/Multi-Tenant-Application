@@ -1,6 +1,5 @@
 package com.example.jkpvt.Core.PaginationUtil;
 
-import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import jakarta.persistence.TypedQuery;
 
 import java.lang.reflect.Field;
@@ -27,7 +26,7 @@ public class PaginationUtil {
             else pageOffset = (pageOffset) * pageSize;
 
             // Enable caching for the query (optional)
-            // query.setHint("org.hibernate.cacheable", true);
+             query.setHint("org.hibernate.cacheable", true);
 
             // Apply pagination
             query.setFirstResult(pageOffset);  // Set the offset

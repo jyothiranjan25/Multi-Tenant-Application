@@ -15,9 +15,9 @@ import java.util.Set;
 @Entity
 @Table(name = "user_group")
 @EntityListeners(UserGroupListener.class)
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-//@Audited
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Audited
 public class UserGroup {
 
     @Id

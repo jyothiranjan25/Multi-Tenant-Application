@@ -16,9 +16,9 @@ import java.util.Set;
 @Entity
 @Table(name = "resources")
 @EntityListeners(ResourcesListener.class)
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-//@Audited
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Audited
 public class Resources {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

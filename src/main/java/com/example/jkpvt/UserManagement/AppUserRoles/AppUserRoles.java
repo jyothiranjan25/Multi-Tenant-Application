@@ -13,9 +13,9 @@ import org.hibernate.envers.Audited;
 @Entity
 @Table(name = "app_user_roles")
 @EntityListeners(AppUserRolesListener.class)
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-//@Audited
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Audited
 public class AppUserRoles {
 
     @Id

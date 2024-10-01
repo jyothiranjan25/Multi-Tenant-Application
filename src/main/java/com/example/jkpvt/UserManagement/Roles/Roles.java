@@ -16,9 +16,9 @@ import java.util.Set;
 @Entity
 @Table(name = "roles")
 @EntityListeners(RolesListener.class)
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-//@Audited
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Audited
 public class Roles {
 
     @Id
