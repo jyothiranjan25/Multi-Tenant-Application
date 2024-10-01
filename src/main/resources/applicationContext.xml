@@ -34,6 +34,7 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="format_sql">false</prop>
+                <prop key="hibernate.transaction.jta.platform">org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform</prop>
 
                 <!-- EhCache configuration -->
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
@@ -72,5 +73,14 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <!-- CacheManager bean definition -->
+    <bean id="cacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
+        <constructor-arg ref="jCacheManager"/>
+    </bean>
+
+    <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
+        <property name="cacheManagerUri" value="classpath:XMLConfiguration/ehCache.xml"/>
+    </bean>
 
 </beans>
