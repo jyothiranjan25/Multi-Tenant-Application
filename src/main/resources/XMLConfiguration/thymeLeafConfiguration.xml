@@ -26,7 +26,6 @@
 
     <!-- React App static Files Configuration -->
     <mvc:resources mapping="/static/**" location="/myApp/build/static/" />
-    <mvc:resources mapping="/public/**" location="/myApp/public/"/>
 
     <!-- MVC view resolver -->
     <mvc:view-controller path="/" view-name="index"/>
