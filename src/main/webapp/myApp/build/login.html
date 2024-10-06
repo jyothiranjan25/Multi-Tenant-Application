@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script>
+        async function submitLoginForm(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            const formData = new URLSearchParams(new FormData(event.target));
+
+            try {
+                // Submit the form using fetch API
+                const response = await fetch('http://localhost:8080/JKPVT_war_exploded/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+                if (response.ok) {
+                    const data = await response.json(); // Assume the response is JSON
+                    console.log('Response:', data.user_details.redirectUrl);
+                    if (data.user_details.redirectUrl) {
+                        window.location.href = data.user_details.redirectUrl;
+                    } else {
+                        alert('Login successful, but no redirect URL found.');
+                    }
+                } else {
+                    alert('Login failed.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your login.');
+            }
+        }
+    </script>
+</head>
+<body>
+<h2>Login Page</h2>
+<form id="loginForm" onsubmit="submitLoginForm(event)">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="jyothiranjan@gmail.com" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" value="1234" required>
+    </div>
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>

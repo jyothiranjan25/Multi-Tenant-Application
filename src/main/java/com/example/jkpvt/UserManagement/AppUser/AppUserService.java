@@ -16,7 +16,7 @@ public class AppUserService {
     private final AppUserRepository repository;
     private final AppUserMapper mapper;
     private final AppUserDAO appUserDAO;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<AppUserDTO> get(AppUserDTO appUserDTO) {
@@ -26,11 +26,11 @@ public class AppUserService {
     @Transactional
     public AppUserDTO createAppUser(AppUserDTO appUserDTO) {
         try{
-//            if(appUserDTO.getPassword() != null){
-//                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-//            }else{
-//                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getUserName()));
-//            }
+            if(appUserDTO.getPassword() != null){
+                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+            }else{
+                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getUserName()));
+            }
             AppUser appUser = mapper.map(appUserDTO);
             repository.save(appUser);
             return mapper.map(appUser);
@@ -50,9 +50,9 @@ public class AppUserService {
             if(appUserDTO.getEmail() != null){
                 appUser.setEmail(appUserDTO.getEmail());
             }
-//            if(appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()){
-//                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-//            }
+            if(appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()){
+                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+            }
             if(appUserDTO.getIsAdmin() != null){
                 appUser.setIsAdmin(appUserDTO.getIsAdmin());
             }
