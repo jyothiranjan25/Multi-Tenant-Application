@@ -19,6 +19,9 @@ public class PaginationUtil {
         Integer pageOffset = getFieldValue(dto, "pageOffset");
         Integer pageSize = getFieldValue(dto, "pageSize");
 
+        // Get the total count of the query results
+        getTotalCount(query);
+
         // Apply pagination if both fields are provided
         if (pageOffset != null && pageSize != null) {
             // Adjust the pageOffset to be 0-based (since JPA uses 0-based index)
@@ -39,5 +42,10 @@ public class PaginationUtil {
         } catch (Exception e) {
            return null;
         }
+    }
+
+    private static <T> void getTotalCount(TypedQuery<T> query) {
+        // Get the total count of the query results
+        System.out.println("Total count: " + query.getResultList().size());
     }
 }
