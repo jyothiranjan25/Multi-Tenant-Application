@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.WebSecurity;
+package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.google.gson.Gson;
 import jakarta.servlet.ServletContext;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

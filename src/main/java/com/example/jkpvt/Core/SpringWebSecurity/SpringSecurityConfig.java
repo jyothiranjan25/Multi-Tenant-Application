@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.WebSecurity;
+package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.example.jkpvt.UserManagement.UserLogin.UserLoginService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.DelegatingSecurityContextRepository;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.security.SecureRandom;
-import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity

@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.WebSecurity;
+package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetails;
 import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsRepository;

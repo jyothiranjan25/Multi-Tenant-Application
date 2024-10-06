@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.WebSecurity;
+package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
