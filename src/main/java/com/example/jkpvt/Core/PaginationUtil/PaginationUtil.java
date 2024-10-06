@@ -46,7 +46,6 @@ public class PaginationUtil {
 
     private static <T> void getTotalCount(TypedQuery<T> query) {
         // Get the total count of the query results
-        query.getResultList();
         System.out.println("Total count: " + query.getResultList().size());
     }
 }
