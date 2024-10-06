@@ -47,6 +47,14 @@ public class SpringSecurityConfig {
                         .failureHandler(customLoginFailureHandler)
                         .permitAll()
                 )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
+                        .invalidSessionUrl("/login")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/login?expired")
+                )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessHandler(customLogoutSuccessHandler)
@@ -55,14 +63,6 @@ public class SpringSecurityConfig {
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
-                )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
-                        .invalidSessionUrl("/login?invalid")
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-                        .expiredUrl("/login?expired")
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults());

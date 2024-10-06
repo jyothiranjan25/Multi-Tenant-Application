@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomSessionListener extends HttpServlet implements HttpSessionListener {
+public class CustomSessionListener implements HttpSessionListener {
 
     private final UserLoginDetailsRepository userLoginDetailsRepository;
 

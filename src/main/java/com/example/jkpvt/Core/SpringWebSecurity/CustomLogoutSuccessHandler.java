@@ -17,24 +17,22 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class CustomLogoutSuccessHandler extends HttpServlet implements LogoutSuccessHandler {
+public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     private final UserLoginDetailsRepository loginDetailRepository;
     private final ServletContext servletContext;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            String sessionId = (String) session.getAttribute("sessionId1");
 
+        String sessionId = request.getRequestedSessionId();
+
+        if (sessionId != null) {
             UserLoginDetails userLoginDetails = (UserLoginDetails) loginDetailRepository.findBySessionId(sessionId).orElse(null);
             if (userLoginDetails != null) {
                 userLoginDetails.setIsActive(false);
                 loginDetailRepository.save(userLoginDetails);
             }
-
-            session.invalidate();
         }
 
         String contextPath = servletContext.getContextPath();
