@@ -36,7 +36,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             // Save login details in the database
             saveUserLoginDetails(request, authentication);
 
-            // to be used in system-wide session management
+            // To be used in system-wide session management
             HttpSession session = request.getSession();
             session.setAttribute("username", authentication.getName());
             session.setAttribute("sessionId", request.getSession().getId());
