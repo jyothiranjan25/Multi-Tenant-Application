@@ -24,7 +24,6 @@ public class AppUserDAOImpl implements AppUserDAO {
     private EntityManager entityManager;
     private final AppUserMapper mapper;
 
-    @Transactional(readOnly = true)
     public List<AppUserDTO> get(AppUserDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

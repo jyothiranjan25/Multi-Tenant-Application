@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,12 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        String errorMessage = "Invalid username or password";
-
+        String errorMessage;
+        if (exception instanceof DisabledException) {
+            errorMessage = "This account is disabled, please contact the administrator";
+        } else {
+            errorMessage = "Invalid username or password";
+        }
         ErrorResponse errorResponse = new ErrorResponse(errorMessage);
 
         try (PrintWriter writer = response.getWriter()) {
