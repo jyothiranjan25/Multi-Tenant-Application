@@ -41,10 +41,6 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                 throw new UsernameNotFoundException("User not found");
             }
 
-            AppUserRolesDTO appUserRolesDTO = new AppUserRolesDTO();
-            appUserRolesDTO.setAppUserId(appUserDTOList.getFirst().getId());
-            List<AppUserRolesDTO> appUserRolesList = applicationContext.getBean(AppUserRolesService.class).get(appUserRolesDTO);
-
             return User.withUsername(appUserDTOList.getFirst().getUserName())
                     .username(appUserDTOList.getFirst().getUserName())
                     .password(appUserDTOList.getFirst().getPassword())
