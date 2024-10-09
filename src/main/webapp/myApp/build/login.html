@@ -22,9 +22,9 @@
                 });
                 if (response.ok) {
                     const data = await response.json(); // Assume the response is JSON
-                    console.log('Response:', data.user_details.redirectUrl);
-                    if (data.user_details.redirectUrl) {
-                        window.location.href = data.user_details.redirectUrl;
+                    console.log('Response:', data.redirect_url);
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
                     } else {
                         alert('Login successful, but no redirect URL found.');
                     }

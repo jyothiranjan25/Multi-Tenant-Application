@@ -416,6 +416,7 @@
                             <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
+                    <packagingExcludes>**/node_modules/**,myApp/react/**,**/.gitignore</packagingExcludes>
                 </configuration>
             </plugin>
 

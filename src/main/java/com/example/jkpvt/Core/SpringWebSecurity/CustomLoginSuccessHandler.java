@@ -1,5 +1,6 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
+import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetails;
 import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsRepository;
 import com.google.gson.Gson;
@@ -8,7 +9,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -41,13 +44,20 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             session.setAttribute("username", authentication.getName());
             session.setAttribute("sessionId", request.getSession().getId());
 
-            Map<String, String> userDetails = new HashMap<>();
-            userDetails.put("message", "Login successful");
-            userDetails.put("username", authentication.getName());
-            userDetails.put("sessionId", request.getSession().getId());
-            userDetails.put("redirectUrl", "home");
+            AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
 
-            SuccessResponse successResponse = new SuccessResponse(userDetails);
+            String redirectUrl;
+            if(appUserDTO.getAppUserRoles().size() > 1){
+                redirectUrl = "selectRole";
+            }else {
+                redirectUrl = "home";
+            }
+
+            SuccessResponse successResponse = new SuccessResponse();
+            successResponse.setRedirectUrl(redirectUrl);
+            successResponse.setMessage("Login successful");
+            successResponse.setSessionId(request.getSession().getId());
+            successResponse.setUserDetails(appUserDTO);
 
             try (PrintWriter writer = response.getWriter()) {
                 writer.write(gson.toJson(successResponse));
@@ -74,10 +84,13 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         }
     }
 
+    @Getter
+    @Setter
     private static class SuccessResponse {
-        private final Map<String, String> userDetails;
-        public SuccessResponse(Map<String, String> userDetails) {
-            this.userDetails = userDetails;
-        }
+        private String redirectUrl;
+        private String message;
+        private String sessionId;
+        private AppUserDTO userDetails;
     }
 }
+
