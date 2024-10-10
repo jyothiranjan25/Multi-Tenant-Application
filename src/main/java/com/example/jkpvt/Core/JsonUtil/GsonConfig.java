@@ -9,6 +9,7 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
@@ -27,6 +28,9 @@ public class GsonConfig implements WebMvcConfigurer {
 //        gsonBuilder.serializeNulls();
         gsonBuilder.setPrettyPrinting();
         gsonBuilder.setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES);
+
+        // Register custom TypeAdapter for LocalDateTime
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
 
         // Create and return the custom Gson instance
         return gsonBuilder.create();

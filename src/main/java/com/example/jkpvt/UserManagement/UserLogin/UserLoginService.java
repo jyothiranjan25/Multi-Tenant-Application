@@ -1,6 +1,7 @@
 package com.example.jkpvt.UserManagement.UserLogin;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.ExceptionHandling.RoleNotFoundExemption;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDAO;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUser.AppUserListener;
@@ -10,6 +11,7 @@ import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDAO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesService;
 import com.example.jkpvt.UserManagement.Roles.RolesDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
@@ -36,7 +38,7 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, RoleNotFoundExemption {
         try {
             AppUserDTO appUserDTO = new AppUserDTO();
             appUserDTO.setUserName(username);
@@ -45,9 +47,11 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                 throw new UsernameNotFoundException("User not found");
             }
 
+            if (appUserDTOList.getFirst().getAppUserRoles().isEmpty()) {
+                throw new RoleNotFoundExemption("Role not found");
+            }
             // Store the first AppUserDTO in the session
-            HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
-            session.setAttribute("appUser", appUserDTOList.getFirst());
+            storeUserLoginDetails(appUserDTOList.getFirst());
 
             return User.withUsername(appUserDTOList.getFirst().getUserName())
                     .username(appUserDTOList.getFirst().getUserName())
@@ -56,8 +60,15 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                     .build();
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException(e.getMessage());
+        }catch (RoleNotFoundExemption e){
+            throw new RoleNotFoundExemption(e.getMessage());
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }
+    }
+
+    public void storeUserLoginDetails(AppUserDTO AppUserDTO) {
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
+        session.setAttribute("appUser", AppUserDTO);
     }
 }

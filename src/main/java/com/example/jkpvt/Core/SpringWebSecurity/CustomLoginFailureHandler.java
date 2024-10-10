@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,8 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         String errorMessage;
         if (exception instanceof DisabledException) {
             errorMessage = "This account is disabled, please contact the administrator";
+        } else if (exception instanceof UsernameNotFoundException) {
+            errorMessage = "User not found";
         } else {
             errorMessage = "Invalid username or password";
         }
