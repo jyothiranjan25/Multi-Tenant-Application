@@ -44,7 +44,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
             String redirectUrl;
             if(appUserDTO.getAppUserRoles().size() > 1){
-                redirectUrl = "selectRole";
+                redirectUrl = "switchRoles";
             }else if(appUserDTO.getAppUserRoles().size() == 1) {
                 redirectUrl = "dashboard";
                 userLoginDetailsService.storeUserLoginDetails(appUserDTO.getAppUserRoles().getFirst());
