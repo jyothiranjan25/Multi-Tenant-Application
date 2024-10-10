@@ -1,5 +1,6 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
+import com.example.jkpvt.Core.ExceptionHandling.RoleNotFoundExemption;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,8 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             errorMessage = "This account is disabled, please contact the administrator";
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = "User not found";
+        } else if (exception instanceof RoleNotFoundExemption) {
+            errorMessage = "Role not found";
         } else {
             errorMessage = "Invalid username or password";
         }
