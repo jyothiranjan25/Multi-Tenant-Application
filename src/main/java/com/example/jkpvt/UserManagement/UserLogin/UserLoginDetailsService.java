@@ -3,8 +3,6 @@ package com.example.jkpvt.UserManagement.UserLogin;
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
-import com.example.jkpvt.UserManagement.Roles.RolesDTO;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +45,7 @@ public class UserLoginDetailsService {
 
     public void test() {
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
+        String userName = (String) session.getAttribute("userName");
         String userGroup = (String) session.getAttribute("userGroup");
         Long roleId = (Long) session.getAttribute("roleId");
         AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");

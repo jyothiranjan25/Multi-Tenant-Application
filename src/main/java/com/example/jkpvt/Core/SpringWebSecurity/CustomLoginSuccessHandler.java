@@ -39,7 +39,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             if (session == null) {
                 session = request.getSession();
             }
-            session.setAttribute("username", authentication.getName());
+            session.setAttribute("userName", authentication.getName());
             AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
 
             String redirectUrl;
