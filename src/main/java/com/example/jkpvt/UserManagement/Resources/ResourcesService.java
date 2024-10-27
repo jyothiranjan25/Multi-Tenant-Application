@@ -1,6 +1,8 @@
 package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.UserManagement.UserGroup.UserGroup;
+import com.example.jkpvt.UserManagement.UserGroup.UserGroupDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,24 @@ public class ResourcesService {
     public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
         List<Resources> resources = dao.get(resourcesDTO);
         return mapper.map(resources);
+    }
+
+    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
+    public List<ResourcesDTO> getResources(ResourcesDTO resourcesDTO) {
+        List<Resources> resources = dao.get(resourcesDTO);
+        List<ResourcesDTO> ResourcesDTOList = new ArrayList<>();
+        for (Resources resource : resources) {
+            if (resource.getParentResource() != null) {
+                continue;
+            }
+            ResourcesDTO newResourcesDTO= mapToResourcesDTO(resource);
+            Set<ResourcesDTO> childGroups = getChildResources(resource);
+            if(!childGroups.isEmpty()) {
+                newResourcesDTO.setChildResources(childGroups);
+            }
+            ResourcesDTOList.add(newResourcesDTO);
+        }
+        return ResourcesDTOList;
     }
 
     @Transactional
@@ -78,15 +98,6 @@ public class ResourcesService {
         }
     }
 
-    public void updateAll(List<Resources> resources) {
-        try {
-            resources = repository.saveAll(resources);
-            mapper.map(resources);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
-    }
-
     @Transactional
     public String delete(ResourcesDTO resourcesDTO) {
         try {
@@ -96,6 +107,21 @@ public class ResourcesService {
             } else {
                 throw new CommonException("Data not found");
             }
+        } catch (Exception e) {
+            throw new CommonException(e.getMessage());
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Resources getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new CommonException("Resources with id: " + id + " not found"));
+    }
+
+    public void updateAll(List<Resources> resources) {
+        try {
+            resources = repository.saveAll(resources);
+            mapper.map(resources);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
@@ -324,9 +350,31 @@ public class ResourcesService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Resources getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new CommonException("Resources with id: " + id + " not found"));
+    private Set<ResourcesDTO> getChildResources(Resources resources) {
+        Set<ResourcesDTO> childResources = new HashSet<>();
+        if (resources.getChildResources() != null) {
+            for (Resources resource : resources.getChildResources()) {
+                ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
+                Set<ResourcesDTO> child = getChildResources(resource);
+                if(!child.isEmpty()) {
+                    newResourcesDTO.setChildResources(getChildResources(resource));
+                }
+                childResources.add(newResourcesDTO);
+            }
+        }
+        return childResources;
+    }
+
+    private ResourcesDTO mapToResourcesDTO(Resources resources) {
+        ResourcesDTO resourcesDTO = new ResourcesDTO();
+        resourcesDTO.setId(resources.getId());
+        resourcesDTO.setResourceName(resources.getResourceName());
+        resourcesDTO.setResourceFullName(resources.getResourceFullName());
+        resourcesDTO.setResourceDescription(resources.getResourceDescription());
+        resourcesDTO.setResourceUrl(resources.getResourceUrl());
+        resourcesDTO.setShowInMenu(resources.getShowInMenu());
+        resourcesDTO.setResourceOrder(resources.getResourceOrder());
+        resourcesDTO.setResourceSubOrder(resources.getResourceSubOrder());
+        return resourcesDTO;
     }
 }
