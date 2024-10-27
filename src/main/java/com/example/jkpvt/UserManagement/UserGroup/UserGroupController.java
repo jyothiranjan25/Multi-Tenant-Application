@@ -15,10 +15,16 @@ public class UserGroupController {
 
     private final UserGroupService service;
 
+    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    public List<UserGroupDTO> getUserGroupAll(@RequestParam Map<String, String> queryParams) {
+        UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
+        return service.get(userGroupDTO);
+    }
+
     @RequestMapping(value = "/get",method = RequestMethod.GET)
     public List<UserGroupDTO> getUserGroup(@RequestParam Map<String, String> queryParams) {
         UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
-        return service.get(userGroupDTO);
+        return service.getUserGroups(userGroupDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

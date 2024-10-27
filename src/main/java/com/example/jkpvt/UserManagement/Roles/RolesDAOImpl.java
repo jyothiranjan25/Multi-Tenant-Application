@@ -21,9 +21,8 @@ public class RolesDAOImpl implements RolesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final RolesMapper mapper;
 
-        public List<RolesDTO> get(RolesDTO rolesDTO) {
+        public List<Roles> get(RolesDTO rolesDTO) {
             try {
                 CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
                 CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
@@ -37,8 +36,7 @@ public class RolesDAOImpl implements RolesDAO {
 
                 PaginationUtil.applyPagination(query, rolesDTO);
 
-                List<Roles> roles = query.getResultList();
-                return mapper.map(roles);
+                return query.getResultList();
             } catch (Exception e) {
                 throw new CommonException(e.getMessage());
             }

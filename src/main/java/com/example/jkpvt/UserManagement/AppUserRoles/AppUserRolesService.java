@@ -18,7 +18,8 @@ public class AppUserRolesService {
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRolesDTO> get(AppUserRolesDTO appUserRolesDTO) {
-        return dao.get(appUserRolesDTO);
+        List<AppUserRoles> appUserRoles = dao.get(appUserRolesDTO);
+        return mapper.map(appUserRoles);
     }
 
     @Transactional

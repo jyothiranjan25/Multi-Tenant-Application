@@ -23,7 +23,8 @@ public class UserLoginDetailsService {
 
     @Transactional(readOnly = true)
     public List<UserLoginDetailsDTO> get(UserLoginDetailsDTO userLoginDetailsDTO) {
-        return userLoginDetailsDAO.get(userLoginDetailsDTO);
+        List<UserLoginDetails> userLoginDetails = userLoginDetailsDAO.get(userLoginDetailsDTO);
+        return mapper.map(userLoginDetails);
     }
 
     @Transactional

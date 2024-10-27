@@ -29,7 +29,8 @@ public class RolesService {
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<RolesDTO> get(RolesDTO rolesDTO) {
-        return dao.get(rolesDTO);
+        List<Roles> roles = dao.get(rolesDTO);
+        return roleMapper.map(roles);
     }
 
     @Transactional

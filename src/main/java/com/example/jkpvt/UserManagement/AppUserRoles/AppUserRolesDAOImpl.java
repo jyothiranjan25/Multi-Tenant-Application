@@ -21,9 +21,8 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final AppUserRolesMapper mapper;
 
-    public List<AppUserRolesDTO> get(AppUserRolesDTO dto) {
+    public List<AppUserRoles> get(AppUserRolesDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<AppUserRoles> criteriaQuery = criteriaBuilder.createQuery(AppUserRoles.class);
@@ -37,9 +36,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
 
             PaginationUtil.applyPagination(query, dto);
 
-            List<AppUserRoles> appUserRoles = query.getResultList();
-
-            return mapper.map(appUserRoles);
+            return query.getResultList();
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }

@@ -19,9 +19,8 @@ public class ModulesDAOImpl implements ModulesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final ModulesMapper mapper;
 
-    public List<ModulesDTO> get(ModulesDTO modulesDTO) {
+    public List<Modules> get(ModulesDTO modulesDTO) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Modules> criteriaQuery = criteriaBuilder.createQuery(Modules.class);
@@ -38,8 +37,7 @@ public class ModulesDAOImpl implements ModulesDAO {
 
             PaginationUtil.applyPagination(query, modulesDTO);
 
-            List<Modules> Modules = query.getResultList();
-            return mapper.map(Modules);
+            return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

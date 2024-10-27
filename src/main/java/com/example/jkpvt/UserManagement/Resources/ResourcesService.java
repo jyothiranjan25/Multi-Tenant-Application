@@ -20,7 +20,8 @@ public class ResourcesService {
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
     public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
-        return dao.get(resourcesDTO);
+        List<Resources> resources = dao.get(resourcesDTO);
+        return mapper.map(resources);
     }
 
     @Transactional

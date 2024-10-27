@@ -21,9 +21,8 @@ public class UserGroupDAOImpl implements UserGroupDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final UserGroupMapper mapper;
 
-    public List<UserGroupDTO> get(UserGroupDTO userGroupDTO) {
+    public List<UserGroup> get(UserGroupDTO userGroupDTO) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<UserGroup> criteriaQuery = criteriaBuilder.createQuery(UserGroup.class);
@@ -37,8 +36,7 @@ public class UserGroupDAOImpl implements UserGroupDAO {
 
             PaginationUtil.applyPagination(query, userGroupDTO);
 
-            List<UserGroup> userGroups = query.getResultList();
-            return mapper.map(userGroups);
+            return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

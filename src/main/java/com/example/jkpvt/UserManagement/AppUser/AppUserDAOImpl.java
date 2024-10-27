@@ -22,9 +22,8 @@ public class AppUserDAOImpl implements AppUserDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final AppUserMapper mapper;
 
-    public List<AppUserDTO> get(AppUserDTO dto) {
+    public List<AppUser> get(AppUserDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<AppUser> criteriaQuery = criteriaBuilder.createQuery(AppUser.class);
@@ -38,9 +37,7 @@ public class AppUserDAOImpl implements AppUserDAO {
 
             PaginationUtil.applyPagination(query, dto);
 
-            List<AppUser> appUsers = query.getResultList();
-
-            return mapper.map(appUsers);
+            return query.getResultList();
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }

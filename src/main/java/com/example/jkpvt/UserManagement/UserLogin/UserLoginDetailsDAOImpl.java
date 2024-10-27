@@ -20,9 +20,8 @@ import java.util.List;
 public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
     @PersistenceContext
     private EntityManager entityManager;
-    private final UserLoginDetailsMapper mapper;
 
-    public List<UserLoginDetailsDTO> get(UserLoginDetailsDTO userLoginDetailsDTO) {
+    public List<UserLoginDetails> get(UserLoginDetailsDTO userLoginDetailsDTO) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<UserLoginDetails> criteriaQuery = criteriaBuilder.createQuery(UserLoginDetails.class);
@@ -36,8 +35,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
 
             PaginationUtil.applyPagination(query, userLoginDetailsDTO);
 
-            List<UserLoginDetails> userLoginDetails = query.getResultList();
-            return mapper.map(userLoginDetails);
+            return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

@@ -21,9 +21,8 @@ public class ResourcesDAOImpl implements ResourcesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private final ResourcesMapper mapper;
 
-    public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
+    public List<Resources> get(ResourcesDTO resourcesDTO) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Resources> criteriaQuery = criteriaBuilder.createQuery(Resources.class);
@@ -38,8 +37,7 @@ public class ResourcesDAOImpl implements ResourcesDAO {
             // Apply pagination
             PaginationUtil.applyPagination(query, resourcesDTO);
 
-            List<Resources> Resources = query.getResultList();
-            return mapper.map(Resources);
+            return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

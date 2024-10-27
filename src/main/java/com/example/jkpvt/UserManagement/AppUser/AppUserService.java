@@ -20,7 +20,8 @@ public class AppUserService {
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<AppUserDTO> get(AppUserDTO appUserDTO) {
-            return appUserDAO.get(appUserDTO);
+        List<AppUser> appUser = appUserDAO.get(appUserDTO);
+        return mapper.map(appUser);
     }
 
     @Transactional

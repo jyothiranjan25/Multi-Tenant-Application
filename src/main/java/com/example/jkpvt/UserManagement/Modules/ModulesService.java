@@ -21,7 +21,8 @@ public class ModulesService {
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<ModulesDTO> get(ModulesDTO modulesDTO) {
-        return modulesDAO.get(modulesDTO);
+        List<Modules> modules = modulesDAO.get(modulesDTO);
+        return mapper.map(modules);
     }
 
     @Transactional
