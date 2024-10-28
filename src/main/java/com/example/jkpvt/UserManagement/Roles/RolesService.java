@@ -142,43 +142,93 @@ public class RolesService {
     }
 
     public Set<ModulesDTO> mapToModulesDTO(Roles roles) {
-        // group by modules
-        Map<Long,List<RoleModuleResources>> roleModuleResources = new HashMap<>();
-        for (RoleModuleResources roleModuleResource : roles.getRoleModuleResources()) {
-            if (roleModuleResources.containsKey(roleModuleResource.getModule().getId())) {
-                roleModuleResources.get(roleModuleResource.getModule().getId()).add(roleModuleResource);
-            } else {
-                List<RoleModuleResources> roleModuleResourceList = new ArrayList<>();
-                roleModuleResourceList.add(roleModuleResource);
-                roleModuleResources.put(roleModuleResource.getModule().getId(), roleModuleResourceList);
-            }
-        }
-
+        Map<Long, List<RoleModuleResources>> roleModuleResources = groupRoleModuleResourcesByModule(roles);
         Set<ModulesDTO> modulesDTOSet = new HashSet<>();
 
         for (Map.Entry<Long, List<RoleModuleResources>> entry : roleModuleResources.entrySet()) {
-            ModulesDTO modulesDTO = new ModulesDTO();
-            modulesDTO.setId(entry.getKey());
-
-            // get the first element from the list
-            Modules module = entry.getValue().getFirst().getModule();
-
-            modulesDTO.setModuleName(module.getModuleName());
-            modulesDTO.setModuleDescription(module.getModuleDescription());
-            modulesDTO.setModuleUrl(module.getModuleUrl());
-
-            modulesDTO.setModelOrder(entry.getValue().getFirst().getModelOrder());
-            modulesDTO.setResources(new HashSet<>());
-
-            for (RoleModuleResources roleModuleResource : entry.getValue()) {
-                ResourcesDTO resourcesDTO = new ResourcesDTO();
-                resourcesDTO.setId(roleModuleResource.getResource().getId());
-                resourcesDTO.setResourceName(roleModuleResource.getResource().getResourceName());
-                resourcesDTO.setResourceDescription(roleModuleResource.getResource().getResourceDescription());
-                modulesDTO.getResources().add(resourcesDTO);
-            }
+            ModulesDTO modulesDTO = createModulesDTO(entry);
             modulesDTOSet.add(modulesDTO);
         }
+
         return modulesDTOSet;
+    }
+
+    private Map<Long, List<RoleModuleResources>> groupRoleModuleResourcesByModule(Roles roles) {
+        Map<Long, List<RoleModuleResources>> roleModuleResources = new HashMap<>();
+        for (RoleModuleResources roleModuleResource : roles.getRoleModuleResources()) {
+            roleModuleResources
+                    .computeIfAbsent(roleModuleResource.getModule().getId(), k -> new ArrayList<>())
+                    .add(roleModuleResource);
+        }
+        return roleModuleResources;
+    }
+
+    private ModulesDTO createModulesDTO(Map.Entry<Long, List<RoleModuleResources>> entry) {
+        ModulesDTO modulesDTO = new ModulesDTO();
+        modulesDTO.setId(entry.getKey());
+
+        Modules module = entry.getValue().getFirst().getModule();
+        modulesDTO.setModuleName(module.getModuleName());
+        modulesDTO.setModuleDescription(module.getModuleDescription());
+        modulesDTO.setModuleUrl(module.getModuleUrl());
+        modulesDTO.setModelOrder(entry.getValue().getFirst().getModelOrder());
+        modulesDTO.setResources(new HashSet<>());
+
+        Map<Long, List<Resources>> childResources = groupChildResources(entry.getValue());
+        addResourcesToModulesDTO(entry.getValue(), modulesDTO, childResources);
+
+        return modulesDTO;
+    }
+
+    private Map<Long, List<Resources>> groupChildResources(List<RoleModuleResources> roleModuleResources) {
+        Map<Long, List<Resources>> childResources = new HashMap<>();
+        for (RoleModuleResources roleModuleResource : roleModuleResources) {
+            if (roleModuleResource.getResource().getParentResource() != null) {
+                childResources
+                        .computeIfAbsent(roleModuleResource.getResource().getParentResource().getId(), k -> new ArrayList<>())
+                        .add(roleModuleResource.getResource());
+            }
+        }
+        return childResources;
+    }
+
+    private void addResourcesToModulesDTO(List<RoleModuleResources> roleModuleResources, ModulesDTO modulesDTO, Map<Long, List<Resources>> childResources) {
+        for (RoleModuleResources roleModuleResource : roleModuleResources) {
+            if (roleModuleResource.getResource().getParentResource() != null) {
+                continue;
+            }
+            ResourcesDTO resourcesDTO = createResourcesDTO(roleModuleResource, childResources);
+            modulesDTO.getResources().add(resourcesDTO);
+        }
+    }
+
+    private ResourcesDTO createResourcesDTO(RoleModuleResources roleModuleResource, Map<Long, List<Resources>> childResources) {
+        ResourcesDTO resourcesDTO = new ResourcesDTO();
+        resourcesDTO.setId(roleModuleResource.getResource().getId());
+        resourcesDTO.setResourceName(roleModuleResource.getResource().getResourceName());
+        resourcesDTO.setResourceDescription(roleModuleResource.getResource().getResourceDescription());
+        resourcesDTO.setResourceUrl(roleModuleResource.getResource().getResourceUrl());
+        resourcesDTO.setResourceOrder(roleModuleResource.getResource().getResourceOrder());
+        resourcesDTO.setShowInMenu(roleModuleResource.getResource().getShowInMenu());
+        resourcesDTO.setChildResources(mapToResourcesDTO(childResources));
+        return resourcesDTO;
+    }
+
+    public Set<ResourcesDTO> mapToResourcesDTO(Map<Long, List<Resources>> childResources) {
+        Set<ResourcesDTO> resourcesDTOSet = new HashSet<>();
+        for (Map.Entry<Long, List<Resources>> entry : childResources.entrySet()) {
+            for (Resources resource : entry.getValue()) {
+                ResourcesDTO resourcesDTO = new ResourcesDTO();
+                resourcesDTO.setId(resource.getId());
+                resourcesDTO.setResourceName(resource.getResourceName());
+                resourcesDTO.setResourceDescription(resource.getResourceDescription());
+                resourcesDTO.setResourceUrl(resource.getResourceUrl());
+                resourcesDTO.setResourceOrder(resource.getResourceOrder());
+                resourcesDTO.setShowInMenu(resource.getShowInMenu());
+                resourcesDTO.setResourceOrder(Long.parseLong(resource.getResourceSubOrder()));
+                resourcesDTOSet.add(resourcesDTO);
+            }
+        }
+        return resourcesDTOSet;
     }
 }
