@@ -14,10 +14,16 @@ public class RolesController {
 
     private final RolesService rolesService;
 
+    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    public List<RolesDTO> GetRolesAll(@RequestParam Map<String,String> queryParams) {
+        RolesDTO rolesDTO = MapUtils.toDto(queryParams, RolesDTO.class);
+        return rolesService.get(rolesDTO);
+    }
+
     @RequestMapping(value = "/get",method = RequestMethod.GET)
     public List<RolesDTO> GetRoles(@RequestParam Map<String,String> queryParams) {
         RolesDTO rolesDTO = MapUtils.toDto(queryParams, RolesDTO.class);
-        return rolesService.get(rolesDTO);
+        return rolesService.getRoles(rolesDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,18 @@ public class RolesService {
     public List<RolesDTO> get(RolesDTO rolesDTO) {
         List<Roles> roles = dao.get(rolesDTO);
         return roleMapper.map(roles);
+    }
+
+    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    public List<RolesDTO> getRoles(RolesDTO rolesDTO) {
+        List<Roles> roles = dao.get(rolesDTO);
+        List<RolesDTO> rolesDTOList = new ArrayList<>();
+        for (Roles role : roles) {
+            RolesDTO newRoleDTO = mapToRolesDTO(role);
+            newRoleDTO.setModuleResources(mapToModulesDTO(role));
+            rolesDTOList.add(newRoleDTO);
+        }
+        return rolesDTOList;
     }
 
     @Transactional
@@ -91,6 +101,11 @@ public class RolesService {
         }
     }
 
+    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    public Roles getById(Long id) {
+        return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
+    }
+
     public Set<RoleModuleResources> setRoleModuleResources(Roles roles, RolesDTO rolesDTO) {
         // Create a Set for RoleModuleResources if it doesn't exist
         Set<RoleModuleResources> roleModuleResources = new HashSet<>();
@@ -117,8 +132,53 @@ public class RolesService {
         return roleModuleResources;
     }
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
-    public Roles getById(Long id) {
-        return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
+    public RolesDTO mapToRolesDTO(Roles roles) {
+        RolesDTO rolesDTO = new RolesDTO();
+        rolesDTO.setId(roles.getId());
+        rolesDTO.setRoleName(roles.getRoleName());
+        rolesDTO.setRoleDescription(roles.getRoleDescription());
+        rolesDTO.setRoleIcon(roles.getRoleIcon());
+        return rolesDTO;
+    }
+
+    public Set<ModulesDTO> mapToModulesDTO(Roles roles) {
+        // group by modules
+        Map<Long,List<RoleModuleResources>> roleModuleResources = new HashMap<>();
+        for (RoleModuleResources roleModuleResource : roles.getRoleModuleResources()) {
+            if (roleModuleResources.containsKey(roleModuleResource.getModule().getId())) {
+                roleModuleResources.get(roleModuleResource.getModule().getId()).add(roleModuleResource);
+            } else {
+                List<RoleModuleResources> roleModuleResourceList = new ArrayList<>();
+                roleModuleResourceList.add(roleModuleResource);
+                roleModuleResources.put(roleModuleResource.getModule().getId(), roleModuleResourceList);
+            }
+        }
+
+        Set<ModulesDTO> modulesDTOSet = new HashSet<>();
+
+        for (Map.Entry<Long, List<RoleModuleResources>> entry : roleModuleResources.entrySet()) {
+            ModulesDTO modulesDTO = new ModulesDTO();
+            modulesDTO.setId(entry.getKey());
+
+            // get the first element from the list
+            Modules module = entry.getValue().getFirst().getModule();
+
+            modulesDTO.setModuleName(module.getModuleName());
+            modulesDTO.setModuleDescription(module.getModuleDescription());
+            modulesDTO.setModuleUrl(module.getModuleUrl());
+
+            modulesDTO.setModelOrder(entry.getValue().getFirst().getModelOrder());
+            modulesDTO.setResources(new HashSet<>());
+
+            for (RoleModuleResources roleModuleResource : entry.getValue()) {
+                ResourcesDTO resourcesDTO = new ResourcesDTO();
+                resourcesDTO.setId(roleModuleResource.getResource().getId());
+                resourcesDTO.setResourceName(roleModuleResource.getResource().getResourceName());
+                resourcesDTO.setResourceDescription(roleModuleResource.getResource().getResourceDescription());
+                modulesDTO.getResources().add(resourcesDTO);
+            }
+            modulesDTOSet.add(modulesDTO);
+        }
+        return modulesDTOSet;
     }
 }
