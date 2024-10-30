@@ -25,6 +25,7 @@ public class ResourcesListener implements ApplicationContextAware {
     public void prePersist(Resources resources) {
         conditionsChecks(resources);
         checkDuplicateData(resources);
+        checkForParentData(resources);
     }
 
     @PreUpdate
@@ -88,6 +89,17 @@ public class ResourcesListener implements ApplicationContextAware {
             List<ResourcesDTO> children = applicationContext.getBean(ResourcesService.class).get(filter);
             if (!children.isEmpty()) {
                 throw new CommonException("Resource has child records");
+            }
+        } catch (Exception e) {
+            throw new CommonException(e.getMessage());
+        }
+    }
+
+    public void checkForParentData(Resources resources) {
+        try {
+            Resources data = applicationContext.getBean(ResourcesService.class).getById(resources.getParentResource().getId());
+            if(data.getParentResource() != null) {
+                throw new CommonException("Resource has Parent record");
             }
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
