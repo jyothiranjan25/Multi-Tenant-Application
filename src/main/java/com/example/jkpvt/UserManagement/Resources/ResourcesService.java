@@ -356,8 +356,8 @@ public class ResourcesService {
         if (resources.getChildResources() != null) {
             for (Resources resource : resources.getChildResources()) {
                 ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
-                if(resources.getResourceSubOrder() != null) {
-                    newResourcesDTO.setResourceOrder(Long.parseLong(resources.getResourceSubOrder()));
+                if(resource.getResourceSubOrder() != null) {
+                    newResourcesDTO.setResourceOrder(Long.parseLong(resource.getResourceSubOrder()));
                 }
                 Set<ResourcesDTO> child = getChildResources(resource);
                 if(!child.isEmpty()) {
