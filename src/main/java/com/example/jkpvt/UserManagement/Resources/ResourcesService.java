@@ -35,6 +35,7 @@ public class ResourcesService {
                 continue;
             }
             ResourcesDTO newResourcesDTO= mapToResourcesDTO(resource);
+            newResourcesDTO.setResourceOrder(resource.getResourceOrder());
             Set<ResourcesDTO> childGroups = getChildResources(resource);
             if(!childGroups.isEmpty()) {
                 newResourcesDTO.setChildResources(childGroups);
@@ -355,6 +356,9 @@ public class ResourcesService {
         if (resources.getChildResources() != null) {
             for (Resources resource : resources.getChildResources()) {
                 ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
+                if(resources.getResourceSubOrder() != null) {
+                    newResourcesDTO.setResourceOrder(Long.parseLong(resources.getResourceSubOrder()));
+                }
                 Set<ResourcesDTO> child = getChildResources(resource);
                 if(!child.isEmpty()) {
                     newResourcesDTO.setChildResources(getChildResources(resource));
@@ -373,8 +377,6 @@ public class ResourcesService {
         resourcesDTO.setResourceDescription(resources.getResourceDescription());
         resourcesDTO.setResourceUrl(resources.getResourceUrl());
         resourcesDTO.setShowInMenu(resources.getShowInMenu());
-        resourcesDTO.setResourceOrder(resources.getResourceOrder());
-        resourcesDTO.setResourceSubOrder(resources.getResourceSubOrder());
         return resourcesDTO;
     }
 }
