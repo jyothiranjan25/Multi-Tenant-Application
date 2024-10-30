@@ -144,7 +144,7 @@ public class ResourcesService {
         boolean orderMatchFound = parentResources.values().stream()
                 .anyMatch(parent -> parent.getResourceOrder().equals(resourcesDTO.getResourceOrder()));
 
-        long initialParentResourcesSize = parentResources!=null?parentResources.size(): + 1;
+        long initialParentResourcesSize = parentResources!=null?parentResources.size() + 1: + 1;
 
         if(resourcesDTO.getParentId() == null) {
             if (resourcesDTO.getResourceOrder() == null || resourcesDTO.getResourceOrder() > initialParentResourcesSize) {
@@ -159,7 +159,7 @@ public class ResourcesService {
             }
         }else{
             List<Resources> childResources = childResourcesForParent.get(resourcesDTO.getParentId());
-            long initialChildResourceSize = childResources!=null?childResources.size(): + 1;
+            long initialChildResourceSize = childResources!=null?childResources.size() + 1 : + 1;
             resources.setResourceOrder(null);
             if (resourcesDTO.getResourceOrder() == null || resourcesDTO.getResourceOrder() > initialChildResourceSize) {
                 resources.setResourceSubOrder(resources.getParentResource().getResourceOrder() + Long.toString(initialChildResourceSize));
@@ -233,7 +233,7 @@ public class ResourcesService {
         boolean orderMatchFound = parentResources.values().stream()
                 .anyMatch(parent -> parent.getResourceOrder().equals(resourcesDTO.getResourceOrder()));
 
-        long initialParentResourcesSize = parentResources!=null?parentResources.size(): + 1;
+        long initialParentResourcesSize = parentResources!=null?parentResources.size() + 1: + 1;
 
         // check if id matches with parent id or child id
         if(resources.getParentResource() == null ) {
@@ -255,7 +255,7 @@ public class ResourcesService {
             }
         }else {
             List<Resources> childResources = childResourcesForParent.get(resources.getParentResource().getId());
-            long initialChildResourceSize = childResources!=null?childResources.size(): + 1;
+            long initialChildResourceSize = childResources!=null?childResources.size() + 1: + 1;
             String parentOrderStr = String.valueOf(resources.getParentResource().getResourceOrder());
             int length = parentOrderStr.length();
             String actualChildOrder = resources.getResourceSubOrder().substring(length);
