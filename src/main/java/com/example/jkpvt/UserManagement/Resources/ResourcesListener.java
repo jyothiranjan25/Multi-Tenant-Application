@@ -97,9 +97,11 @@ public class ResourcesListener implements ApplicationContextAware {
 
     public void checkForParentData(Resources resources) {
         try {
-            Resources data = applicationContext.getBean(ResourcesService.class).getById(resources.getParentResource().getId());
-            if(data.getParentResource() != null) {
-                throw new CommonException("Resource has Parent record");
+             if(resources.getParentResource() != null) {
+                Resources data = applicationContext.getBean(ResourcesService.class).getById(resources.getParentResource().getId());
+                if (data.getParentResource() != null) {
+                    throw new CommonException("Resource has Parent record");
+                }
             }
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
