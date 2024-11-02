@@ -100,7 +100,7 @@ public class ResourcesService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public Resources getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new CommonException("Resources with id: " + id + " not found"));

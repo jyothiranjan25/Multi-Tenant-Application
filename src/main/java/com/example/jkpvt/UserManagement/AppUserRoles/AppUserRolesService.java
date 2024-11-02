@@ -47,7 +47,7 @@ public class AppUserRolesService {
         }
     }
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public AppUserRoles getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new CommonException("Data not found"));
     }

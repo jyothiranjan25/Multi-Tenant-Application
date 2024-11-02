@@ -93,7 +93,7 @@ public class ModulesService {
         return resources;
     }
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public Modules getById(Long id) {
         return modulesRepository.findById(id)
                 .orElseThrow(() -> new CommonException("Module id not found"));

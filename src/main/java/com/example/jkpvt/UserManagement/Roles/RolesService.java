@@ -101,7 +101,7 @@ public class RolesService {
         }
     }
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public Roles getById(Long id) {
         return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
     }

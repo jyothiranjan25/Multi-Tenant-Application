@@ -93,7 +93,7 @@ public class UserGroupService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true)
     public UserGroup getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new CommonException("Group not found"));
     }
