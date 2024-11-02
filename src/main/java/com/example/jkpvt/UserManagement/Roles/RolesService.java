@@ -172,7 +172,7 @@ public class RolesService {
         modulesDTO.setModuleDescription(module.getModuleDescription());
         modulesDTO.setModuleUrl(module.getModuleUrl());
         modulesDTO.setModelOrder(entry.getValue().getFirst().getModelOrder());
-        modulesDTO.setResources(new HashSet<>());
+        modulesDTO.setResources(new ArrayList<>());
 
         Map<Long, List<Resources>> childResources = groupChildResources(entry.getValue());
         addResourcesToModulesDTO(entry.getValue(), modulesDTO, childResources);

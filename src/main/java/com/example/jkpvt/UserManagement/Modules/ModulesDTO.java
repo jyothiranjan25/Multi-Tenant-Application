@@ -14,7 +14,8 @@ public class ModulesDTO {
     private String moduleName;
     private String moduleDescription;
     private String moduleUrl;
-    private Set<ResourcesDTO> resources;
+    private String moduleIcon;
+    private List<ResourcesDTO> resources;
     private List<Integer> resourceIds; // This is a list resource ids
     private Integer modelOrder;
     private Integer pageOffset;

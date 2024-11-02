@@ -22,7 +22,8 @@ public class ModulesService {
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<ModulesDTO> get(ModulesDTO modulesDTO) {
         List<Modules> modules = modulesDAO.get(modulesDTO);
-        return mapper.map(modules);
+//        return mapper.map(modules);
+        return MapToModelDto(modules);
     }
 
     @Transactional
@@ -96,5 +97,20 @@ public class ModulesService {
     public Modules getById(Long id) {
         return modulesRepository.findById(id)
                 .orElseThrow(() -> new CommonException("Module id not found"));
+    }
+
+    public List<ModulesDTO> MapToModelDto(List<Modules> modules) {
+        List<ModulesDTO> modulesDTOS = new ArrayList<>();
+        for (Modules module : modules) {
+            ModulesDTO modulesDTO = new ModulesDTO();
+            modulesDTO.setId(module.getId());
+            modulesDTO.setModuleName(module.getModuleName());
+            modulesDTO.setModuleDescription(module.getModuleDescription());
+            modulesDTO.setModuleUrl(module.getModuleUrl());
+            modulesDTO.setModuleIcon(module.getModuleIcon());
+            modulesDTO.setResources(resourcesService.getResourceDtoList(new ArrayList<>(module.getResources())));
+            modulesDTOS.add(modulesDTO);
+        }
+        return modulesDTOS;
     }
 }

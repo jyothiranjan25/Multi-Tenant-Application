@@ -29,20 +29,7 @@ public class ResourcesService {
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
     public List<ResourcesDTO> getResources(ResourcesDTO resourcesDTO) {
         List<Resources> resources = dao.get(resourcesDTO);
-        List<ResourcesDTO> ResourcesDTOList = new ArrayList<>();
-        for (Resources resource : resources) {
-            if (resource.getParentResource() != null) {
-                continue;
-            }
-            ResourcesDTO newResourcesDTO= mapToResourcesDTO(resource);
-            newResourcesDTO.setResourceOrder(resource.getResourceOrder());
-            Set<ResourcesDTO> childGroups = getChildResources(resource);
-            if(!childGroups.isEmpty()) {
-                newResourcesDTO.setChildResources(childGroups);
-            }
-            ResourcesDTOList.add(newResourcesDTO);
-        }
-        return ResourcesDTOList;
+        return getResourceDtoList(resources);
     }
 
     @Transactional
@@ -351,23 +338,28 @@ public class ResourcesService {
         }
     }
 
-    private Set<ResourcesDTO> getChildResources(Resources resources) {
-        Set<ResourcesDTO> childResources = new HashSet<>();
-        if (resources.getChildResources() != null) {
-            for (Resources resource : resources.getChildResources()) {
-                ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
-                if(resource.getResourceSubOrder() != null) {
-                  long Order = Long.parseLong(resource.getResourceSubOrder().substring(resources.getResourceOrder().toString().length()));
-                    newResourcesDTO.setResourceOrder(Order);
-                }
-                Set<ResourcesDTO> child = getChildResources(resource);
-                if(!child.isEmpty()) {
-                    newResourcesDTO.setChildResources(getChildResources(resource));
-                }
-                childResources.add(newResourcesDTO);
+    public List<ResourcesDTO> getResourceDtoList(List<Resources> resources) {
+        // Get all parent resources
+        HashMap<Long, List<Resources>> parentChildResources = new HashMap<>();
+        List<Resources> parentResources = new ArrayList<>();
+        for (Resources resource : resources) {
+            if (resource.getParentResource() == null) {
+                parentResources.add(resource);
+            } else {
+                parentChildResources.computeIfAbsent(resource.getParentResource().getId(), k -> new ArrayList<>()).add(resource);
             }
         }
-        return childResources;
+
+        List<ResourcesDTO> resourcesDTOList = new ArrayList<>();
+        for (Resources resource : parentResources) {
+            ResourcesDTO resourcesDTO = mapToResourcesDTO(resource);
+            // check if resource has child resources
+            if (parentChildResources.containsKey(resource.getId())) {
+                resourcesDTO.setChildResources(getChildResources(parentChildResources.get(resource.getId())));
+            }
+            resourcesDTOList.add(resourcesDTO);
+        }
+        return resourcesDTOList;
     }
 
     private ResourcesDTO mapToResourcesDTO(Resources resources) {
@@ -379,5 +371,19 @@ public class ResourcesService {
         resourcesDTO.setResourceUrl(resources.getResourceUrl());
         resourcesDTO.setShowInMenu(resources.getShowInMenu());
         return resourcesDTO;
+    }
+
+    private Set<ResourcesDTO> getChildResources(List<Resources> resources) {
+        Set<ResourcesDTO> childResources = new HashSet<>();
+            for (Resources resource : resources) {
+                ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
+                if(resource.getResourceSubOrder() != null) {
+                  long Order = Long.parseLong(resource.getResourceSubOrder().substring(resource.getParentResource().getResourceOrder().toString().length()));
+                    newResourcesDTO.setResourceOrder(Order);
+                }
+                childResources.add(newResourcesDTO);
+
+        }
+        return childResources;
     }
 }
