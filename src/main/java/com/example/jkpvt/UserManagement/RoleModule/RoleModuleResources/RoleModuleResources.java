@@ -1,10 +1,10 @@
-package com.example.jkpvt.UserManagement.Roles.RoleModuleResources;
+package com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources;
 
-import com.example.jkpvt.UserManagement.Modules.Modules;
 import com.example.jkpvt.UserManagement.Resources.Resources;
-import com.example.jkpvt.UserManagement.Roles.Roles;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -23,23 +23,13 @@ public class RoleModuleResources {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
-
-    @ManyToOne
-    @JoinColumn(name = "module_id")
-    private Modules module;
+    @JoinColumn(name = "role_module_id")
+    private RoleModule roleModule;
 
     @ManyToOne
     @JoinColumn(name = "resource_id")
     private Resources resource;
 
-    @Column(name = "model_order")
-    private int modelOrder;
-
-    @Column(name = "show_in_menu")
-    private boolean ShowInMenu;
-
-    @Transient
-    private boolean isUpdating = false;
+    @Column(name = "is_visible")
+    private boolean isVisible;
 }

@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.Modules;
 
 import com.example.jkpvt.UserManagement.Resources.Resources;
-import com.example.jkpvt.UserManagement.Roles.RoleModuleResources.RoleModuleResources;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cache;
@@ -45,5 +45,5 @@ public class Modules {
         private Set<Resources> resources = new HashSet<>();
 
         @OneToMany(mappedBy = "module",cascade = CascadeType.ALL, orphanRemoval = true)
-        private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
+        private Set<RoleModule> roleModule = new HashSet<>();
 }

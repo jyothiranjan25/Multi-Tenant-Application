@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.Roles;
 
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRoles;
-import com.example.jkpvt.UserManagement.Roles.RoleModuleResources.RoleModuleResources;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cache;
@@ -35,7 +35,7 @@ public class Roles {
     private String roleIcon;
 
     @OneToMany(mappedBy = "role",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
+    private Set<RoleModule> roleModule = new HashSet<>();
 
     @OneToMany(mappedBy = "roles",cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AppUserRoles> appUserRoles;

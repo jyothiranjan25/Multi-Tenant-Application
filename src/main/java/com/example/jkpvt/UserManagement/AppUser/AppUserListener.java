@@ -51,6 +51,9 @@ public class AppUserListener implements ApplicationContextAware {
         if (appUser.getEmail() == null) {
             throw new CommonException("Email cannot be null");
         }
+        if(appUser.getIsActive() == null){
+            appUser.setIsActive(true);
+        }
     }
 
     public void checkForDuplicateUserName(AppUser appUser) {
