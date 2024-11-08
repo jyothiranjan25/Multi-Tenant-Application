@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 public class AppUserRolesDTO {
     private Long id;
-    private AppUserDTO appUser;
     private RolesDTO roles;
     private String userGroup;
     private Long appUserId;
