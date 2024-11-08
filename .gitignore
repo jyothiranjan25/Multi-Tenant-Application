@@ -43,3 +43,4 @@ build/
 
 ### Database File ###
 src/main/resources/DatabaseContextFile.xml
+.idea/uiDesigner.xml
