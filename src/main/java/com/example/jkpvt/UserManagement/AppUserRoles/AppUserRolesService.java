@@ -1,6 +1,8 @@
 package com.example.jkpvt.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.UserManagement.AppUser.AppUserService;
+import com.example.jkpvt.UserManagement.Roles.RolesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +17,8 @@ public class AppUserRolesService {
     private final AppUserRolesRepository repository;
     private final AppUserRolesDAO dao;
     private final AppUserRolesMapper mapper;
+    private final AppUserService appUserService;
+    private final RolesService rolesService;
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRolesDTO> get(AppUserRolesDTO appUserRolesDTO) {
@@ -26,6 +30,8 @@ public class AppUserRolesService {
     public AppUserRolesDTO create(AppUserRolesDTO appUserRolesDTO) {
         try {
             AppUserRoles appUserRoles = mapper.map(appUserRolesDTO);
+            appUserRoles.setRoles(rolesService.getById(appUserRolesDTO.getRolesId()));
+            appUserRoles.setAppUser(appUserService.getById(appUserRolesDTO.getAppUserId()));
             appUserRoles = repository.save(appUserRoles);
             return mapper.map(appUserRoles);
         } catch (Exception e) {
