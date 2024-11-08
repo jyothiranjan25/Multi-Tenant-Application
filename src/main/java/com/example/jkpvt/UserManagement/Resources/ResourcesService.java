@@ -23,12 +23,6 @@ public class ResourcesService {
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
     public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
         List<Resources> resources = dao.get(resourcesDTO);
-        return mapper.map(resources);
-    }
-
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
-    public List<ResourcesDTO> getResources(ResourcesDTO resourcesDTO) {
-        List<Resources> resources = dao.get(resourcesDTO);
         return getResourceDtoList(resources);
     }
 
@@ -363,13 +357,8 @@ public class ResourcesService {
     }
 
     private ResourcesDTO mapToResourcesDTO(Resources resources) {
-        ResourcesDTO resourcesDTO = new ResourcesDTO();
-        resourcesDTO.setId(resources.getId());
-        resourcesDTO.setResourceName(resources.getResourceName());
-        resourcesDTO.setResourceFullName(resources.getResourceFullName());
-        resourcesDTO.setResourceDescription(resources.getResourceDescription());
-        resourcesDTO.setResourceUrl(resources.getResourceUrl());
-        resourcesDTO.setShowInMenu(resources.getShowInMenu());
+        ResourcesDTO resourcesDTO = mapper.map(resources);
+        resourcesDTO.setParentResource(null);
         return resourcesDTO;
     }
 

@@ -14,9 +14,8 @@ public class RolesDTO {
     private String roleName;
     private String roleDescription;
     private String roleIcon;
-    private Set<RoleModuleResourcesDTO> roleModuleResources;
     private List<ModulesDTO> modules;
-    private Set<ModulesDTO> moduleResources;
+    private List<ModulesDTO> moduleResources;
     private Integer pageOffset;
     private Integer pageSize;
 }

@@ -14,16 +14,10 @@ public class ResourcesController {
 
     private final ResourcesService service;
 
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
-    public List<ResourcesDTO> getResourcesAll(@RequestParam Map<String, String> queryParams) {
-        ResourcesDTO resourcesDTO = MapUtils.toDto(queryParams, ResourcesDTO.class);
-        return service.get(resourcesDTO);
-    }
-
     @RequestMapping(value = "/get",method = RequestMethod.GET)
     public List<ResourcesDTO> getResources(@RequestParam Map<String, String> queryParams) {
         ResourcesDTO resourcesDTO = MapUtils.toDto(queryParams, ResourcesDTO.class);
-        return service.getResources(resourcesDTO);
+        return service.get(resourcesDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
