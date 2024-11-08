@@ -2,18 +2,9 @@ package com.example.jkpvt.UserManagement.UserLogin;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.ExceptionHandling.RoleNotFoundExemption;
-import com.example.jkpvt.UserManagement.AppUser.AppUserDAO;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
-import com.example.jkpvt.UserManagement.AppUser.AppUserListener;
 import com.example.jkpvt.UserManagement.AppUser.AppUserService;
-import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRoles;
-import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDAO;
-import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
-import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesService;
-import com.example.jkpvt.UserManagement.Roles.RolesDTO;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -58,12 +49,8 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                     .password(appUserDTOList.getFirst().getPassword())
                     .disabled(!appUserDTOList.getFirst().getIsActive())
                     .build();
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage());
-        }catch (RoleNotFoundExemption e){
-            throw new RoleNotFoundExemption(e.getMessage());
-        }catch (Exception e){
-            throw new CommonException(e.getMessage());
+        } catch (Exception e){
+            throw e;
         }
     }
 

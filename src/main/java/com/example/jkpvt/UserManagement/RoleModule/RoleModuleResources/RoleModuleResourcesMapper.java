@@ -1,14 +1,17 @@
-package com.example.jkpvt.UserManagement.Roles.RoleModuleResources;
+package com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources;
 
-import com.example.jkpvt.UserManagement.Modules.ModulesMapper;
 import com.example.jkpvt.UserManagement.Resources.ResourcesMapper;
-import org.mapstruct.*;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleDTO;
+import org.mapstruct.InheritConfiguration;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ModulesMapper.class, ResourcesMapper.class})
+@Mapper(componentModel = "spring", uses = {ResourcesMapper.class})
 public interface RoleModuleResourcesMapper {
-
     RoleModuleResourcesDTO map(RoleModuleResources roleModuleResources);
 
     @InheritConfiguration(name = "map")

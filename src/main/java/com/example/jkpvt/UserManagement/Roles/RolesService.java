@@ -4,17 +4,14 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.Modules.Modules;
 import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
 import com.example.jkpvt.UserManagement.Modules.ModulesService;
-import com.example.jkpvt.UserManagement.Resources.Resources;
-import com.example.jkpvt.UserManagement.Resources.ResourcesDTO;
-import com.example.jkpvt.UserManagement.Resources.ResourcesService;
-import com.example.jkpvt.UserManagement.Roles.RoleModuleResources.*;
+import com.example.jkpvt.UserManagement.RoleModule.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class RolesService {
     private final RolesMapper mapper;
     private final RolesRepository repository;
     private final ModulesService modulesService;
-    private final ResourcesService resourcesService;
+    private final RoleModuleService roleModuleService;
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<RolesDTO> get(RolesDTO rolesDTO) {
@@ -32,7 +29,7 @@ public class RolesService {
         List<RolesDTO> rolesDTOList = new ArrayList<>();
         for (Roles role : roles) {
             RolesDTO newRoleDTO = mapper.map(role);
-            newRoleDTO.setModuleResources(mapToModulesDTO(role));
+            newRoleDTO.setModules(mapToModulesDTO(role));
             rolesDTOList.add(newRoleDTO);
         }
         return rolesDTOList;
@@ -42,13 +39,9 @@ public class RolesService {
     public RolesDTO create(RolesDTO rolesDTO) {
         try {
             Roles roles = mapper.map(rolesDTO);
-
-            Set<RoleModuleResources> roleModuleResources = setRoleModuleResources(roles, rolesDTO);
-            roles.setRoleModuleResources(roleModuleResources);
-
             roles = repository.save(roles);
             RolesDTO newRolesDTO = mapper.map(roles);
-            newRolesDTO.setModuleResources(mapToModulesDTO(roles));
+            newRolesDTO.setRoleModules(saveRoleModules(rolesDTO, roles));
             return newRolesDTO;
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
@@ -71,16 +64,8 @@ public class RolesService {
             if(rolesDTO.getRoleIcon() != null) {
                 roles.setRoleIcon(rolesDTO.getRoleIcon());
             }
-            if (rolesDTO.getModules() != null) {
-                Set<RoleModuleResources> roleModuleResources = setRoleModuleResources(roles, rolesDTO);
-                roles.getRoleModuleResources().clear();
-                roles.getRoleModuleResources().addAll(roleModuleResources);
-            }
-
             roles = repository.save(roles);
-            RolesDTO newRolesDTO = mapper.map(roles);
-            newRolesDTO.setModuleResources(mapToModulesDTO(roles));
-            return newRolesDTO;
+            return mapper.map(roles);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
@@ -105,51 +90,41 @@ public class RolesService {
         return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
     }
 
-    public Set<RoleModuleResources> setRoleModuleResources(Roles roles, RolesDTO rolesDTO) {
-        // Create a Set for RoleModuleResources if it doesn't exist
-        Set<RoleModuleResources> roleModuleResources = new HashSet<>();
-
-        // Loop through the modules from the DTO
-        if (rolesDTO.getModules() != null) {
-            for (ModulesDTO moduleDTO : rolesDTO.getModules()) {
-                Modules modules = modulesService.getById(moduleDTO.getId());
-                int order = moduleDTO.getModelOrder();
-                for (ResourcesDTO resource : moduleDTO.getResources()) {
-                    // get resources
-                    Resources resources = resourcesService.getById(resource.getId());
-
-                    RoleModuleResources roleModuleResource = new RoleModuleResources();
-                    roleModuleResource.setRole(roles);
-                    roleModuleResource.setModule(modules);
-                    roleModuleResource.setResource(resources);
-                    roleModuleResource.setModelOrder(order);
-                    roleModuleResource.setShowInMenu(resource.getShowInMenu());
-                    roleModuleResources.add(roleModuleResource);
-                }
-            }
-        }
-        return roleModuleResources;
-    }
-
     public List<ModulesDTO> mapToModulesDTO(Roles roles) {
-        Map<Long, List<RoleModuleResources>> roleModuleResources = groupRoleModuleResourcesByModule(roles);
+        Map<Long, List<RoleModule>> roleModuleResources = groupRoleModuleResourcesByModule(roles);
         List<Modules> modules = new ArrayList<>();
-        for (Map.Entry<Long, List<RoleModuleResources>> entry : roleModuleResources.entrySet()) {
+        for (Map.Entry<Long, List<RoleModule>> entry : roleModuleResources.entrySet()) {
             Modules newModule = entry.getValue().getFirst().getModule();
-            newModule.setResources(entry.getValue().stream().map(RoleModuleResources::getResource).collect(Collectors.toSet()));
+//            newModule.setResources(entry.getValue().stream().map(RoleModuleResources::getResource).collect(Collectors.toSet()));
             modules.add(newModule);
         }
         return modulesService.MapToModelDto(modules);
     }
 
 
-    private Map<Long, List<RoleModuleResources>> groupRoleModuleResourcesByModule(Roles roles) {
-        Map<Long, List<RoleModuleResources>> roleModuleResources = new HashMap<>();
-        for (RoleModuleResources roleModuleResource : roles.getRoleModuleResources()) {
-            roleModuleResources
-                    .computeIfAbsent(roleModuleResource.getModule().getId(), k -> new ArrayList<>())
-                    .add(roleModuleResource);
-        }
+    private Map<Long, List<RoleModule>> groupRoleModuleResourcesByModule(Roles roles) {
+        Map<Long, List<RoleModule>> roleModuleResources = new HashMap<>();
+//        for (RoleModule roleModuleResource : roles.getRoleModuleResources()) {
+//            roleModuleResources
+//                    .computeIfAbsent(roleModuleResource.getModule().getId(), k -> new ArrayList<>())
+//                    .add(roleModuleResource);
+//        }
         return roleModuleResources;
+    }
+
+    private List<RoleModuleDTO> saveRoleModules(RolesDTO rolesDTO, Roles roles) {
+        if(rolesDTO.getModules() != null) {
+            List<RoleModule> roleModules = new ArrayList<>();
+            for (ModulesDTO modulesDTO : rolesDTO.getModules()) {
+                RoleModule roleModule = new RoleModule();
+                roleModule.setRole(roles);
+                roleModule.setModule(modulesService.getById(modulesDTO.getId()));
+                roleModule.setModelOrder(modulesDTO.getModelOrder());
+                roleModules.add(roleModule);
+            }
+            return roleModuleService.saveAll(roleModules);
+        }else{
+            throw new CommonException("Modules cannot be null");
+        }
     }
 }

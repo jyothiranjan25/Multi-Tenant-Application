@@ -28,16 +28,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        String errorMessage;
-        if (exception instanceof DisabledException) {
-            errorMessage = "This account is disabled, please contact the administrator";
-        } else if (exception instanceof UsernameNotFoundException) {
-            errorMessage = "User not found";
-        } else if (exception instanceof RoleNotFoundExemption) {
-            errorMessage = "Role not found";
-        } else {
-            errorMessage = "Invalid username or password";
-        }
+        String errorMessage = exception.getMessage();
         ErrorResponse errorResponse = new ErrorResponse(errorMessage);
 
         try (PrintWriter writer = response.getWriter()) {

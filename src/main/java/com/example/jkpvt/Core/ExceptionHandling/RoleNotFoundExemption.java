@@ -6,8 +6,4 @@ public class RoleNotFoundExemption extends AuthenticationException {
     public RoleNotFoundExemption(String msg) {
         super(msg);
     }
-
-    public RoleNotFoundExemption(String msg, Throwable cause) {
-        super(msg, cause);
-    }
 }
