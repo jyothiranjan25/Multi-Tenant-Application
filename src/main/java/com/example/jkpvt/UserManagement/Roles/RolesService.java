@@ -26,13 +26,7 @@ public class RolesService {
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
     public List<RolesDTO> get(RolesDTO rolesDTO) {
         List<Roles> roles = dao.get(rolesDTO);
-        List<RolesDTO> rolesDTOList = new ArrayList<>();
-        for (Roles role : roles) {
-            RolesDTO newRoleDTO = mapper.map(role);
-            newRoleDTO.setModules(mapToModulesDTO(role));
-            rolesDTOList.add(newRoleDTO);
-        }
-        return rolesDTOList;
+        return mapper.map(roles);
     }
 
     @Transactional
@@ -88,28 +82,6 @@ public class RolesService {
     @Transactional(readOnly = true)
     public Roles getById(Long id) {
         return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
-    }
-
-    public List<ModulesDTO> mapToModulesDTO(Roles roles) {
-        Map<Long, List<RoleModule>> roleModuleResources = groupRoleModuleResourcesByModule(roles);
-        List<Modules> modules = new ArrayList<>();
-        for (Map.Entry<Long, List<RoleModule>> entry : roleModuleResources.entrySet()) {
-            Modules newModule = entry.getValue().getFirst().getModule();
-//            newModule.setResources(entry.getValue().stream().map(RoleModuleResources::getResource).collect(Collectors.toSet()));
-            modules.add(newModule);
-        }
-        return modulesService.MapToModelDto(modules);
-    }
-
-
-    private Map<Long, List<RoleModule>> groupRoleModuleResourcesByModule(Roles roles) {
-        Map<Long, List<RoleModule>> roleModuleResources = new HashMap<>();
-//        for (RoleModule roleModuleResource : roles.getRoleModuleResources()) {
-//            roleModuleResources
-//                    .computeIfAbsent(roleModuleResource.getModule().getId(), k -> new ArrayList<>())
-//                    .add(roleModuleResource);
-//        }
-        return roleModuleResources;
     }
 
     private List<RoleModuleDTO> saveRoleModules(RolesDTO rolesDTO, Roles roles) {

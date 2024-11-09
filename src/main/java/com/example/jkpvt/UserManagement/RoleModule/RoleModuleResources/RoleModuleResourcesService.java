@@ -26,12 +26,11 @@ public class RoleModuleResourcesService {
     public List<RoleModuleResourcesDTO> saveAll(List<RoleModule> roleModules) {
         List<RoleModuleResources> roleModuleResources = new ArrayList<>();
         for (RoleModule roleModule : roleModules) {
-            RoleModuleResources roleModuleResource = new RoleModuleResources();
-            roleModuleResource.setRoleModule(roleModule);
-            // get resources from roleModule
             Modules module = modulesService.getById(roleModule.getModule().getId());
            if(module.getResources() != null) {
                for (Resources resource : module.getResources()) {
+                   RoleModuleResources roleModuleResource = new RoleModuleResources();
+                   roleModuleResource.setRoleModule(roleModule);
                    roleModuleResource.setResource(resource);
                    roleModuleResource.setVisible(resource.getShowInMenu());
                    roleModuleResources.add(roleModuleResource);
