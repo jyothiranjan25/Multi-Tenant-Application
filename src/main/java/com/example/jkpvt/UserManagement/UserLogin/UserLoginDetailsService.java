@@ -1,6 +1,7 @@
 package com.example.jkpvt.UserManagement.UserLogin;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
 import jakarta.servlet.http.HttpSession;
@@ -39,20 +40,20 @@ public class UserLoginDetailsService {
     }
 
     public void storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
-        session.setAttribute("userGroup", appUserRolesDTO.getUserGroup());
-        session.setAttribute("roleId", appUserRolesDTO.getRoles().getId());
+        SessionStorageUtil.setUserGroup(appUserRolesDTO.getUserGroup());
+        SessionStorageUtil.setRoleId(appUserRolesDTO.getRoles().getId());
+        test();
     }
 
     public void test() {
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
-        String userName = (String) session.getAttribute("userName");
-        String userGroup = (String) session.getAttribute("userGroup");
-        Long roleId = (Long) session.getAttribute("roleId");
-        AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
+        String userName = SessionStorageUtil.getUserName();
+        String userGroup = SessionStorageUtil.getUserGroup();
+        Long roleId = SessionStorageUtil.getRoleId();
+        AppUserDTO appUserDTO = SessionStorageUtil.getUserLoginDetails();
 
+        System.out.println("UserName: " + userName);
         System.out.println("userGroup: " + userGroup);
         System.out.println("roleId: " + roleId);
-        System.out.println("appUserDTO: " + appUserDTO);
+        System.out.println("appUserDTO: " + appUserDTO.toString());
     }
 }

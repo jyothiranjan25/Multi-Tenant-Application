@@ -1,12 +1,14 @@
 package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResourcesService;
+import com.example.jkpvt.UserManagement.Resources.Resources;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -14,51 +16,24 @@ public class RoleModuleService {
 
     private final RoleModuleRepository repository;
     private final RoleModuleMapper mapper;
-    private final RoleModuleResourcesService roleModuleResourcesService;
-    @Transactional
-    public RoleModuleDTO saveRoleModule(RoleModuleDTO roleModuleDTO) {
-        try {
-            RoleModule roleModule = mapper.map(roleModuleDTO);
-            repository.save(roleModule);
-            return roleModuleDTO;
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
-    }
 
     @Transactional
-    public List<RoleModuleDTO> saveAll(List<RoleModule> roleModule) {
+    public List<RoleModuleDTO> saveAll(List<RoleModule> roleModules) {
         try {
-            List<RoleModule> roleModuleList = repository.saveAll(roleModule);
-            List<RoleModuleDTO> roleModuleDTOList = mapper.map(roleModuleList);
-            roleModuleResourcesService.saveAll(roleModuleList);
-            return roleModuleDTOList;
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
-    }
-
-
-    @Transactional
-    public RoleModuleDTO updateRoleModule(RoleModuleDTO roleModuleDTO) {
-        try {
-            RoleModule roleModule = mapper.map(roleModuleDTO);
-            repository.save(roleModule);
-            return roleModuleDTO;
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
-    }
-
-    @Transactional
-    public String deleteRoleModule(Long id) {
-        try {
-            if (repository.existsById(id)) {
-                repository.deleteById(id);
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
+            List<RoleModule> roleModuleList = roleModules;
+            for (RoleModule roleModule : roleModuleList) {
+                if(roleModule.getModule() != null && roleModule.getModule().getResources() != null) {
+                    Set<Resources> newResources = new HashSet<>();
+                    for (Resources resource : roleModule.getModule().getResources()) {
+                        if(resource.getShowInMenu()) {
+                            newResources.add(resource);
+                        }
+                    }
+                    roleModule.setResources(newResources);
+                }
             }
+            roleModuleList = repository.saveAll(roleModuleList);
+            return mapper.map(roleModuleList);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

@@ -31,7 +31,7 @@ public class AuditTablesCleanupService {
             List<String> auditTables = getAllAuditTables();
 
             // Calculate the threshold date (3 months ago)
-            LocalDateTime thresholdDate = LocalDateTime.now().minus(3, ChronoUnit.MONTHS);
+            LocalDateTime thresholdDate = LocalDateTime.now().minusMonths(3);
             long thresholdEpochMillis = thresholdDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
             // Delete from audit tables

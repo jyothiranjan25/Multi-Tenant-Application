@@ -1,8 +1,10 @@
 package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.UserManagement.Modules.Modules;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -53,4 +55,7 @@ public class Resources {
 
         @ManyToMany(mappedBy = "resources", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
         private Set<Modules> modules = new HashSet<>();
+
+        @ManyToMany(mappedBy = "resources", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+        private Set<RoleModule> roleModules = new HashSet<>();
 }

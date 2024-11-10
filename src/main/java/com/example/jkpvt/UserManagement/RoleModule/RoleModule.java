@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.UserManagement.Modules.Modules;
-import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResources;
+import com.example.jkpvt.UserManagement.Resources.Resources;
 import com.example.jkpvt.UserManagement.Roles.Roles;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +9,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,7 +36,11 @@ public class RoleModule {
     @Column(name = "model_order")
     private Integer modelOrder;
 
-    @OneToMany(mappedBy = "roleModule", cascade = CascadeType.ALL)
-    private List<RoleModuleResources> roleModuleResources;
-
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "role_module_resources",
+            joinColumns = @JoinColumn(name = "role_module_id"),
+            inverseJoinColumns = @JoinColumn(name = "resource_id")
+    )
+    private Set<Resources> resources = new HashSet<>();
 }

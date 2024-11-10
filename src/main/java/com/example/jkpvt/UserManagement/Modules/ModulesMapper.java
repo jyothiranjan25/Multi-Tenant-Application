@@ -1,10 +1,7 @@
 package com.example.jkpvt.UserManagement.Modules;
 
 import com.example.jkpvt.UserManagement.Resources.ResourcesMapper;
-import org.mapstruct.InheritConfiguration;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -20,4 +17,9 @@ public interface ModulesMapper {
     @InheritInverseConfiguration(name = "map")
     @Mapping(target = "resources", ignore = true)
     Modules map(ModulesDTO modulesDTO);
+
+    @Named("mapModulesWithoutResources")
+    @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParentAndChild")
+    ModulesDTO mapWithoutResources(Modules modules);
+
 }

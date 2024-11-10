@@ -52,7 +52,7 @@ public class AppUserService {
                 appUser.setEmail(appUserDTO.getEmail());
             }
             if(appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()){
-                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+                appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
             }
             if(appUserDTO.getIsAdmin() != null){
                 appUser.setIsAdmin(appUserDTO.getIsAdmin());

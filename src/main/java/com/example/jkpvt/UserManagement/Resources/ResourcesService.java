@@ -1,10 +1,7 @@
 package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.UserManagement.UserGroup.UserGroup;
-import com.example.jkpvt.UserManagement.UserGroup.UserGroupDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +15,6 @@ public class ResourcesService {
     private final ResourcesDAO dao;
     private final ResourcesMapper mapper;
     private final ResourcesRepository repository;
-    private final LocalContainerEntityManagerFactoryBean entityManagerFactory;
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
     public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
