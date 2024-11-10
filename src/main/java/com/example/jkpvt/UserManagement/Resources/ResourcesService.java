@@ -16,7 +16,7 @@ public class ResourcesService {
     private final ResourcesMapper mapper;
     private final ResourcesRepository repository;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW )
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ResourcesDTO> get(ResourcesDTO resourcesDTO) {
         List<Resources> resources = dao.get(resourcesDTO);
         return getResourceDtoList(resources);
@@ -42,7 +42,7 @@ public class ResourcesService {
 
     @Transactional
     public ResourcesDTO update(ResourcesDTO resourcesDTO) {
-    try {
+        try {
             Resources resources = getById(resourcesDTO.getId());
 
             if (resourcesDTO.getResourceName() != null) {
@@ -121,9 +121,9 @@ public class ResourcesService {
         boolean orderMatchFound = parentResources.values().stream()
                 .anyMatch(parent -> parent.getResourceOrder().equals(resourcesDTO.getResourceOrder()));
 
-        long initialParentResourcesSize = parentResources!=null?parentResources.size() + 1: + 1;
+        long initialParentResourcesSize = parentResources != null ? parentResources.size() + 1 : +1;
 
-        if(resourcesDTO.getParentId() == null) {
+        if (resourcesDTO.getParentId() == null) {
             if (resourcesDTO.getResourceOrder() == null || resourcesDTO.getResourceOrder() > initialParentResourcesSize) {
                 resources.setResourceOrder(initialParentResourcesSize);
                 resources.setResourceSubOrder(initialParentResourcesSize + "0");
@@ -134,13 +134,13 @@ public class ResourcesService {
                     changeOrderForParentAndChild(resources, parentResources, childResourcesForParent);
                 }
             }
-        }else{
+        } else {
             List<Resources> childResources = childResourcesForParent.get(resourcesDTO.getParentId());
-            long initialChildResourceSize = childResources!=null?childResources.size() + 1 : + 1;
+            long initialChildResourceSize = childResources != null ? childResources.size() + 1 : +1;
             resources.setResourceOrder(null);
             if (resourcesDTO.getResourceOrder() == null || resourcesDTO.getResourceOrder() > initialChildResourceSize) {
                 resources.setResourceSubOrder(resources.getParentResource().getResourceOrder() + Long.toString(initialChildResourceSize));
-            }else{
+            } else {
                 String subResOrder = resources.getParentResource().getResourceOrder() + resourcesDTO.getResourceOrder().toString();
                 resources.setResourceSubOrder(subResOrder);
                 boolean orderMatchFound1 = childResources != null && childResources.stream()
@@ -161,7 +161,7 @@ public class ResourcesService {
                 parent.setResourceSubOrder(parent.getResourceOrder() + "0");
                 updatedResources.add(parent);
                 List<Resources> childResources = childResourcesForParent.get(parent.getId());
-                if(childResources != null) {
+                if (childResources != null) {
                     for (Resources child : childResources) {
                         String parentOrderStr = String.valueOf(parent.getResourceOrder());
                         int length = parentOrderStr.length();
@@ -172,24 +172,24 @@ public class ResourcesService {
                 }
             }
         }
-        if(!updatedResources.isEmpty()){
+        if (!updatedResources.isEmpty()) {
             updateAll(updatedResources);
         }
     }
 
     public void changeOrderForChild(ResourcesDTO resourcesDTO, List<Resources> childResources) {
         List<Resources> updatedResources = new ArrayList<>();
-        for(Resources child : childResources){
+        for (Resources child : childResources) {
             String parentOrderStr = String.valueOf(child.getParentResource().getResourceOrder());
             int length = parentOrderStr.length();
             String actualChildOrder = child.getResourceSubOrder().substring(length);
-            if(Long.parseLong(actualChildOrder) >= resourcesDTO.getResourceOrder()){
+            if (Long.parseLong(actualChildOrder) >= resourcesDTO.getResourceOrder()) {
                 long newOrder = Long.parseLong(actualChildOrder) + 1;
                 child.setResourceSubOrder(child.getParentResource().getResourceOrder() + Long.toString(newOrder));
                 updatedResources.add(child);
             }
         }
-        if(!updatedResources.isEmpty()){
+        if (!updatedResources.isEmpty()) {
             updateAll(updatedResources);
         }
     }
@@ -210,11 +210,11 @@ public class ResourcesService {
         boolean orderMatchFound = parentResources.values().stream()
                 .anyMatch(parent -> parent.getResourceOrder().equals(resourcesDTO.getResourceOrder()));
 
-        long initialParentResourcesSize = parentResources!=null?parentResources.size() + 1: + 1;
+        long initialParentResourcesSize = parentResources != null ? parentResources.size() + 1 : +1;
 
         // check if id matches with parent id or child id
-        if(resources.getParentResource() == null ) {
-            if(!resources.getResourceOrder().equals(resourcesDTO.getResourceOrder())) {
+        if (resources.getParentResource() == null) {
+            if (!resources.getResourceOrder().equals(resourcesDTO.getResourceOrder())) {
                 if (resourcesDTO.getResourceOrder() > initialParentResourcesSize) {
                     resources.setResourceOrder(initialParentResourcesSize);
                     resources.setResourceSubOrder(initialParentResourcesSize + "0");
@@ -226,18 +226,18 @@ public class ResourcesService {
                     resources.setResourceSubOrder(resourcesDTO.getResourceOrder() + "0");
                     updateChildOrder(childResourcesForParent.get(resources.getId()));
                     if (orderMatchFound) {
-                        changeOrderForParentAndChildUpdate(resources,parentResources, childResourcesForParent, oldOrder, newOrder);
+                        changeOrderForParentAndChildUpdate(resources, parentResources, childResourcesForParent, oldOrder, newOrder);
                     }
                 }
             }
-        }else {
+        } else {
             List<Resources> childResources = childResourcesForParent.get(resources.getParentResource().getId());
-            long initialChildResourceSize = childResources!=null?childResources.size() + 1: + 1;
+            long initialChildResourceSize = childResources != null ? childResources.size() + 1 : +1;
             String parentOrderStr = String.valueOf(resources.getParentResource().getResourceOrder());
             int length = parentOrderStr.length();
             String actualChildOrder = resources.getResourceSubOrder().substring(length);
             String newChildOrder = resourcesDTO.getResourceOrder().toString();
-            if(!actualChildOrder.equals(newChildOrder)) {
+            if (!actualChildOrder.equals(newChildOrder)) {
                 if (resourcesDTO.getResourceOrder() > initialChildResourceSize) {
                     resources.setResourceSubOrder(resources.getParentResource().getResourceOrder() + Long.toString(initialChildResourceSize));
                 } else {
@@ -245,7 +245,7 @@ public class ResourcesService {
                     boolean orderMatchFound1 = childResources != null && childResources.stream()
                             .anyMatch(child -> child.getResourceSubOrder().equals(parentOrderStr + newChildOrder));
                     if (orderMatchFound1) {
-                        changeOrderForChildUpdate(resources, childResources,actualChildOrder,newChildOrder);
+                        changeOrderForChildUpdate(resources, childResources, actualChildOrder, newChildOrder);
                     }
                 }
             }
@@ -253,7 +253,7 @@ public class ResourcesService {
         }
     }
 
-    public void changeOrderForParentAndChildUpdate(Resources resources,Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent, long oldOrder, long newOrder) {
+    public void changeOrderForParentAndChildUpdate(Resources resources, Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent, long oldOrder, long newOrder) {
         List<Resources> updatedResources = new ArrayList<>();
         for (Map.Entry<Long, Resources> entry : parentResources.entrySet()) {
             Resources parent = entry.getValue();
@@ -277,43 +277,43 @@ public class ResourcesService {
             updatedResources.add(parent);
             updateChildOrder(childResourcesForParent.get(parent.getId()));
         }
-        if(!updatedResources.isEmpty()){
+        if (!updatedResources.isEmpty()) {
             updateAll(updatedResources);
         }
     }
 
     public void changeOrderForChildUpdate(Resources resources, List<Resources> childResources, String actualChildOrder, String newChildOrder) {
         List<Resources> updatedResources = new ArrayList<>();
-        for(Resources child : childResources){
-            if(resources.getId().equals(child.getId())){
+        for (Resources child : childResources) {
+            if (resources.getId().equals(child.getId())) {
                 continue;
             }
-            if(Long.parseLong(actualChildOrder) < Long.parseLong(newChildOrder)){
+            if (Long.parseLong(actualChildOrder) < Long.parseLong(newChildOrder)) {
                 // Shifting up
-                if(Long.parseLong(actualChildOrder) < Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) &&
-                        Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) <= Long.parseLong(newChildOrder)){
+                if (Long.parseLong(actualChildOrder) < Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) &&
+                        Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) <= Long.parseLong(newChildOrder)) {
                     long newOrder = Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) - 1;
                     child.setResourceSubOrder(resources.getParentResource().getResourceOrder() + Long.toString(newOrder));
                     updatedResources.add(child);
                 }
-            }else{
+            } else {
                 // Shifting down
-                if(Long.parseLong(actualChildOrder) > Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) &&
-                        Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) >= Long.parseLong(newChildOrder)){
+                if (Long.parseLong(actualChildOrder) > Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) &&
+                        Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) >= Long.parseLong(newChildOrder)) {
                     long newOrder = Long.parseLong(child.getResourceSubOrder().substring(resources.getParentResource().getResourceOrder().toString().length())) + 1;
                     child.setResourceSubOrder(resources.getParentResource().getResourceOrder() + Long.toString(newOrder));
                     updatedResources.add(child);
                 }
             }
         }
-        if(!updatedResources.isEmpty()){
+        if (!updatedResources.isEmpty()) {
             updateAll(updatedResources);
         }
     }
 
     public void updateChildOrder(List<Resources> childResources) {
         List<Resources> updatedResources = new ArrayList<>();
-        if(childResources != null) {
+        if (childResources != null) {
             for (Resources child : childResources) {
                 long parentResOrder = child.getParentResource().getResourceOrder();
                 String parentOrderStr = String.valueOf(parentResOrder);
@@ -323,7 +323,7 @@ public class ResourcesService {
                 updatedResources.add(child);
             }
         }
-        if(!updatedResources.isEmpty()){
+        if (!updatedResources.isEmpty()) {
             updateAll(updatedResources);
         }
     }
@@ -360,13 +360,13 @@ public class ResourcesService {
 
     private Set<ResourcesDTO> getChildResources(List<Resources> resources) {
         Set<ResourcesDTO> childResources = new HashSet<>();
-            for (Resources resource : resources) {
-                ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
-                if(resource.getResourceSubOrder() != null) {
-                  long Order = Long.parseLong(resource.getResourceSubOrder().substring(resource.getParentResource().getResourceOrder().toString().length()));
-                    newResourcesDTO.setResourceOrder(Order);
-                }
-                childResources.add(newResourcesDTO);
+        for (Resources resource : resources) {
+            ResourcesDTO newResourcesDTO = mapToResourcesDTO(resource);
+            if (resource.getResourceSubOrder() != null) {
+                long Order = Long.parseLong(resource.getResourceSubOrder().substring(resource.getParentResource().getResourceOrder().toString().length()));
+                newResourcesDTO.setResourceOrder(Order);
+            }
+            childResources.add(newResourcesDTO);
 
         }
         return childResources;

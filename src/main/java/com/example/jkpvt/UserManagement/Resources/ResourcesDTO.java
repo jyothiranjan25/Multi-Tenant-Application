@@ -1,6 +1,7 @@
 package com.example.jkpvt.UserManagement.Resources;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 

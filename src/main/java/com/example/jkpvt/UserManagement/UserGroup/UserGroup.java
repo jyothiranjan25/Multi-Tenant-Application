@@ -2,7 +2,8 @@ package com.example.jkpvt.UserManagement.UserGroup;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -27,7 +28,7 @@ public class UserGroup {
     @Column(name = "name", nullable = false, unique = true)
     private String groupName;
 
-    @Column(name = "description",length = 1025)
+    @Column(name = "description", length = 1025)
     private String groupDescription;
 
     @Column(name = "qualified_name")

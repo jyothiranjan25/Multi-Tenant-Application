@@ -20,7 +20,7 @@ public class UserGroupService {
     private final UserGroupMapper mapper;
     private final UserGroupRepository repository;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserGroupDTO> get(UserGroupDTO userGroupDTO) {
         List<UserGroup> userGroup = dao.get(userGroupDTO);
         return mapper.map(userGroup);
@@ -36,7 +36,7 @@ public class UserGroupService {
             }
             UserGroupDTO newUserGroupDTO = mapToUserGroupDTO(userGroup);
             Set<UserGroupDTO> childGroups = getChildGroups(userGroup);
-            if(!childGroups.isEmpty()) {
+            if (!childGroups.isEmpty()) {
                 newUserGroupDTO.setChildGroups(childGroups);
             }
             userGroupDTOList.add(newUserGroupDTO);
@@ -68,7 +68,7 @@ public class UserGroupService {
         try {
             UserGroup userGroup = getById(userGroupDTO.getId());
 
-            if(userGroupDTO.getGroupDescription() != null) {
+            if (userGroupDTO.getGroupDescription() != null) {
                 userGroup.setGroupDescription(userGroupDTO.getGroupDescription());
             }
 
@@ -104,7 +104,7 @@ public class UserGroupService {
             for (UserGroup childGroup : userGroup.getChildGroups()) {
                 UserGroupDTO newUserGroupDTO = mapToUserGroupDTO(childGroup);
                 Set<UserGroupDTO> child = getChildGroups(childGroup);
-                if(!child.isEmpty()) {
+                if (!child.isEmpty()) {
                     newUserGroupDTO.setChildGroups(getChildGroups(childGroup));
                 }
                 childGroups.add(newUserGroupDTO);

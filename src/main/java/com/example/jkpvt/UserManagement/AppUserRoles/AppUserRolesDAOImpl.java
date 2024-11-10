@@ -37,7 +37,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
             PaginationUtil.applyPagination(query, dto);
 
             return query.getResultList();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
@@ -48,13 +48,13 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
-        if(dto.getAppUserId() != null){
+        if (dto.getAppUserId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("appUser").get("id"), dto.getAppUserId()));
         }
-        if(dto.getRolesId() != null){
+        if (dto.getRolesId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("roles").get("id"), dto.getRolesId()));
         }
-        if(dto.getUserGroup() != null){
+        if (dto.getUserGroup() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("userGroup")), dto.getUserGroup().toLowerCase()));
         }
 

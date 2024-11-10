@@ -1,6 +1,5 @@
 package com.example.jkpvt.UserManagement.UserLogin;
 
-import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.ExceptionHandling.RoleNotFoundExemption;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUser.AppUserService;
@@ -49,7 +48,7 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                     .password(appUserDTOList.getFirst().getPassword())
                     .disabled(!appUserDTOList.getFirst().getIsActive())
                     .build();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }

@@ -55,7 +55,7 @@ public class ModulesDAOImpl implements ModulesDAO {
         if (dto.getModuleDescription() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("moduleDescription")), dto.getModuleDescription().toLowerCase()));
         }
-        if(dto.getModuleUrl() != null){
+        if (dto.getModuleUrl() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("moduleUrl")), dto.getModuleUrl().toLowerCase()));
         }
 //         if (dto.getResourceName() != null) {

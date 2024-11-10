@@ -45,7 +45,7 @@ public interface ResourcesMapper {
         dto.setShowInMenu(parentResource.getShowInMenu());
         dto.setResourceOrder(parentResource.getResourceOrder());
         dto.setResourceSubOrder(parentResource.getResourceSubOrder());
-        dto.setParentId(parentResource.getParentResource()!=null?parentResource.getParentResource().getId():null);
+        dto.setParentId(parentResource.getParentResource() != null ? parentResource.getParentResource().getId() : null);
         return dto;
     }
 
@@ -65,7 +65,7 @@ public interface ResourcesMapper {
                     dto.setShowInMenu(childResource.getShowInMenu());
                     dto.setResourceOrder(childResource.getResourceOrder());
                     dto.setResourceSubOrder(childResource.getResourceSubOrder());
-                    dto.setParentId(childResource.getParentResource() != null?childResource.getParentResource().getId():null);
+                    dto.setParentId(childResource.getParentResource() != null ? childResource.getParentResource().getId() : null);
                     return dto;
                 })
                 .collect(Collectors.toSet());

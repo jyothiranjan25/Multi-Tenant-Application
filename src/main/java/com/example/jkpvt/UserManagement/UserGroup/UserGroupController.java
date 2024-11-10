@@ -15,13 +15,13 @@ public class UserGroupController {
 
     private final UserGroupService service;
 
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public List<UserGroupDTO> getUserGroupAll(@RequestParam Map<String, String> queryParams) {
         UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
         return service.get(userGroupDTO);
     }
 
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<UserGroupDTO> getUserGroup(@RequestParam Map<String, String> queryParams) {
         UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
         return service.getUserGroups(userGroupDTO);
@@ -38,5 +38,7 @@ public class UserGroupController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String deleteUserGroup(@RequestBody UserGroupDTO userGroupDTO) {return service.delete(userGroupDTO);}
+    public String deleteUserGroup(@RequestBody UserGroupDTO userGroupDTO) {
+        return service.delete(userGroupDTO);
+    }
 }

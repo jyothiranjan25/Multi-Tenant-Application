@@ -22,25 +22,25 @@ public class RolesDAOImpl implements RolesDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-        public List<Roles> get(RolesDTO rolesDTO) {
-            try {
-                CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-                CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
-                Root<Roles> root = criteriaQuery.from(Roles.class);
+    public List<Roles> get(RolesDTO rolesDTO) {
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
+            Root<Roles> root = criteriaQuery.from(Roles.class);
 
-                List<Predicate> predicates = buildPredicates(rolesDTO, criteriaBuilder, root);
+            List<Predicate> predicates = buildPredicates(rolesDTO, criteriaBuilder, root);
 
-                criteriaQuery.where(predicates.toArray(new Predicate[0]));
+            criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-                TypedQuery<Roles> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<Roles> query = entityManager.createQuery(criteriaQuery);
 
-                PaginationUtil.applyPagination(query, rolesDTO);
+            PaginationUtil.applyPagination(query, rolesDTO);
 
-                return query.getResultList();
-            } catch (Exception e) {
-                throw new CommonException(e.getMessage());
-            }
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new CommonException(e.getMessage());
         }
+    }
 
 
     private List<Predicate> buildPredicates(RolesDTO dto, CriteriaBuilder criteriaBuilder, Root<Roles> root) {

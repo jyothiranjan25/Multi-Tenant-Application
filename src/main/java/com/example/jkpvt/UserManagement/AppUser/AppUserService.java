@@ -18,7 +18,7 @@ public class AppUserService {
     private final AppUserDAO appUserDAO;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserDTO> get(AppUserDTO appUserDTO) {
         List<AppUser> appUser = appUserDAO.get(appUserDTO);
         return mapper.map(appUser);
@@ -26,57 +26,57 @@ public class AppUserService {
 
     @Transactional
     public AppUserDTO createAppUser(AppUserDTO appUserDTO) {
-        try{
-            if(appUserDTO.getPassword() != null){
+        try {
+            if (appUserDTO.getPassword() != null) {
                 appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-            }else{
+            } else {
                 appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getUserName()));
             }
             AppUser appUser = mapper.map(appUserDTO);
             repository.save(appUser);
             return mapper.map(appUser);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
 
     @Transactional
     public AppUserDTO updateAppUser(AppUserDTO appUserDTO) {
-        try{
+        try {
             AppUser appUser = getById(appUserDTO.getId());
 
-            if(appUserDTO.getUserName() != null){
+            if (appUserDTO.getUserName() != null) {
                 appUser.setUserName(appUserDTO.getUserName());
             }
-            if(appUserDTO.getEmail() != null){
+            if (appUserDTO.getEmail() != null) {
                 appUser.setEmail(appUserDTO.getEmail());
             }
-            if(appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()){
+            if (appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()) {
                 appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
             }
-            if(appUserDTO.getIsAdmin() != null){
+            if (appUserDTO.getIsAdmin() != null) {
                 appUser.setIsAdmin(appUserDTO.getIsAdmin());
             }
-            if(appUserDTO.getIsActive() != null){
+            if (appUserDTO.getIsActive() != null) {
                 appUser.setIsActive(appUserDTO.getIsActive());
             }
             appUser = repository.save(appUser);
             return mapper.map(appUser);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
 
     @Transactional
     public String deleteAppUser(AppUserDTO appUserDTO) {
-        try{
-            if(repository.existsById(appUserDTO.getId())){
+        try {
+            if (repository.existsById(appUserDTO.getId())) {
                 repository.deleteById(appUserDTO.getId());
                 return "Data deleted successfully";
-            }else{
+            } else {
                 throw new CommonException("Data not found");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }

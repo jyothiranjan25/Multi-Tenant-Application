@@ -25,7 +25,7 @@ public class PaginationUtil {
         // Apply pagination if both fields are provided
         if (pageOffset != null && pageSize != null) {
             // Adjust the pageOffset to be 0-based (since JPA uses 0-based index)
-            if(pageOffset < 0)pageOffset = 0;
+            if (pageOffset < 0) pageOffset = 0;
             else pageOffset = (pageOffset) * pageSize;
 
             // Apply pagination
@@ -40,7 +40,7 @@ public class PaginationUtil {
             field.setAccessible(true);  // Make private fields accessible
             return (Integer) field.get(dto); // Retrieve values from the fields
         } catch (Exception e) {
-           return null;
+            return null;
         }
     }
 

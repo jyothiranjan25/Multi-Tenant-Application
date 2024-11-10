@@ -51,7 +51,7 @@ public class RolesListener implements ApplicationContextAware {
             if (!rolesList.isEmpty()) {
                 throw new CommonException("Role name already exists");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }

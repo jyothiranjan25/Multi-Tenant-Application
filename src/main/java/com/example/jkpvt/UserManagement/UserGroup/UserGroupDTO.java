@@ -1,7 +1,8 @@
 package com.example.jkpvt.UserManagement.UserGroup;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 

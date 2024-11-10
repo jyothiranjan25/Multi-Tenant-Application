@@ -3,7 +3,8 @@ package com.example.jkpvt.UserManagement.Roles;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRoles;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -28,15 +29,15 @@ public class Roles {
     @Column(name = "name")
     private String roleName;
 
-    @Column(name = "description",length = 1025)
+    @Column(name = "description", length = 1025)
     private String roleDescription;
 
-    @Column(name = "icon",length = 4025)
+    @Column(name = "icon", length = 4025)
     private String roleIcon;
 
-    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RoleModule> roleModule = new HashSet<>();
 
-    @OneToMany(mappedBy = "roles",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "roles", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AppUserRoles> appUserRoles;
 }

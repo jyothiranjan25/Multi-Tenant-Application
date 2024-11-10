@@ -22,10 +22,10 @@ public class RoleModuleService {
         try {
             List<RoleModule> roleModuleList = roleModules;
             for (RoleModule roleModule : roleModuleList) {
-                if(roleModule.getModule() != null && roleModule.getModule().getResources() != null) {
+                if (roleModule.getModule() != null && roleModule.getModule().getResources() != null) {
                     Set<Resources> newResources = new HashSet<>();
                     for (Resources resource : roleModule.getModule().getResources()) {
-                        if(resource.getShowInMenu()) {
+                        if (resource.getShowInMenu()) {
                             newResources.add(resource);
                         }
                     }

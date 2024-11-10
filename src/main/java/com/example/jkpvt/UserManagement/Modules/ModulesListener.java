@@ -43,11 +43,11 @@ public class ModulesListener implements ApplicationContextAware {
         // checkIDExists(modules);
     }
 
-    private void conditionsChecks(ModulesDTO modulesDTO, Modules modules , Set<Resources> resources) {
+    private void conditionsChecks(ModulesDTO modulesDTO, Modules modules, Set<Resources> resources) {
         if (modulesDTO.getModuleUrl() == null && resources.isEmpty()) {
             throw new CommonException("Module URL is required");
         }
-        if(modulesDTO.getModuleUrl() != null && !resources.isEmpty()) {
+        if (modulesDTO.getModuleUrl() != null && !resources.isEmpty()) {
             modules.setModuleUrl(null);
         }
         // check parent and child resources
@@ -69,7 +69,7 @@ public class ModulesListener implements ApplicationContextAware {
         // check parent has child
         for (Long parentId : parentIds) {
             boolean hasChilds = resources.stream().anyMatch(resource ->
-                    Objects.equals(resource.getParentResource()!=null?resource.getParentResource().getId():null, parentId));
+                    Objects.equals(resource.getParentResource() != null ? resource.getParentResource().getId() : null, parentId));
             if (!hasChilds) {
                 throw new CommonException("Parent resource should have child resource");
             }

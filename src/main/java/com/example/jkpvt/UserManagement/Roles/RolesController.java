@@ -14,8 +14,8 @@ public class RolesController {
 
     private final RolesService rolesService;
 
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
-    public List<RolesDTO> GetRoles(@RequestParam Map<String,String> queryParams) {
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public List<RolesDTO> GetRoles(@RequestParam Map<String, String> queryParams) {
         RolesDTO rolesDTO = MapUtils.toDto(queryParams, RolesDTO.class);
         return rolesService.get(rolesDTO);
     }

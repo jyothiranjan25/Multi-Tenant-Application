@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Login Page</title>
     <script>
         async function submitLoginForm(event) {
@@ -43,11 +43,11 @@
 <form id="loginForm" onsubmit="submitLoginForm(event)">
     <div>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="jyothiranjan@gmail.com" required>
+        <input id="username" name="username" required type="text" value="jyothiranjan@gmail.com">
     </div>
     <div>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" value="1234" required>
+        <input id="password" name="password" required type="password" value="1234">
     </div>
     <button type="submit">Login</button>
 </form>

@@ -1,11 +1,10 @@
 package com.example.jkpvt.UserManagement.Modules;
 
 import com.example.jkpvt.UserManagement.Resources.ResourcesDTO;
-
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

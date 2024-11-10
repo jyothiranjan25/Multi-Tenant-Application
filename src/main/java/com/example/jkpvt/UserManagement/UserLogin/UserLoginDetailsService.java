@@ -4,13 +4,9 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 
 import java.util.List;
 

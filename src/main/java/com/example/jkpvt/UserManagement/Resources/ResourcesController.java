@@ -14,7 +14,7 @@ public class ResourcesController {
 
     private final ResourcesService service;
 
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<ResourcesDTO> getResources(@RequestParam Map<String, String> queryParams) {
         ResourcesDTO resourcesDTO = MapUtils.toDto(queryParams, ResourcesDTO.class);
         return service.get(resourcesDTO);

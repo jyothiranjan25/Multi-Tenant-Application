@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class ModulesService {
     private final ModulesRepository modulesRepository;
     private final ResourcesService resourcesService;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ModulesDTO> get(ModulesDTO modulesDTO) {
         List<Modules> modules = modulesDAO.get(modulesDTO);
         return MapToModelDto(modules);
@@ -86,7 +89,7 @@ public class ModulesService {
     public Set<Resources> setResources(ModulesDTO modulesDTO) {
         Set<Resources> resources = new HashSet<>();
         for (Integer resourceId : modulesDTO.getResourceIds()) {
-            Resources resources1 = resourcesService.getById((long)resourceId);
+            Resources resources1 = resourcesService.getById((long) resourceId);
             resources.add(resources1);
         }
         return resources;

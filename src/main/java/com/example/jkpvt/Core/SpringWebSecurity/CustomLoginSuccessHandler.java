@@ -43,12 +43,12 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
 
             String redirectUrl;
-            if(appUserDTO.getAppUserRoles().size() > 1){
+            if (appUserDTO.getAppUserRoles().size() > 1) {
                 redirectUrl = "switchRoles";
-            }else if(appUserDTO.getAppUserRoles().size() == 1) {
+            } else if (appUserDTO.getAppUserRoles().size() == 1) {
                 redirectUrl = "dashboard";
                 userLoginDetailsService.storeUserLoginDetails(appUserDTO.getAppUserRoles().getFirst());
-            }else {
+            } else {
                 redirectUrl = "login";
             }
 
@@ -62,7 +62,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                 writer.write(gson.toJson(successResponse));
                 writer.flush();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -78,7 +78,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             loginDetail.setIsActive(true);
 
             userLoginDetailsService.create(loginDetail);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

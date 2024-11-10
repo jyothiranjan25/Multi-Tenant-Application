@@ -2,7 +2,8 @@ package com.example.jkpvt.UserManagement.Roles;
 
 import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleDTO;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 

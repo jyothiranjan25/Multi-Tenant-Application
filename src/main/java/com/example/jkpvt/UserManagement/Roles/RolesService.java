@@ -3,13 +3,16 @@ package com.example.jkpvt.UserManagement.Roles;
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
 import com.example.jkpvt.UserManagement.Modules.ModulesService;
-import com.example.jkpvt.UserManagement.RoleModule.*;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleDTO;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -22,7 +25,7 @@ public class RolesService {
     private final ModulesService modulesService;
     private final RoleModuleService roleModuleService;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RolesDTO> get(RolesDTO rolesDTO) {
         List<Roles> roles = dao.get(rolesDTO);
         return mapper.map(roles);
@@ -48,13 +51,13 @@ public class RolesService {
             Roles roles = getById(rolesDTO.getId());
 
             // Update the Roles entity with the new values
-            if(rolesDTO.getRoleName() != null) {
+            if (rolesDTO.getRoleName() != null) {
                 roles.setRoleName(rolesDTO.getRoleName());
             }
-            if(rolesDTO.getRoleDescription() != null) {
+            if (rolesDTO.getRoleDescription() != null) {
                 roles.setRoleDescription(rolesDTO.getRoleDescription());
             }
-            if(rolesDTO.getRoleIcon() != null) {
+            if (rolesDTO.getRoleIcon() != null) {
                 roles.setRoleIcon(rolesDTO.getRoleIcon());
             }
             roles = repository.save(roles);
@@ -80,11 +83,11 @@ public class RolesService {
 
     @Transactional(readOnly = true)
     public Roles getById(Long id) {
-        return repository.findById(id).orElseThrow(()->new CommonException("Role with id: "+ id +" not found"));
+        return repository.findById(id).orElseThrow(() -> new CommonException("Role with id: " + id + " not found"));
     }
 
     private List<RoleModuleDTO> saveRoleModules(RolesDTO rolesDTO, Roles roles) {
-        if(rolesDTO.getModules() != null) {
+        if (rolesDTO.getModules() != null) {
             List<RoleModule> roleModules = new ArrayList<>();
             for (ModulesDTO modulesDTO : rolesDTO.getModules()) {
                 RoleModule roleModule = new RoleModule();
@@ -94,7 +97,7 @@ public class RolesService {
                 roleModules.add(roleModule);
             }
             return roleModuleService.saveAll(roleModules);
-        }else{
+        } else {
             throw new CommonException("Modules cannot be null");
         }
     }

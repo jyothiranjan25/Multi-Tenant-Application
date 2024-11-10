@@ -2,7 +2,10 @@ package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.UserManagement.Modules.ModulesMapper;
 import com.example.jkpvt.UserManagement.Resources.ResourcesMapper;
-import org.mapstruct.*;
+import org.mapstruct.InheritConfiguration;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

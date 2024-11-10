@@ -52,7 +52,7 @@ public class ResourcesDAOImpl implements ResourcesDAO {
         if (dto.getResourceName() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceName")), dto.getResourceName().toLowerCase()));
         }
-        if(dto.getResourceFullName() != null) {
+        if (dto.getResourceFullName() != null) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceFullName")), dto.getResourceFullName().toLowerCase()));
         }
         if (dto.getResourceDescription() != null) {

@@ -1,11 +1,12 @@
 package com.example.jkpvt;
 
-import java.io.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {

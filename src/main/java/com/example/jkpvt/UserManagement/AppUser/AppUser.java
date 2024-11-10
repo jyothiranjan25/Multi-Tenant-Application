@@ -2,7 +2,8 @@ package com.example.jkpvt.UserManagement.AppUser;
 
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRoles;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
@@ -26,7 +27,7 @@ public class AppUser {
     @Column(name = "username")
     private String userName;
 
-    @Column(name = "password",length = 1025)
+    @Column(name = "password", length = 1025)
     private String password;
 
     @Column(name = "email")

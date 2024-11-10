@@ -31,7 +31,7 @@ public class UserGroupListener implements ApplicationContextAware {
 
     @PreUpdate
     public void preUpdate(UserGroup userGroup) {
-        if (userGroup.getId() == null ) {
+        if (userGroup.getId() == null) {
             throw new CommonException("ID is mandatory");
         }
         checkForDuplicateGroupName(userGroup);
@@ -67,7 +67,7 @@ public class UserGroupListener implements ApplicationContextAware {
             if (!children.isEmpty()) {
                 throw new CommonException("Group has child records");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }

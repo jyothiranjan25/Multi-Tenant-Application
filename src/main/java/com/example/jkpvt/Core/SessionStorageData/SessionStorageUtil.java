@@ -5,26 +5,21 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-public class SessionStorageUtil{
+public class SessionStorageUtil {
 
     private static final String APP_USER_SESSION_KEY = "appUser";
     private static final String USER_NAME_SESSION_KEY = "userName";
     private static final String USER_GROUP_SESSION_KEY = "userGroup";
     private static final String ROLE_SESSION_KEY = "roleId";
 
-    public static void setUserLoginDetails(AppUserDTO appUserDTO) {
-        HttpSession session = getCurrentSession();
-        session.setAttribute(APP_USER_SESSION_KEY, appUserDTO);
-    }
-
     public static AppUserDTO getUserLoginDetails() {
         HttpSession session = getCurrentSession();
         return (AppUserDTO) session.getAttribute(APP_USER_SESSION_KEY);
     }
 
-    public static void setUserName(String userName) {
+    public static void setUserLoginDetails(AppUserDTO appUserDTO) {
         HttpSession session = getCurrentSession();
-        session.setAttribute(USER_NAME_SESSION_KEY, userName);
+        session.setAttribute(APP_USER_SESSION_KEY, appUserDTO);
     }
 
     public static String getUserName() {
@@ -32,9 +27,9 @@ public class SessionStorageUtil{
         return (String) session.getAttribute(USER_NAME_SESSION_KEY);
     }
 
-    public static void setUserGroup(String userGroup) {
+    public static void setUserName(String userName) {
         HttpSession session = getCurrentSession();
-        session.setAttribute(USER_GROUP_SESSION_KEY, userGroup);
+        session.setAttribute(USER_NAME_SESSION_KEY, userName);
     }
 
     public static String getUserGroup() {
@@ -42,14 +37,19 @@ public class SessionStorageUtil{
         return (String) session.getAttribute(USER_GROUP_SESSION_KEY);
     }
 
-    public static void setRoleId(Long roleId) {
+    public static void setUserGroup(String userGroup) {
         HttpSession session = getCurrentSession();
-        session.setAttribute(ROLE_SESSION_KEY, roleId);
+        session.setAttribute(USER_GROUP_SESSION_KEY, userGroup);
     }
 
     public static Long getRoleId() {
         HttpSession session = getCurrentSession();
         return (Long) session.getAttribute(ROLE_SESSION_KEY);
+    }
+
+    public static void setRoleId(Long roleId) {
+        HttpSession session = getCurrentSession();
+        session.setAttribute(ROLE_SESSION_KEY, roleId);
     }
 
     // Helper method to get the current session

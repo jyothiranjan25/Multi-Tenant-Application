@@ -11,7 +11,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +37,12 @@ public class AppUserDAOImpl implements AppUserDAO {
             PaginationUtil.applyPagination(query, dto);
 
             return query.getResultList();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
 
-    private List<Predicate> buildPredicates( AppUserDTO dto, CriteriaBuilder criteriaBuilder, Root<AppUser> root) {
+    private List<Predicate> buildPredicates(AppUserDTO dto, CriteriaBuilder criteriaBuilder, Root<AppUser> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {

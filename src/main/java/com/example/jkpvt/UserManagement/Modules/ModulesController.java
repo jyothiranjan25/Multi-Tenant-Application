@@ -14,7 +14,7 @@ public class ModulesController {
 
     private final ModulesService service;
 
-    @RequestMapping(value = "/get",method = RequestMethod.GET)
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<ModulesDTO> getModules(@RequestParam Map<String, String> queryParams) {
         ModulesDTO modulesDTO = MapUtils.toDto(queryParams, ModulesDTO.class);
         return service.get(modulesDTO);
