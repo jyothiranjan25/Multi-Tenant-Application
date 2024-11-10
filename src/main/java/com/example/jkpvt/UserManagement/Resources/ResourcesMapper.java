@@ -17,8 +17,8 @@ public interface ResourcesMapper {
     List<ResourcesDTO> map(List<Resources> ResourcesList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(source = "parentResource", target = "parentResource", qualifiedByName = "mapParentDTO")
-    @Mapping(source = "childResources", target = "childResources", qualifiedByName = "mapChildDTO")
+    @Mapping(target = "parentResource", ignore = true)
+    @Mapping(target = "childResources", ignore = true)
     Resources map(ResourcesDTO resourcesDTO);
 
     @Named("mapResourcesWithoutParent")
@@ -26,11 +26,10 @@ public interface ResourcesMapper {
     @Mapping(source = "childResources", target = "childResources", qualifiedByName = "mapChild")
     ResourcesDTO mapWithoutParent(Resources resources);
 
-    @InheritInverseConfiguration(name = "map")
-    @Named("mapResourcesWithoutParentDTO")
+    @Named("mapResourcesWithoutParentAndChild")
     @Mapping(target = "parentResource", ignore = true) // Ignore parentResource in this case
-    @Mapping(source = "childResources", target = "childResources", qualifiedByName = "mapChildDTO")
-    Resources mapResourcesWithoutParentDTO(ResourcesDTO resourcesDTO);
+    @Mapping(target = "childResources", ignore = true)
+    ResourcesDTO mapResources(Resources resources);
 
     @Named("mapParent")
     default ResourcesDTO mapParent(Resources parentResource) {
@@ -48,23 +47,6 @@ public interface ResourcesMapper {
         dto.setResourceSubOrder(parentResource.getResourceSubOrder());
         dto.setParentId(parentResource.getParentResource()!=null?parentResource.getParentResource().getId():null);
         return dto;
-    }
-
-    @Named("mapParentDTO")
-    default Resources mapParentDTO(ResourcesDTO parentResourceDTO) {
-        if (parentResourceDTO == null) {
-            return null;
-        }
-        Resources entity = new Resources();
-        entity.setId(parentResourceDTO.getId());
-        entity.setResourceName(parentResourceDTO.getResourceName());
-        entity.setResourceFullName(parentResourceDTO.getResourceFullName());
-        entity.setResourceDescription(parentResourceDTO.getResourceDescription());
-        entity.setResourceUrl(parentResourceDTO.getResourceUrl());
-        entity.setResourceOrder(parentResourceDTO.getResourceOrder());
-        entity.setResourceSubOrder(parentResourceDTO.getResourceSubOrder());
-        entity.setShowInMenu(parentResourceDTO.getShowInMenu());
-        return entity;
     }
 
     @Named("mapChild")
@@ -85,27 +67,6 @@ public interface ResourcesMapper {
                     dto.setResourceSubOrder(childResource.getResourceSubOrder());
                     dto.setParentId(childResource.getParentResource() != null?childResource.getParentResource().getId():null);
                     return dto;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("mapChildDTO")
-    default Set<Resources> mapChildDTO(Set<ResourcesDTO> childResourcesDTO) {
-        if (childResourcesDTO == null || childResourcesDTO.isEmpty()) {
-            return null;
-        }
-        return childResourcesDTO.stream()
-                .map(childResourceDTO -> {
-                    Resources entity = new Resources();
-                    entity.setId(childResourceDTO.getId());
-                    entity.setResourceName(childResourceDTO.getResourceName());
-                    entity.setResourceFullName(childResourceDTO.getResourceFullName());
-                    entity.setResourceDescription(childResourceDTO.getResourceDescription());
-                    entity.setResourceUrl(childResourceDTO.getResourceUrl());
-                    entity.setResourceOrder(childResourceDTO.getResourceOrder());
-                    entity.setResourceSubOrder(childResourceDTO.getResourceSubOrder());
-                    entity.setShowInMenu(childResourceDTO.getShowInMenu());
-                    return entity;
                 })
                 .collect(Collectors.toSet());
     }

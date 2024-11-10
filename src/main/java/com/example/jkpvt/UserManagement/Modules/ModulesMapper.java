@@ -11,7 +11,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = ResourcesMapper.class)
 public interface ModulesMapper {
 
-    // Mapping for Modules where we ignore the parentResource field in resources
     @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParent")
     ModulesDTO map(Modules modules);
 
@@ -19,6 +18,6 @@ public interface ModulesMapper {
     List<ModulesDTO> map(List<Modules> modulesList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParentDTO")
+    @Mapping(target = "resources", ignore = true)
     Modules map(ModulesDTO modulesDTO);
 }

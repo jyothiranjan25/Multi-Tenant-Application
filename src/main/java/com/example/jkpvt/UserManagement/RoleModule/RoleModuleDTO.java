@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
-import com.example.jkpvt.UserManagement.Resources.ResourcesDTO;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResourcesDTO;
 import lombok.*;
 
 import java.util.List;
@@ -12,6 +12,7 @@ public class RoleModuleDTO {
     private Long id;
     private Long roleId;
     private Long moduleId;
-    private ModulesDTO modules;
+    private ModulesDTO module;
+    private List<RoleModuleResourcesDTO> roleModuleResources;
     private int modelOrder;
 }

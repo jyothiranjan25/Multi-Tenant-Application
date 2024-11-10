@@ -1,7 +1,6 @@
 package com.example.jkpvt.UserManagement.Roles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.UserManagement.Modules.Modules;
 import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
 import com.example.jkpvt.UserManagement.Modules.ModulesService;
 import com.example.jkpvt.UserManagement.RoleModule.*;
