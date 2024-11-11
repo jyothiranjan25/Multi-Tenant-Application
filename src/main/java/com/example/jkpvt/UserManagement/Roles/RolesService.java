@@ -1,17 +1,12 @@
 package com.example.jkpvt.UserManagement.Roles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
-import com.example.jkpvt.UserManagement.Modules.ModulesService;
-import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
-import com.example.jkpvt.UserManagement.RoleModule.RoleModuleDTO;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +17,6 @@ public class RolesService {
     private final RolesDAO dao;
     private final RolesMapper mapper;
     private final RolesRepository repository;
-    private final ModulesService modulesService;
     private final RoleModuleService roleModuleService;
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
@@ -36,9 +30,7 @@ public class RolesService {
         try {
             Roles roles = mapper.map(rolesDTO);
             roles = repository.save(roles);
-            RolesDTO newRolesDTO = mapper.map(roles);
-            newRolesDTO.setRoleModules(saveRoleModules(rolesDTO, roles));
-            return newRolesDTO;
+            return mapper.map(roles);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
@@ -84,21 +76,5 @@ public class RolesService {
     @Transactional(readOnly = true)
     public Roles getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new CommonException("Role with id: " + id + " not found"));
-    }
-
-    private List<RoleModuleDTO> saveRoleModules(RolesDTO rolesDTO, Roles roles) {
-        if (rolesDTO.getModules() != null) {
-            List<RoleModule> roleModules = new ArrayList<>();
-            for (ModulesDTO modulesDTO : rolesDTO.getModules()) {
-                RoleModule roleModule = new RoleModule();
-                roleModule.setRole(roles);
-                roleModule.setModule(modulesService.getById(modulesDTO.getId()));
-                roleModule.setModelOrder(modulesDTO.getModelOrder());
-                roleModules.add(roleModule);
-            }
-            return roleModuleService.saveAll(roleModules);
-        } else {
-            throw new CommonException("Modules cannot be null");
-        }
     }
 }

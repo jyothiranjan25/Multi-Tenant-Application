@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.UserManagement.Modules.Modules;
-import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResources;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +56,6 @@ public class Resources {
     @ManyToMany(mappedBy = "resources", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Modules> modules = new HashSet<>();
 
-    @ManyToMany(mappedBy = "resources", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Set<RoleModule> roleModules = new HashSet<>();
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
 }

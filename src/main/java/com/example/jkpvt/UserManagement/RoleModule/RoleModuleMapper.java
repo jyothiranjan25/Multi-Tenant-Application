@@ -1,7 +1,6 @@
 package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.UserManagement.Modules.ModulesMapper;
-import com.example.jkpvt.UserManagement.Resources.ResourcesMapper;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -9,11 +8,11 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ModulesMapper.class, ResourcesMapper.class})
+@Mapper(componentModel = "spring", uses = {ModulesMapper.class})
 public interface RoleModuleMapper {
 
-    @Mapping(target = "module", qualifiedByName = "mapModulesWithoutResources")
-    @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParentAndChild")
+    @Mapping(source = "role.id", target = "roleId")
+    @Mapping(source = "module.id", target = "moduleId")
     RoleModuleDTO map(RoleModule roleModule);
 
     @InheritConfiguration(name = "map")
@@ -21,7 +20,6 @@ public interface RoleModuleMapper {
 
     @InheritInverseConfiguration(name = "map")
     @Mapping(source = "roleId", target = "role.id")
-    @Mapping(target = "resources", ignore = true)
-    @Mapping(target = "module", ignore = true)
+    @Mapping(source = "moduleId", target = "module.id")
     RoleModule map(RoleModuleDTO roleModuleDTO);
 }

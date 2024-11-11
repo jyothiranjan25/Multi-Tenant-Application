@@ -1,6 +1,7 @@
-package com.example.jkpvt.UserManagement.RoleModule;
+package com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources;
 
 import com.example.jkpvt.UserManagement.Modules.Modules;
+import com.example.jkpvt.UserManagement.Resources.Resources;
 import com.example.jkpvt.UserManagement.Roles.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,12 +13,11 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 @Entity
-@Table(name = "role_module")
-@EntityListeners(RoleModuleListener.class)
+@Table(name = "role_module_resources")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Audited
-public class RoleModule {
+public class RoleModuleResources {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,10 @@ public class RoleModule {
     @JoinColumn(name = "module_id")
     private Modules module;
 
-    @Column(name = "model_order")
-    private Long modelOrder;
+    @ManyToOne
+    @JoinColumn(name = "resource_id")
+    private Resources resource;
+
+    @Column(name = "is_visible", columnDefinition = "boolean default true")
+    private Boolean isVisible;
 }
