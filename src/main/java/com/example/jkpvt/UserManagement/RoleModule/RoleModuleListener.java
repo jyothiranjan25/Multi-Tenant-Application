@@ -25,5 +25,17 @@ public class RoleModuleListener implements ApplicationContextAware {
         if(roleModule.getModelOrder() == null) {
             roleModule.setModelOrder(0L);
         }
+        checkForDuplicateRoleModule(roleModule);
+    }
+
+    private void checkForDuplicateRoleModule(RoleModule roleModule) {
+        try {
+            RoleModule roleModuleList = applicationContext.getBean(RoleModuleService.class).getByRoleAndModuleId(roleModule.getRole().getId(), roleModule.getModule().getId());
+            if (roleModuleList != null) {
+                throw new RuntimeException("RoleModule already exists");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

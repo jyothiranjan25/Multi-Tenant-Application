@@ -39,11 +39,15 @@ public class RoleModuleService {
     public RoleModuleDTO update(RoleModuleDTO roleModuleDTO) {
         try {
             RoleModule roleModule = getByRoleAndModuleId(roleModuleDTO.getRoleId(), roleModuleDTO.getModuleId());
-            if(roleModuleDTO.getModelOrder() != null){
-                roleModule.setModelOrder(roleModuleDTO.getModelOrder());
+            if(roleModule != null) {
+                if (roleModuleDTO.getModelOrder() != null) {
+                    roleModule.setModelOrder(roleModuleDTO.getModelOrder());
+                }
+                roleModule = repository.save(roleModule);
+                return mapper.map(roleModule);
+            }else {
+                throw new CommonException("RoleModule not found");
             }
-            roleModule = repository.save(roleModule);
-            return mapper.map(roleModule);
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }
@@ -53,7 +57,7 @@ public class RoleModuleService {
     public String delete(RoleModuleDTO roleModuleDTO) {
         try {
             RoleModule roleModule = getByRoleAndModuleId(roleModuleDTO.getRoleId(), roleModuleDTO.getModuleId());
-            if (repository.existsById(roleModule.getId())) {
+            if (roleModule != null) {
                 repository.deleteById(roleModule.getId());
                 return "Data deleted successfully";
             }else {
@@ -65,17 +69,8 @@ public class RoleModuleService {
     }
 
     @Transactional
-    public RoleModule getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new CommonException("RoleModule not found"));
-    }
-
-    @Transactional
     public RoleModule getByRoleAndModuleId(Long roleId, Long moduleId) {
         Optional<RoleModule> roleModule = repository.findByRoleIdAndModuleId(roleId, moduleId);
-        if(roleModule.isPresent()){
-            return roleModule.get();
-        }else{
-            throw new CommonException("RoleModule not found");
-        }
+        return roleModule.orElse(null);
     }
 }
