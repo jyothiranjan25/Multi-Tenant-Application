@@ -48,6 +48,7 @@ public class RolesListener implements ApplicationContextAware {
             RolesDTO filter = new RolesDTO();
             filter.setRoleName(roles.getRoleName().toLowerCase());
             List<RolesDTO> rolesList = applicationContext.getBean(RolesService.class).get(filter);
+            rolesList.removeIf(x -> x.getId().equals(roles.getId()));
             if (!rolesList.isEmpty()) {
                 throw new CommonException("Role name already exists");
             }
