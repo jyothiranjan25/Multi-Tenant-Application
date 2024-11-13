@@ -48,6 +48,7 @@ public class RoleModuleDAOImpl implements RoleModuleDAO {
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
+        
         return predicates;
     }
 }
