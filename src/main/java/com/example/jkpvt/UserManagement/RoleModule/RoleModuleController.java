@@ -19,18 +19,8 @@ public class RoleModuleController {
         return roleModuleService.get(roleModuleDTO);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public RoleModuleDTO create(@RequestBody RoleModuleDTO roleModuleDTO) {
-        return roleModuleService.create(roleModuleDTO);
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public RoleModuleDTO update(@RequestBody RoleModuleDTO roleModuleDTO) {
-        return roleModuleService.update(roleModuleDTO);
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String delete(@RequestBody RoleModuleDTO roleModuleDTO) {
-        return roleModuleService.delete(roleModuleDTO);
+    @PostMapping
+    public List<RoleModuleDTO> addOrRemove(@RequestBody RoleModuleDTO roleModuleDTO) {
+        return roleModuleService.addOrRemove(roleModuleDTO);
     }
 }

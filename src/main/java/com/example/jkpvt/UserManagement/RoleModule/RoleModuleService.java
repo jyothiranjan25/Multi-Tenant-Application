@@ -1,11 +1,17 @@
 package com.example.jkpvt.UserManagement.RoleModule;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.UserManagement.Modules.Modules;
+import com.example.jkpvt.UserManagement.Modules.ModulesDTO;
+import com.example.jkpvt.UserManagement.Modules.ModulesService;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResourcesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +21,9 @@ public class RoleModuleService {
 
     private final RoleModuleRepository repository;
     private final RoleModuleMapper mapper;
+    private final ModulesService modulesService;
     private final RoleModuleDAO dao;
+    private final RoleModuleResourcesService roleModuleResourcesService;
 
 
     @Transactional(readOnly = true,propagation = Propagation.REQUIRED)
@@ -25,52 +33,79 @@ public class RoleModuleService {
     }
 
     @Transactional
-    public RoleModuleDTO create(RoleModuleDTO roleModuleDTO) {
-        try {
-            RoleModule roleModule = mapper.map(roleModuleDTO);
-            roleModule = repository.save(roleModule);
-            return mapper.map(roleModule);
-        }catch (Exception e){
-            throw new CommonException(e.getMessage());
-        }
-    }
+    public List<RoleModuleDTO> addOrRemove(RoleModuleDTO roleModuleDTO) {
+        List<RoleModule> roleModules = new ArrayList<>();
 
-    @Transactional
-    public RoleModuleDTO update(RoleModuleDTO roleModuleDTO) {
         try {
-            RoleModule roleModule = getByRoleAndModuleId(roleModuleDTO.getRoleId(), roleModuleDTO.getModuleId());
-            if(roleModule != null) {
-                if (roleModuleDTO.getModelOrder() != null) {
-                    roleModule.setModelOrder(roleModuleDTO.getModelOrder());
-                }
-                roleModule = repository.save(roleModule);
-                return mapper.map(roleModule);
-            }else {
-                throw new CommonException("RoleModule not found");
+            if (roleModuleDTO.getAddModules() != null) {
+                roleModules.addAll(handleAddModules(roleModuleDTO));
             }
-        }catch (Exception e){
-            throw new CommonException(e.getMessage());
-        }
-    }
 
-    @Transactional
-    public String delete(RoleModuleDTO roleModuleDTO) {
-        try {
-            RoleModule roleModule = getByRoleAndModuleId(roleModuleDTO.getRoleId(), roleModuleDTO.getModuleId());
-            if (roleModule != null) {
-                repository.deleteById(roleModule.getId());
-                return "Data deleted successfully";
-            }else {
-                throw new CommonException("RoleModule not found");
+            if (roleModuleDTO.getRemoveModules() != null) {
+                handleRemoveModules(roleModuleDTO.getRoleId(), roleModuleDTO.getRemoveModules());
             }
+
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
+
+        return mapper.map(roleModules);
     }
 
-    @Transactional
+    private List<RoleModule> handleAddModules(RoleModuleDTO roleModuleDTO) {
+        List<RoleModule> addList = new ArrayList<>();
+        List<RoleModule> updateList = new ArrayList<>();
+
+        for (ModulesDTO module : roleModuleDTO.getAddModules()) {
+            RoleModule existingRoleModule = getByRoleAndModuleId(roleModuleDTO.getRoleId(), module.getId());
+
+            if (existingRoleModule == null) {
+                addList.add(createNewRoleModule(roleModuleDTO, module));
+            } else {
+                if(roleModuleDTO.getModelOrder() != null) {
+                    existingRoleModule.setModelOrder(roleModuleDTO.getModelOrder());
+                }
+                updateList.add(existingRoleModule);
+            }
+        }
+
+        List<RoleModule> savedModules = new ArrayList<>();
+        if(!addList.isEmpty()){
+            roleModuleResourcesService.save(addList);
+            savedModules.addAll(repository.saveAll(addList));
+        }
+        if(!updateList.isEmpty())savedModules.addAll(repository.saveAll(updateList));
+        return savedModules;
+    }
+
+    private RoleModule createNewRoleModule(RoleModuleDTO roleModuleDTO, ModulesDTO moduleDTO) {
+        RoleModule newRoleModule = mapper.map(roleModuleDTO);
+        Modules module = modulesService.getById(moduleDTO.getId());
+        newRoleModule.setModule(module);
+        newRoleModule.setModelOrder(moduleDTO.getModelOrder());
+        return newRoleModule;
+    }
+
+    private void handleRemoveModules(Long roleId, List<Long> moduleIdsToRemove) {
+        Collection<Modules> modules = new ArrayList<>();
+        moduleIdsToRemove.forEach(id -> {
+            Modules module = new Modules();
+            module.setId(id);
+            modules.add(module);
+        });
+        List<RoleModule> modulesToRemove = getByRoleIdAndModulesIn(roleId, modules);
+        if(!modulesToRemove.isEmpty()){
+            roleModuleResourcesService.delete(modulesToRemove);
+            repository.deleteAll(modulesToRemove);
+        }
+    }
+
     public RoleModule getByRoleAndModuleId(Long roleId, Long moduleId) {
         Optional<RoleModule> roleModule = repository.findByRoleIdAndModuleId(roleId, moduleId);
         return roleModule.orElse(null);
+    }
+
+    public List<RoleModule> getByRoleIdAndModulesIn(Long roleId, Collection<Modules> module) {
+        return repository.findByRoleIdAndModuleIn(roleId, module);
     }
 }

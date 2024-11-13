@@ -53,4 +53,19 @@ public class RoleModuleResourcesService {
         roleModuleResource.setIsVisible(dto.getIsVisible());
         return mapper.map(repository.save(roleModuleResource));
     }
+
+
+    @Transactional
+    public void delete(List<RoleModule> roleModules) {
+        List<RoleModuleResources> resources = roleModules.stream()
+                .flatMap(roleModule -> roleModule.getModule().getResources().stream()
+                        .map(resource -> createRoleModuleResource(roleModule, resource)))
+                .toList();
+        List<RoleModuleResources> roleModuleResources = repository.findByRoleInAndModuleInAndResourceIn(
+                resources.stream().map(RoleModuleResources::getRole).toList(),
+                resources.stream().map(RoleModuleResources::getModule).toList(),
+                resources.stream().map(RoleModuleResources::getResource).toList()
+        );
+        repository.deleteAll(roleModuleResources);
+    }
 }
