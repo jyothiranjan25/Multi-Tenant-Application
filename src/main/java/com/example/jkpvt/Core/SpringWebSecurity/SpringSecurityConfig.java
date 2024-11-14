@@ -46,6 +46,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/appUser/create").permitAll()
                         .requestMatchers("/login", "/logout").permitAll()
                         .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
