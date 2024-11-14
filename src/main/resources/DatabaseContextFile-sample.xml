@@ -18,7 +18,7 @@
         <property name="poolName" value="springHikariCP"/>
 
         <!-- Leak detection -->
-        <property name="leakDetectionThreshold" value="2000"/>  <!-- Detects leaks if not closed in 2 seconds -->
+        <property name="leakDetectionThreshold" value="10000"/>  <!-- Detects leaks if not closed in 10 seconds -->
     </bean>
 
 </beans>
