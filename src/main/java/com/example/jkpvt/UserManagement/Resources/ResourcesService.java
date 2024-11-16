@@ -341,13 +341,14 @@ public class ResourcesService {
         }
 
         List<ResourcesDTO> resourcesDTOList = new ArrayList<>();
-        for (Resources resource : parentResources) {
-            ResourcesDTO resourcesDTO = mapToResourcesDTO(resource);
-            // check if resource has child resources
-            if (parentChildResources.containsKey(resource.getId())) {
-                resourcesDTO.setChildResources(getChildResources(parentChildResources.get(resource.getId())));
+        for (Resources parent : parentResources) {
+            ResourcesDTO parentDTO = mapToResourcesDTO(parent);
+            parentDTO.setChildResources(null);
+            List<Resources> childResources = parentChildResources.get(parent.getId());
+            if (childResources != null) {
+                parentDTO.setChildResources(getChildResources(childResources));
             }
-            resourcesDTOList.add(resourcesDTO);
+            resourcesDTOList.add(parentDTO);
         }
         return resourcesDTOList;
     }
