@@ -12,38 +12,34 @@ import {
   Stepper,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
-import {
-  CollapseIcon,
-  CustomTreeItem,
-  EndIcon,
-  ExpandIcon,
-} from '../../components/UiComponents/CustomSimpleTreeView';
 import { FormGrid } from '../../components/UiComponents/StyledComponents';
+import { Tree } from 'antd';
+import AppDesign from '../../components/UiComponents/AntDesign';
+import { useState } from 'react';
 
 const steps = ['Create a Module', 'Select Resources'];
 
-const CustomTreeComponent = ({ data }) => {
+const transformDataToTreeData = (data, ParentId) => {
   return data
     .sort((a, b) => a.id - b.id)
-    .map((node) => (
-      <CustomTreeItem
-        key={node.id}
-        itemId={node.id.toString()}
-        label={node.resource_name}
-      >
-        {node.child_resources && (
-          <CustomTreeComponent data={node.child_resources} />
-        )}
-      </CustomTreeItem>
-    ));
+    .map((node) => {
+      const key = ParentId ? `${ParentId}.${node.id}` : `${node.id}`;
+      return {
+        title: node.resource_name,
+        key: key,
+        children: node.child_resources
+          ? transformDataToTreeData(node.child_resources, node.id)
+          : [],
+      };
+    });
 };
 
 function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [formData, setFormData] = React.useState(isEdit ? params : {});
   const [resources, setResources] = React.useState([]);
-  const [selectedItems, setSelectedItems] = React.useState([]);
+  const [selectedResources, setSelectedResources] = useState([]);
+  const [checkedKeys, setCheckedKeys] = useState([]);
   const { createModules, updateModules } = useModules();
   const { getResources } = useGetAPIs();
 
@@ -56,19 +52,29 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
     });
 
     if (isEdit) {
-      const extractIds = (resources) => {
+      const extractIds = (data, parentId = null) => {
         let ids = [];
-        resources.forEach((resource) => {
-          ids.push(resource.id.toString());
+        let checkedKeys = [];
+
+        data.forEach((resource) => {
+          const resourceId = resource.id.toString();
+          ids.push(resourceId);
+          // Include the parent ID in checkedKeys for this resource
+          if (parentId) {
+            checkedKeys.push(`${parentId}.${resourceId}`);
+          }
           if (resource.child_resources) {
-            ids = ids.concat(extractIds(resource.child_resources));
+            const childData = extractIds(resource.child_resources, resourceId);
+            ids = ids.concat(childData.ids);
+            checkedKeys = checkedKeys.concat(childData.checkedKeys);
           }
         });
-        return ids;
+        return { ids, checkedKeys };
       };
 
-      const selectedIds = extractIds(params.resources);
-      setSelectedItems(selectedIds);
+      const { ids, checkedKeys } = extractIds(params.resources);
+      setCheckedKeys(checkedKeys);
+      setSelectedResources(ids);
     }
   }, []);
 
@@ -87,13 +93,12 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
   const handleReset = () => {
     setActiveStep(0);
     setFormData({});
-    setSelectedItems([]);
   };
 
   const handleFinish = () => {
     const data = {
       ...formData,
-      resource_ids: selectedItems,
+      resource_ids: selectedResources,
     };
     if (isEdit) {
       data.id = params.id;
@@ -109,14 +114,16 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
     handleReset();
   };
 
-  const handleItemSelectionToggle = (event, itemId, isSelected) => {
-    setSelectedItems((prevSelectedItems) => {
-      if (isSelected) {
-        return [...prevSelectedItems, itemId];
-      } else {
-        return prevSelectedItems.filter((id) => id !== itemId);
-      }
-    });
+  const treeData = transformDataToTreeData(resources);
+  const onCheck = (checkedKeysValue) => {
+    setCheckedKeys(checkedKeysValue);
+    // Split by dot, flatten the array, convert to numbers, and filter unique values
+    const uniqueValues = [
+      ...new Set(
+        checkedKeysValue.flatMap((value) => value.split('.').map(Number))
+      ),
+    ];
+    setSelectedResources(uniqueValues);
   };
 
   return (
@@ -200,26 +207,19 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
         )}
         {activeStep === 1 && (
           <Box>
-            <SimpleTreeView
-              aria-label="customized"
-              slots={{
-                expandIcon: ExpandIcon,
-                collapseIcon: CollapseIcon,
-                endIcon: EndIcon,
-              }}
-              sx={{
-                overflowX: 'hidden',
-                minHeight: 270,
-                flexGrow: 1,
-                maxWidth: 500,
-              }}
-              multiSelect
-              checkboxSelection
-              onItemSelectionToggle={handleItemSelectionToggle}
-              defaultSelectedItems={selectedItems}
-            >
-              <CustomTreeComponent data={resources} />
-            </SimpleTreeView>
+            <AppDesign>
+              <Tree
+                showLine
+                checkable
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                treeData={treeData}
+                rootStyle={{
+                  background: 'none',
+                  backgroundColor: 'none',
+                }}
+              />
+            </AppDesign>
           </Box>
         )}
       </Card>

@@ -32,11 +32,17 @@ const Resources = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [isAddingChild, setIsAddingChild] = useState(false);
+  const [hideAddChild, setHideAddChild] = useState(false);
 
   const handleNodeClick = (node) => {
     const data = {
       ...node,
     };
+    if (node.resource_url !== '#') {
+      setHideAddChild(true);
+    } else {
+      setHideAddChild(false);
+    }
     setFormData(data);
     setIsEdit(true);
     setParentData({});
@@ -240,7 +246,7 @@ const Resources = (props) => {
                         <Button type="submit" fullWidth variant="contained">
                           {'Update'}
                         </Button>
-                      ) : (
+                      ) : hideAddChild ? null : (
                         <Button
                           fullWidth
                           variant="contained"

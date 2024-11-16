@@ -13,7 +13,7 @@ const ActionCellRenderer = ({
 }) => (
   <div>
     {onAddClick ? (
-      <Tooltip title="Edit" placement="bottom">
+      <Tooltip title="Add" placement="bottom">
         <IconButton
           onClick={onAddClick}
           color="inherit"
@@ -37,7 +37,7 @@ const ActionCellRenderer = ({
       </Tooltip>
     ) : null}
     {onViewClick ? (
-      <Tooltip title="View Resources" placement="bottom">
+      <Tooltip title="View" placement="bottom">
         <IconButton
           onClick={onViewClick}
           color="inherit"

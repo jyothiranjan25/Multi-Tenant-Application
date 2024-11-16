@@ -1,28 +1,14 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
-import {
-  Box,
-  CardHeader,
-  CardContent,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  FormLabel,
-  OutlinedInput,
-  Button,
-  IconButton,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
+import { Box, CardHeader, CardContent, Tooltip, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
 import AppLayout from '../../components/AppLayout';
 import useRoles from './useRoles';
 import GetAPIs from '../../components/GetApisService/GetAPIs';
 import AgGrid from '../../components/UiComponents/AgGridReact';
 import ActionCellRenderer from '../../components/UiComponents/ActionCell';
-import { FormGrid } from '../../components/UiComponents/StyledComponents';
+import AddEditRolesModalDialog from './AddEditRolesModal';
+import AddEditRoleModuleResources from './AddEditRoleModuleResources';
 
 // Roles Component
 const Roles = () => {
@@ -33,6 +19,8 @@ const Roles = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [formData, setFormData] = React.useState({});
+  const [roleModulesData, setRoleModulesData] = React.useState([]);
+  const [openRoleModulesModal, setOpenRoleModulesModal] = React.useState(false);
   const [resTreeData, setResTreeData] = React.useState([]);
   const [openResViewModal, setOpenResViewModal] = React.useState(false);
 
@@ -48,10 +36,10 @@ const Roles = () => {
     setOpenModal(true);
     setFormData({});
   };
-  const closeModals = () => {
-    setOpenModal(false);
-    setIsEdit(false);
-    setOpenResViewModal(false);
+
+  const openAddRoleModuleModal = (params) => {
+    setRoleModulesData(params);
+    setOpenRoleModulesModal(true);
   };
 
   const openEditModal = (params) => {
@@ -60,8 +48,20 @@ const Roles = () => {
     setOpenModal(true);
   };
 
+  const openViewModal = (params) => {
+    setResTreeData(params);
+    setOpenResViewModal(true);
+  };
+
   const handleDeleteClick = (params) => {
     deleteModules(params).then(handleModulesUpdate);
+  };
+
+  const closeModals = () => {
+    setOpenModal(false);
+    setIsEdit(false);
+    setOpenResViewModal(false);
+    setOpenRoleModulesModal(false);
   };
 
   const columns = [
@@ -80,10 +80,8 @@ const Roles = () => {
       filter: false,
       cellRenderer: (params) => (
         <ActionCellRenderer
-          onViewClick={() => {
-            setResTreeData(params.data.resources);
-            setOpenResViewModal(true);
-          }}
+          onAddClick={() => openAddRoleModuleModal(params.data)}
+          onViewClick={() => openViewModal(params.data)}
           onEditClick={() => openEditModal(params.data)}
           onDeleteClick={() => handleDeleteClick(params.data)}
         />
@@ -125,7 +123,7 @@ const Roles = () => {
         </Box>
       </CardContent>
       {openModal && (
-        <ModalDialog
+        <AddEditRolesModalDialog
           isEdit={isEdit}
           formData={formData}
           openModal={openModal}
@@ -133,101 +131,15 @@ const Roles = () => {
           onModulesUpdate={handleModulesUpdate}
         />
       )}
+      {openRoleModulesModal && (
+        <AddEditRoleModuleResources
+          formData={roleModulesData}
+          openModal={openRoleModulesModal}
+          onClose={closeModals}
+          onModulesUpdate={handleModulesUpdate}
+        />
+      )}
     </AppLayout>
-  );
-};
-
-// ModalDialog Component
-const ModalDialog = ({
-  isEdit,
-  formData,
-  openModal,
-  onClose,
-  onModulesUpdate,
-}) => {
-  const { createModules, updateModules } = useRoles();
-  const [formValues, setFormValues] = React.useState(formData || {});
-
-  React.useEffect(() => {
-    setFormValues(formData);
-  }, [formData]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSaveClick = () => {
-    const saveFunction = isEdit ? updateModules : createModules;
-    saveFunction(formValues).then(onModulesUpdate).finally(onClose);
-  };
-
-  return (
-    <Dialog
-      fullWidth
-      maxWidth="md"
-      onClose={onClose}
-      aria-labelledby="customized-dialog-title"
-      open={openModal}
-      scroll="paper"
-    >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-        {isEdit ? 'Edit Module' : 'Add Module'}
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{ position: 'absolute', right: 8, top: 8, color: 'grey.500' }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers>
-        <Box
-          component="form"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            gap: 2,
-          }}
-        >
-          <Grid container spacing={3}>
-            <FormGrid size={{ xs: 6 }}>
-              <FormLabel required>Role Name</FormLabel>
-              <OutlinedInput
-                id="role_name"
-                name="role_name"
-                type="text"
-                placeholder="Name"
-                autoComplete="off"
-                required
-                size="small"
-                onChange={handleInputChange}
-                value={formValues.role_name || ''}
-              />
-            </FormGrid>
-            <FormGrid size={{ xs: 6 }}>
-              <FormLabel>Description</FormLabel>
-              <OutlinedInput
-                id="role_description"
-                name="role_description"
-                type="text"
-                placeholder="Description"
-                autoComplete="off"
-                size="small"
-                onChange={handleInputChange}
-                value={formValues.role_description || ''}
-              />
-            </FormGrid>
-          </Grid>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleSaveClick} autoFocus>
-          Save changes
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 };
 
