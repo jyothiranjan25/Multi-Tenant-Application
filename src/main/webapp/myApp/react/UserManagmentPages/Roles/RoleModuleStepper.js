@@ -1,14 +1,13 @@
 import * as React from 'react';
+import { useMemo, useRef } from 'react';
 import useRoles from './useRoles';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
 import MUIModal from '../../components/UiComponents/Modal';
 import Stepper from '../../components/UiComponents/Stepper';
-import { Box, FormLabel, OutlinedInput, Card, TextField } from '@mui/material';
+import { Box, Card, FormLabel, OutlinedInput } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { FormGrid } from '../../components/UiComponents/StyledComponents';
 import AgGrid from '../../components/UiComponents/AgGridReact';
-import { useMemo, useRef } from 'react';
-import Button from '@mui/material/Button';
 
 const steps = ['Create a Role', 'Select Modules'];
 
@@ -21,7 +20,8 @@ function RoleModuleStepper({
 }) {
   const [formData, setFormData] = React.useState(isEdit ? params : {});
   const [modules, setModules] = React.useState([]);
-  const { createModules, updateModules } = useRoles();
+  const { createRoles, updateRoles } = useRoles();
+  const selectedRowsRef = useRef([]);
   const { getModules } = useGetAPIs();
 
   React.useEffect(() => {
@@ -43,6 +43,24 @@ function RoleModuleStepper({
   };
 
   const handleFinish = () => {
+    const data = {
+      ...formData,
+      add_modules: selectedRowsRef.current.map((item) => ({
+        id: item.id,
+        module_order: item?.module_order,
+      })),
+    };
+
+    if (isEdit) {
+      data.id = formData.id;
+      updateRoles(data).then(() => {
+        onModulesUpdate();
+      });
+    } else {
+      createRoles(data).then(() => {
+        onModulesUpdate();
+      });
+    }
     onClose();
     handleClear();
   };
@@ -52,7 +70,12 @@ function RoleModuleStepper({
       formData={formData}
       handleInputChange={handleInputChange}
     />,
-    <AddEditModuleForm data={modules} />,
+    <AddEditModuleForm
+      data={modules}
+      onSelectedRowsChange={(rows) => {
+        selectedRowsRef.current = rows;
+      }}
+    />,
   ];
 
   return (
@@ -120,8 +143,8 @@ const AddEditRoleForm = ({ formData, handleInputChange }) => {
   );
 };
 
-const AddEditModuleForm = ({ data }) => {
-  const gridRef = useRef(null);
+const AddEditModuleForm = ({ data, onSelectedRowsChange }) => {
+  const gridRef = useRef();
 
   const columns = [
     {
@@ -160,11 +183,10 @@ const AddEditModuleForm = ({ data }) => {
     };
   }, []);
 
-  // Function to get selected rows
-  const handleGetSelectedRows = () => {
+  const handleRowSelection = () => {
     if (gridRef.current && gridRef.current.api) {
       const selectedRows = gridRef.current.api.getSelectedRows();
-      console.log('Selected Rows:', selectedRows);
+      onSelectedRowsChange(selectedRows);
     }
   };
 
@@ -187,9 +209,9 @@ const AddEditModuleForm = ({ data }) => {
         columnDefs={columns}
         rowSelection={rowSelection}
         selectionColumnDef={selectionColumnDef}
+        onSelectionChanged={handleRowSelection}
         onGridReady={(params) => (gridRef.current = params)}
       />
-      <Button onClick={handleGetSelectedRows}>Get Selected Rows</Button>
     </Box>
   );
 };

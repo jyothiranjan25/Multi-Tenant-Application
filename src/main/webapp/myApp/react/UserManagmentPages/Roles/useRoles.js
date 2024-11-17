@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 
 const useRoles = () => {
-  const createModules = async (data) => {
+  const createRoles = async (data) => {
     try {
       const response = await fetch('api/roles/create', {
         method: 'POST',
@@ -20,7 +20,7 @@ const useRoles = () => {
     }
   };
 
-  const updateModules = async (data) => {
+  const updateRoles = async (data) => {
     try {
       const response = await fetch('api/roles/update', {
         method: 'PATCH',
@@ -39,7 +39,7 @@ const useRoles = () => {
     }
   };
 
-  const deleteModules = async (data) => {
+  const deleteRoles = async (data) => {
     try {
       const response = await fetch('api/roles/delete', {
         method: 'DELETE',
@@ -59,9 +59,9 @@ const useRoles = () => {
   };
 
   return {
-    createModules,
-    updateModules,
-    deleteModules,
+    createRoles,
+    updateRoles,
+    deleteRoles,
   };
 };
 

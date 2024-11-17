@@ -27,8 +27,8 @@ export default function MenuContent() {
   }, []);
 
   useEffect(() => {
-    if (roleModulesData && roleModulesData.module_resources) {
-      const roleModules = roleModulesData.module_resources
+    if (roleModulesData && roleModulesData.modules_resources) {
+      const roleModules = roleModulesData.modules_resources
         .sort((a, b) => a.model_order - b.model_order) // Sort by order property
         .map((module) => ({
           text: module.module_name,
