@@ -4,6 +4,7 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.Modules.Modules;
 import com.example.jkpvt.UserManagement.Modules.ModulesService;
 import com.example.jkpvt.UserManagement.Resources.Resources;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleDTO;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResources;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleService;
@@ -108,7 +109,7 @@ public class RolesService {
 
     private List<Modules> getModulesByRole(Roles role) {
         List<Modules> modules = new ArrayList<>();
-        if(role.getRoleModuleResources() != null) {
+        if(!role.getRoleModuleResources().isEmpty()) {
             // group resources by module
             Map<Long, List<RoleModuleResources>> moduleResources = new HashMap<>();
             for (RoleModuleResources roleModuleResources : role.getRoleModuleResources()) {
@@ -133,6 +134,10 @@ public class RolesService {
                 }
                 module.setResources(resources);
                 modules.add(module);
+            }
+        } else if (!role.getRoleModule().isEmpty()) {
+            for (RoleModule roleModule : role.getRoleModule()) {
+                modules.add(roleModule.getModule());
             }
         }
         return modules;
