@@ -38,7 +38,7 @@ public class Modules {
     @Column(name = "icon", length = 4025)
     private String moduleIcon;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "module_resources",
             joinColumns = @JoinColumn(name = "module_id"),
