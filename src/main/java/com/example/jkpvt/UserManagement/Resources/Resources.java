@@ -53,7 +53,7 @@ public class Resources {
     @OneToMany(mappedBy = "parentResource", cascade = CascadeType.ALL)
     private Set<Resources> childResources = new HashSet<>();
 
-    @ManyToMany(mappedBy = "resources", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "resources", cascade = {CascadeType.ALL})
     private Set<Modules> modules = new HashSet<>();
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
