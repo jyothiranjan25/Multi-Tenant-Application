@@ -7,8 +7,7 @@ import useRoles from './useRoles';
 import GetAPIs from '../../components/GetApisService/GetAPIs';
 import AgGrid from '../../components/UiComponents/AgGridReact';
 import ActionCellRenderer from '../../components/UiComponents/ActionCell';
-import AddEditRolesModalDialog from './AddEditRolesModal';
-import AddEditRoleModuleResources from './AddEditRoleModuleResources';
+import RoleModuleStepper from './RoleModuleStepper';
 
 // Roles Component
 const Roles = () => {
@@ -19,10 +18,6 @@ const Roles = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [formData, setFormData] = React.useState({});
-  const [roleModulesData, setRoleModulesData] = React.useState([]);
-  const [openRoleModulesModal, setOpenRoleModulesModal] = React.useState(false);
-  const [resTreeData, setResTreeData] = React.useState([]);
-  const [openResViewModal, setOpenResViewModal] = React.useState(false);
 
   React.useEffect(() => {
     handleModulesUpdate();
@@ -37,21 +32,13 @@ const Roles = () => {
     setFormData({});
   };
 
-  const openAddRoleModuleModal = (params) => {
-    setRoleModulesData(params);
-    setOpenRoleModulesModal(true);
-  };
-
   const openEditModal = (params) => {
     setIsEdit(true);
     setFormData(params);
     setOpenModal(true);
   };
 
-  const openViewModal = (params) => {
-    setResTreeData(params);
-    setOpenResViewModal(true);
-  };
+  const openViewModal = (params) => {};
 
   const handleDeleteClick = (params) => {
     deleteModules(params).then(handleModulesUpdate);
@@ -60,8 +47,6 @@ const Roles = () => {
   const closeModals = () => {
     setOpenModal(false);
     setIsEdit(false);
-    setOpenResViewModal(false);
-    setOpenRoleModulesModal(false);
   };
 
   const columns = [
@@ -80,7 +65,6 @@ const Roles = () => {
       filter: false,
       cellRenderer: (params) => (
         <ActionCellRenderer
-          onAddClick={() => openAddRoleModuleModal(params.data)}
           onViewClick={() => openViewModal(params.data)}
           onEditClick={() => openEditModal(params.data)}
           onDeleteClick={() => handleDeleteClick(params.data)}
@@ -123,18 +107,10 @@ const Roles = () => {
         </Box>
       </CardContent>
       {openModal && (
-        <AddEditRolesModalDialog
+        <RoleModuleStepper
           isEdit={isEdit}
-          formData={formData}
+          params={formData}
           openModal={openModal}
-          onClose={closeModals}
-          onModulesUpdate={handleModulesUpdate}
-        />
-      )}
-      {openRoleModulesModal && (
-        <AddEditRoleModuleResources
-          formData={roleModulesData}
-          openModal={openRoleModulesModal}
           onClose={closeModals}
           onModulesUpdate={handleModulesUpdate}
         />
