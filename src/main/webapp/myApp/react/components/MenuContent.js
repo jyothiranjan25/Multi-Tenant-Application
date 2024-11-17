@@ -29,8 +29,9 @@ export default function MenuContent() {
   useEffect(() => {
     if (roleModulesData && roleModulesData.modules_resources) {
       const roleModules = roleModulesData.modules_resources
-        .sort((a, b) => a.model_order - b.model_order) // Sort by order property
+        .sort((a, b) => a.id - b.id) // Sort by order property
         .map((module) => ({
+          id: module?.model_order,
           text: module.module_name,
           icon: <HomeRoundedIcon />,
           props: module,
@@ -47,19 +48,22 @@ export default function MenuContent() {
       window.location.href = 'selectResources';
     }
   };
-
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
-        {mainListItems.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            {/*<ListItemButton selected={index === 0}>*/}
-            <ListItemButton onClick={() => handleItemClick(item.props)}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {mainListItems && mainListItems.length > 0
+          ? mainListItems
+              .sort((a, b) => a.id - b.id)
+              .map((item, index) => (
+                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                  {/*<ListItemButton selected={index === 0}>*/}
+                  <ListItemButton onClick={() => handleItemClick(item.props)}>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              ))
+          : null}
       </List>
     </Stack>
   );

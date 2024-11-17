@@ -168,7 +168,10 @@ const AddEditModuleForm = ({ data, onSelectedRowsChange }) => {
     return {
       mode: 'multiRow',
       isRowSelectable: (rowNode) =>
-        rowNode.data.resources ? rowNode.data.resources.length !== 0 : false,
+        rowNode.data
+          ? rowNode.data.module_url !== undefined ||
+            rowNode.data?.resources.length !== 0
+          : false,
       hideDisabledCheckboxes: true,
     };
   }, []);
