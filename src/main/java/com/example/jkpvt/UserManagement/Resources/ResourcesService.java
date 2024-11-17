@@ -1,6 +1,7 @@
 package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.UserManagement.Modules.Modules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -79,12 +80,20 @@ public class ResourcesService {
     @Transactional
     public String delete(ResourcesDTO resourcesDTO) {
         try {
-            if (repository.existsById(resourcesDTO.getId())) {
-                repository.deleteById(resourcesDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
+            Resources resource = getById(resourcesDTO.getId());
+
+            // Clear relationships in the join table
+            for (Modules module : new HashSet<>(resource.getModules())) {
+                module.getResources().remove(resource);
             }
+
+            resource.getModules().clear();
+            repository.save(resource); // Save the resource to persist the relationship removal
+
+            // Delete the resource itself
+            repository.delete(resource);
+
+            return "Resource deleted successfully";
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
@@ -94,6 +103,11 @@ public class ResourcesService {
     public Resources getById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new CommonException("Resources with id: " + id + " not found"));
+    }
+
+    @Transactional
+    public List<Resources> getByIds(List<Long> ids) {
+        return repository.findByIdIn(ids);
     }
 
     public void updateAll(List<Resources> resources) {

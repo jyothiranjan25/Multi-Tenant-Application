@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,24 +76,30 @@ public class ModulesService {
     @Transactional
     public String delete(ModulesDTO modulesDTO) {
         try {
-            if (modulesRepository.existsById(modulesDTO.getId())) {
-                modulesRepository.deleteById(modulesDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
+            Modules module = getById(modulesDTO.getId());
+
+            // Clear relationships in the join table
+            for (Resources resource : new HashSet<>(module.getResources())) {
+                resource.getModules().remove(module);
             }
+            module.getResources().clear();
+            modulesRepository.save(module); // Save the module to persist the relationship removal
+
+            // Delete the module itself
+            modulesRepository.delete(module);
+
+            return "Module deleted successfully";
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
 
     public Set<Resources> setResources(ModulesDTO modulesDTO) {
-        Set<Resources> resources = new HashSet<>();
-        for (Integer resourceId : modulesDTO.getResourceIds()) {
-            Resources resources1 = resourcesService.getById((long) resourceId);
-            resources.add(resources1);
-        }
-        return resources;
+        List<Long> resourceIds = modulesDTO.getResourceIds().stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toList());
+        List<Resources> resources = resourcesService.getByIds(resourceIds);
+        return new HashSet<>(resources);
     }
 
     @Transactional(readOnly = true)
