@@ -108,7 +108,8 @@ public class RolesService {
     }
 
     private List<Modules> getModulesByRole(Roles role) {
-        List<Modules> modules = new ArrayList<>();
+       Map<Long, Modules> moduleMap = new HashMap<>();
+
         if(!role.getRoleModuleResources().isEmpty()) {
             // group resources by module
             Map<Long, List<RoleModuleResources>> moduleResources = new HashMap<>();
@@ -133,13 +134,17 @@ public class RolesService {
                     resources.add(roleModuleResources.getResource());
                 }
                 module.setResources(resources);
-                modules.add(module);
-            }
-        } else if (!role.getRoleModule().isEmpty()) {
-            for (RoleModule roleModule : role.getRoleModule()) {
-                modules.add(roleModule.getModule());
+                moduleMap.put(module.getId(), module);
             }
         }
-        return modules;
+
+        if (!role.getRoleModule().isEmpty()) {
+            for (RoleModule roleModule : role.getRoleModule()) {
+                if(!moduleMap.containsKey(roleModule.getModule().getId())) {
+                    moduleMap.put(roleModule.getModule().getId(), roleModule.getModule());
+                }
+            }
+        }
+        return moduleMap.values().stream().toList();
     }
 }
