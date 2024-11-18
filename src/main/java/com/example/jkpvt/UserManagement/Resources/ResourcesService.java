@@ -110,7 +110,7 @@ public class ResourcesService {
         return repository.findByIdIn(ids);
     }
 
-    public void updateAll(List<Resources> resources) {
+    private void updateAll(List<Resources> resources) {
         try {
             resources = repository.saveAll(resources);
             mapper.map(resources);
@@ -119,7 +119,7 @@ public class ResourcesService {
         }
     }
 
-    public void rearrangeOrderCreate(ResourcesDTO resourcesDTO, Resources resources) {
+    private void rearrangeOrderCreate(ResourcesDTO resourcesDTO, Resources resources) {
         List<Resources> resourcesList = repository.findAll();
 
         Map<Long, Resources> parentResources = new HashMap<>();
@@ -166,7 +166,7 @@ public class ResourcesService {
         }
     }
 
-    public void changeOrderForParentAndChild(Resources resources, Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent) {
+    private void changeOrderForParentAndChild(Resources resources, Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent) {
         List<Resources> updatedResources = new ArrayList<>();
         for (Map.Entry<Long, Resources> entry : parentResources.entrySet()) {
             Resources parent = entry.getValue();
@@ -191,7 +191,7 @@ public class ResourcesService {
         }
     }
 
-    public void changeOrderForChild(ResourcesDTO resourcesDTO, List<Resources> childResources) {
+    private void changeOrderForChild(ResourcesDTO resourcesDTO, List<Resources> childResources) {
         List<Resources> updatedResources = new ArrayList<>();
         for (Resources child : childResources) {
             String parentOrderStr = String.valueOf(child.getParentResource().getResourceOrder());
@@ -208,7 +208,7 @@ public class ResourcesService {
         }
     }
 
-    public void rearrangeOrderUpdate(ResourcesDTO resourcesDTO, Resources resources) {
+    private void rearrangeOrderUpdate(ResourcesDTO resourcesDTO, Resources resources) {
         List<Resources> resourcesList = repository.findAll();
 
         Map<Long, Resources> parentResources = new HashMap<>();
@@ -267,7 +267,7 @@ public class ResourcesService {
         }
     }
 
-    public void changeOrderForParentAndChildUpdate(Resources resources, Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent, long oldOrder, long newOrder) {
+    private void changeOrderForParentAndChildUpdate(Resources resources, Map<Long, Resources> parentResources, Map<Long, List<Resources>> childResourcesForParent, long oldOrder, long newOrder) {
         List<Resources> updatedResources = new ArrayList<>();
         for (Map.Entry<Long, Resources> entry : parentResources.entrySet()) {
             Resources parent = entry.getValue();
@@ -296,7 +296,7 @@ public class ResourcesService {
         }
     }
 
-    public void changeOrderForChildUpdate(Resources resources, List<Resources> childResources, String actualChildOrder, String newChildOrder) {
+    private void changeOrderForChildUpdate(Resources resources, List<Resources> childResources, String actualChildOrder, String newChildOrder) {
         List<Resources> updatedResources = new ArrayList<>();
         for (Resources child : childResources) {
             if (resources.getId().equals(child.getId())) {
@@ -325,7 +325,7 @@ public class ResourcesService {
         }
     }
 
-    public void updateChildOrder(List<Resources> childResources) {
+    private void updateChildOrder(List<Resources> childResources) {
         List<Resources> updatedResources = new ArrayList<>();
         if (childResources != null) {
             for (Resources child : childResources) {

@@ -21,19 +21,19 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<UserLoginDetails> get(UserLoginDetailsDTO userLoginDetailsDTO) {
+    public List<UserLoginDetails> get(UserLoginDetailsDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<UserLoginDetails> criteriaQuery = criteriaBuilder.createQuery(UserLoginDetails.class);
             Root<UserLoginDetails> root = criteriaQuery.from(UserLoginDetails.class);
 
-            List<Predicate> predicates = buildPredicates(userLoginDetailsDTO, criteriaBuilder, root);
+            List<Predicate> predicates = buildPredicates(dto, criteriaBuilder, root);
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
             TypedQuery<UserLoginDetails> query = entityManager.createQuery(criteriaQuery);
 
-            PaginationUtil.applyPagination(query, userLoginDetailsDTO);
+            PaginationUtil.applyPagination(query, dto);
 
             return query.getResultList();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getUsername() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("groupName")), dto.getUsername().toLowerCase()));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("username")), dto.getUsername().toLowerCase()));
         }
         return predicates;
     }

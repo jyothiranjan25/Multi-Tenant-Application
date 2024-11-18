@@ -22,19 +22,19 @@ public class RolesDAOImpl implements RolesDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Roles> get(RolesDTO rolesDTO) {
+    public List<Roles> get(RolesDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
             Root<Roles> root = criteriaQuery.from(Roles.class);
 
-            List<Predicate> predicates = buildPredicates(rolesDTO, criteriaBuilder, root);
+            List<Predicate> predicates = buildPredicates(dto, criteriaBuilder, root);
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
             TypedQuery<Roles> query = entityManager.createQuery(criteriaQuery);
 
-            PaginationUtil.applyPagination(query, rolesDTO);
+            PaginationUtil.applyPagination(query, dto);
 
             return query.getResultList();
         } catch (Exception e) {

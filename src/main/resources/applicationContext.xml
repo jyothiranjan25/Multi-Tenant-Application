@@ -52,6 +52,8 @@
                 <prop key="hibernate.javax.cache.missing_cache_strategy">create</prop>
 
                 <!-- Envers configuration -->
+                <prop key="org.hibernate.envers.Audited">false</prop>
+                <prop key="hibernate.integration.envers.enabled">false</prop>
                 <prop key="org.hibernate.envers.audit_table_suffix">_AUD</prop>
                 <prop key="org.hibernate.envers.store_data_at_delete">true</prop>
             </props>

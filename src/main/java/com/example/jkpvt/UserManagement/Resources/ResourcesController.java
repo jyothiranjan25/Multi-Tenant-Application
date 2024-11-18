@@ -15,23 +15,23 @@ public class ResourcesController {
     private final ResourcesService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<ResourcesDTO> getResources(@RequestParam Map<String, String> queryParams) {
+    public List<ResourcesDTO> get(@RequestParam Map<String, String> queryParams) {
         ResourcesDTO resourcesDTO = MapUtils.toDto(queryParams, ResourcesDTO.class);
         return service.get(resourcesDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResourcesDTO createResources(@RequestBody ResourcesDTO resourcesDTO) {
+    public ResourcesDTO create(@RequestBody ResourcesDTO resourcesDTO) {
         return service.create(resourcesDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public ResourcesDTO updateResources(@RequestBody ResourcesDTO resourcesDTO) {
+    public ResourcesDTO update(@RequestBody ResourcesDTO resourcesDTO) {
         return service.update(resourcesDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String deleteResources(@RequestBody ResourcesDTO resourcesDTO) {
+    public String delete(@RequestBody ResourcesDTO resourcesDTO) {
         return service.delete(resourcesDTO);
     }
 

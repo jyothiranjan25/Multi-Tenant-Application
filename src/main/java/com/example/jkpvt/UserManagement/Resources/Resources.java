@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 
 import java.util.HashSet;
@@ -15,7 +17,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "resources")
+@Table(name = "resources", indexes = {
+        @Index(name = "idx_resource_name", columnList = "name"),
+        @Index(name = "idx_resource_resource_order", columnList = "resource_order"),
+        @Index(name = "idx_resource_url", columnList = "url"),
+        @Index(name = "idx_resources_parent_id", columnList = "parent_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "unique_resource_name", columnNames = "name"),
+})
 @EntityListeners(ResourcesListener.class)
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -47,7 +56,8 @@ public class Resources {
     private String resourceSubOrder;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_resources_parent_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Resources parentResource;
 
     @OneToMany(mappedBy = "parentResource", cascade = CascadeType.ALL)

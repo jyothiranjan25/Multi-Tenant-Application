@@ -15,23 +15,23 @@ public class RolesController {
     private final RolesService rolesService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<RolesDTO> GetRoles(@RequestParam Map<String, String> queryParams) {
+    public List<RolesDTO> Get(@RequestParam Map<String, String> queryParams) {
         RolesDTO rolesDTO = MapUtils.toDto(queryParams, RolesDTO.class);
         return rolesService.get(rolesDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public RolesDTO CreateRoles(@RequestBody RolesDTO rolesDTO) {
+    public RolesDTO Create(@RequestBody RolesDTO rolesDTO) {
         return rolesService.create(rolesDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public RolesDTO UpdateRoles(@RequestBody RolesDTO rolesDTO) {
+    public RolesDTO Update(@RequestBody RolesDTO rolesDTO) {
         return rolesService.update(rolesDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String DeleteRoles(@RequestBody RolesDTO rolesDTO) {
+    public String Delete(@RequestBody RolesDTO rolesDTO) {
         return rolesService.delete(rolesDTO);
     }
 

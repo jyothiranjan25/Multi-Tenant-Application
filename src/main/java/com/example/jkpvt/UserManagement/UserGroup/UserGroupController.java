@@ -16,29 +16,29 @@ public class UserGroupController {
     private final UserGroupService service;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public List<UserGroupDTO> getUserGroupAll(@RequestParam Map<String, String> queryParams) {
+    public List<UserGroupDTO> getAll(@RequestParam Map<String, String> queryParams) {
+        UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
+        return service.getAll(userGroupDTO);
+    }
+
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public List<UserGroupDTO> get(@RequestParam Map<String, String> queryParams) {
         UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
         return service.get(userGroupDTO);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<UserGroupDTO> getUserGroup(@RequestParam Map<String, String> queryParams) {
-        UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
-        return service.getUserGroups(userGroupDTO);
-    }
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public UserGroupDTO createUserGroup(@RequestBody UserGroupDTO userGroupDTO) {
+    public UserGroupDTO create(@RequestBody UserGroupDTO userGroupDTO) {
         return service.create(userGroupDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public UserGroupDTO updateUserGroup(@RequestBody UserGroupDTO userGroupDTO) {
+    public UserGroupDTO update(@RequestBody UserGroupDTO userGroupDTO) {
         return service.update(userGroupDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String deleteUserGroup(@RequestBody UserGroupDTO userGroupDTO) {
+    public String delete(@RequestBody UserGroupDTO userGroupDTO) {
         return service.delete(userGroupDTO);
     }
 }

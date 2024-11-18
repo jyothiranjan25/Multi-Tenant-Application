@@ -125,7 +125,7 @@ public class RolesService {
 
             // create module object with resources
             for (Map.Entry<Long, List<RoleModuleResources>> entry : moduleResources.entrySet()) {
-                Modules module = entry.getValue().get(0).getModule();
+                Modules module = entry.getValue().getFirst().getModule();
                 Set<Resources> resources = new HashSet<>();
                 for (RoleModuleResources roleModuleResources : entry.getValue()) {
                     if(!roleModuleResources.getIsVisible()){

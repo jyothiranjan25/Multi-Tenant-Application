@@ -22,20 +22,20 @@ public class ResourcesDAOImpl implements ResourcesDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Resources> get(ResourcesDTO resourcesDTO) {
+    public List<Resources> get(ResourcesDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Resources> criteriaQuery = criteriaBuilder.createQuery(Resources.class);
             Root<Resources> root = criteriaQuery.from(Resources.class);
 
-            List<Predicate> predicates = buildPredicates(resourcesDTO, criteriaBuilder, root);
+            List<Predicate> predicates = buildPredicates(dto, criteriaBuilder, root);
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
             TypedQuery<Resources> query = entityManager.createQuery(criteriaQuery);
 
             // Apply pagination
-            PaginationUtil.applyPagination(query, resourcesDTO);
+            PaginationUtil.applyPagination(query, dto);
 
             return query.getResultList();
         } catch (Exception e) {

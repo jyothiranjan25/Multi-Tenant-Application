@@ -92,7 +92,7 @@ public class ModulesService {
         }
     }
 
-    public Set<Resources> setResources(ModulesDTO modulesDTO) {
+    private Set<Resources> setResources(ModulesDTO modulesDTO) {
         List<Long> resourceIds = modulesDTO.getResourceIds().stream()
                 .map(Long::valueOf)
                 .collect(Collectors.toList());

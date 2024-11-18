@@ -25,9 +25,4 @@ public class UserLoginDetailsController {
     public void storeUserLoginDetails(@RequestBody AppUserRolesDTO appUserRolesDTO) {
         service.storeUserLoginDetails(appUserRolesDTO);
     }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void test() {
-        service.test();
-    }
 }

@@ -15,23 +15,23 @@ public class ModulesController {
     private final ModulesService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<ModulesDTO> getModules(@RequestParam Map<String, String> queryParams) {
+    public List<ModulesDTO> get(@RequestParam Map<String, String> queryParams) {
         ModulesDTO modulesDTO = MapUtils.toDto(queryParams, ModulesDTO.class);
         return service.get(modulesDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ModulesDTO createModules(@RequestBody ModulesDTO modulesDTO) {
+    public ModulesDTO create(@RequestBody ModulesDTO modulesDTO) {
         return service.create(modulesDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public ModulesDTO updateModules(@RequestBody ModulesDTO modulesDTO) {
+    public ModulesDTO update(@RequestBody ModulesDTO modulesDTO) {
         return service.update(modulesDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String deleteModules(@RequestBody ModulesDTO modulesDTO) {
+    public String delete(@RequestBody ModulesDTO modulesDTO) {
         return service.delete(modulesDTO);
     }
 }

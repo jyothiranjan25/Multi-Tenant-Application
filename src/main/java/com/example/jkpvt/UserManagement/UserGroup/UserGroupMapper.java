@@ -17,8 +17,8 @@ public interface UserGroupMapper {
     List<UserGroupDTO> map(List<UserGroup> userGroupList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(source = "parentGroup", target = "parentGroup", qualifiedByName = "mapParentGroupDTO")
-    @Mapping(source = "childGroups", target = "childGroups", qualifiedByName = "mapChildGroupsDTO")
+    @Mapping(target = "parentGroup", ignore = true)
+    @Mapping(target = "childGroups", ignore = true)
     UserGroup map(UserGroupDTO userGroupDTO);
 
     @Named("mapParentGroup")
@@ -35,20 +35,6 @@ public interface UserGroupMapper {
         return dto;
     }
 
-    @Named("mapParentGroupDTO")
-    default UserGroup mapParentGroupDTO(UserGroupDTO parentGroupDTO) {
-        if (parentGroupDTO == null) {
-            return null;
-        }
-        UserGroup entity = new UserGroup();
-        entity.setId(parentGroupDTO.getId());
-        entity.setGroupName(parentGroupDTO.getGroupName());
-        entity.setGroupDescription(parentGroupDTO.getGroupDescription());
-        entity.setQualifiedName(parentGroupDTO.getQualifiedName());
-        // Avoid infinite loop by not setting parentGroup or childGroups
-        return entity;
-    }
-
     @Named("mapChildGroups")
     default Set<UserGroupDTO> mapChildGroups(Set<UserGroup> childGroups) {
         if (childGroups == null || childGroups.isEmpty()) {
@@ -63,24 +49,6 @@ public interface UserGroupMapper {
                     dto.setQualifiedName(childGroup.getQualifiedName());
                     // Avoid infinite loop by not setting parentGroup or childGroups
                     return dto;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("mapChildGroupsDTO")
-    default Set<UserGroup> mapChildGroupsDTO(Set<UserGroupDTO> childGroupsDTO) {
-        if (childGroupsDTO == null) {
-            return null;
-        }
-        return childGroupsDTO.stream()
-                .map(childGroupDTO -> {
-                    UserGroup entity = new UserGroup();
-                    entity.setId(childGroupDTO.getId());
-                    entity.setGroupName(childGroupDTO.getGroupName());
-                    entity.setGroupDescription(childGroupDTO.getGroupDescription());
-                    entity.setQualifiedName(childGroupDTO.getQualifiedName());
-                    // Avoid infinite loop by not setting parentGroup or childGroups
-                    return entity;
                 })
                 .collect(Collectors.toSet());
     }
