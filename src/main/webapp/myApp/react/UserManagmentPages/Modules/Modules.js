@@ -88,7 +88,11 @@ const Modules = (props) => {
       filter: false,
       cellRenderer: (params) => (
         <ActionCellRenderer
-          onViewClick={handleViewClick(params.data)}
+          onViewClick={
+            params.data?.resources.length > 0
+              ? handleViewClick(params.data)
+              : undefined
+          }
           onEditClick={handleEditClick(params.data)}
           onDeleteClick={handleDeleteClick(params.data)}
         />
