@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 
-const FullFeaturedCrudGrid = ({ rows = [], columns = [], ...props }) => {
+const MUIDataTable = ({ rows = [], columns = [], ...props }) => {
   let newData = [];
   rows.map((item, index) => {
     newData.push({ serial_no: index + 1, ...item });
@@ -17,7 +17,7 @@ const FullFeaturedCrudGrid = ({ rows = [], columns = [], ...props }) => {
   return (
     <Box
       sx={{
-        height: 500,
+        height: 600,
         width: '100%',
         '& .actions': {
           color: 'text.secondary',
@@ -32,4 +32,4 @@ const FullFeaturedCrudGrid = ({ rows = [], columns = [], ...props }) => {
   );
 };
 
-export default FullFeaturedCrudGrid;
+export default MUIDataTable;
