@@ -101,7 +101,7 @@ public class RolesService {
         for (Roles role : roles) {
             RolesDTO rolesDTO = mapper.map(role);
             List<Modules> modules = getModulesByRole(role);
-            rolesDTO.setModulesResources(modulesService.MapToModelDto(modules));
+            rolesDTO.setModulesResources(modulesService.MapToModelDto(modules, role.getId()));
             rolesDTOList.add(rolesDTO);
         }
         return rolesDTOList;
