@@ -3,15 +3,13 @@ package com.example.jkpvt.UserManagement.Modules;
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.UserManagement.Resources.Resources;
 import com.example.jkpvt.UserManagement.Resources.ResourcesService;
+import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,6 +110,20 @@ public class ModulesService {
         List<ModulesDTO> modulesDTOS = new ArrayList<>();
         for (Modules module : modules) {
             ModulesDTO modulesDTO = mapper.map(module);
+            modulesDTO.setResources(resourcesService.getResourceDtoList(new ArrayList<>(module.getResources())));
+            modulesDTOS.add(modulesDTO);
+        }
+        return modulesDTOS;
+    }
+
+    public List<ModulesDTO> MapToModelDto(List<Modules> modules,Long roleId) {
+        List<ModulesDTO> modulesDTOS = new ArrayList<>();
+        for (Modules module : modules) {
+            ModulesDTO modulesDTO = mapper.map(module);
+            Optional<RoleModule> roleModuleOptional = module.getRoleModule().stream()
+                    .filter(roleModule -> roleModule.getRole().getId().equals(roleId))
+                    .findFirst();
+            roleModuleOptional.ifPresent(roleModule -> modulesDTO.setModelOrder(roleModule.getModelOrder()));
             modulesDTO.setResources(resourcesService.getResourceDtoList(new ArrayList<>(module.getResources())));
             modulesDTOS.add(modulesDTO);
         }
