@@ -40,7 +40,7 @@ VALUES (1, 4, 4)
 
 -- App User Data
 INSERT INTO app_user (id,username, password, email, is_admin, is_active)
-VALUES (1,'admin', 'admin', 'admin@example.com', TRUE, TRUE)
+VALUES (1,'admin@example.com', '$2a$10$BwBuA2OsxYOD/uv48OVJcenwQa.01jrB6SEV58LR.irx11SICqn1K', 'admin@example.com', TRUE, TRUE)
     ON CONFLICT (username) DO NOTHING;
 
 -- App User Role Data
