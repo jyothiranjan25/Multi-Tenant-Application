@@ -17,6 +17,8 @@ import org.hibernate.envers.Audited;
 @Table(name = "app_user_roles", indexes = {
         @Index(name = "idx_app_user_roles_app_user_id", columnList = "app_user_id"),
         @Index(name = "idx_app_user_roles_role_id", columnList = "role_id"),
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uk_app_user_roles_app_user_id_role_id_user_group", columnNames = {"app_user_id", "role_id","user_group"})
 })
 @EntityListeners(AppUserRolesListener.class)
 @Cacheable

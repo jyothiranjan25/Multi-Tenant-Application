@@ -40,6 +40,6 @@ public class RoleModule {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Modules module;
 
-    @Column(name = "model_order")
-    private Long modelOrder;
+    @Column(name = "module_order")
+    private Long moduleOrder;
 }

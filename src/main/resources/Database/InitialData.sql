@@ -1,0 +1,49 @@
+-- This file contains the initial data that will be inserted into the database when the application starts.
+
+-- User Group Data
+INSERT INTO user_group (id, name, description,qualified_name)
+VALUES (1, 'JKPT', 'TOP LEVEL', 'JKPT')
+    ON CONFLICT (name) DO NOTHING;
+
+-- Modules Data
+INSERT INTO modules (id, name, description, url, icon)
+VALUES (1, 'User Group', 'Create Multiple UserGroups', 'userGroup', 'PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMyA2LjA2NnYxMi4wNjVsLTExLjAwMSA1Ljg2OS0xMS01Ljg2OXYtMTIuMTMxbDExLTYgMTEuMDAxIDYuMDY2em0tMjEuMDAxIDExLjQ2NWw5LjUgNS4wNjl2LTEwLjU3bC05LjUtNC45NDZ2MTAuNDQ3em0yMC4wMDEtMTAuMzg4bC05LjUwMSA0Ljg4OXYxMC41NjhsOS41MDEtNS4wNjl2LTEwLjM4OHptLTUuNTIgMS43MTZsLTkuNTM0LTQuOTY0LTQuMzQ5IDIuMzczIDkuNDA0IDQuODk2IDQuNDc5LTIuMzA1em0tOC40NzYtNS41NDFsOS41NjUgNC45OCAzLjgzMi0xLjk3Mi05LjQwNS01LjE4NS0zLjk5MiAyLjE3N3oiLz48L3N2Zz4=')
+    ON CONFLICT (name) DO NOTHING;
+INSERT INTO modules (id, name, description, url, icon)
+VALUES(2, 'Resources', 'Create Multiple Resources', 'resources', 'PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMyA2LjA2NnYxMi4wNjVsLTExLjAwMSA1Ljg2OS0xMS01Ljg2OXYtMTIuMTMxbDExLTYgMTEuMDAxIDYuMDY2em0tMjEuMDAxIDExLjQ2NWw5LjUgNS4wNjl2LTEwLjU3bC05LjUtNC45NDZ2MTAuNDQ3em0yMC4wMDEtMTAuMzg4bC05LjUwMSA0Ljg4OXYxMC41NjhsOS41MDEtNS4wNjl2LTEwLjM4OHptLTUuNTIgMS43MTZsLTkuNTM0LTQuOTY0LTQuMzQ5IDIuMzczIDkuNDA0IDQuODk2IDQuNDc5LTIuMzA1em0tOC40NzYtNS41NDFsOS41NjUgNC45OCAzLjgzMi0xLjk3Mi05LjQwNS01LjE4NS0zLjk5MiAyLjE3N3oiLz48L3N2Zz4=')
+    ON CONFLICT (name) DO NOTHING;
+INSERT INTO modules (id, name, description, url, icon)
+VALUES (3, 'Modules', 'Create Multiple Modules', 'modules', 'PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMyA2LjA2NnYxMi4wNjVsLTExLjAwMSA1Ljg2OS0xMS01Ljg2OXYtMTIuMTMxbDExLTYgMTEuMDAxIDYuMDY2em0tMjEuMDAxIDExLjQ2NWw5LjUgNS4wNjl2LTEwLjU3bC05LjUtNC45NDZ2MTAuNDQ3em0yMC4wMDEtMTAuMzg4bC05LjUwMSA0Ljg4OXYxMC41NjhsOS41MDEtNS4wNjl2LTEwLjM4OHptLTUuNTIgMS43MTZsLTkuNTM0LTQuOTY0LTQuMzQ5IDIuMzczIDkuNDA0IDQuODk2IDQuNDc5LTIuMzA1em0tOC40NzYtNS41NDFsOS41NjUgNC45OCAzLjgzMi0xLjk3Mi05LjQwNS01LjE4NS0zLjk5MiAyLjE3N3oiLz48L3N2Zz4=')
+    ON CONFLICT (name) DO NOTHING;
+INSERT INTO modules (id, name, description, url, icon)
+VALUES(4, 'Roles', 'Create Multiple Roles', 'roles', 'PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMyA2LjA2NnYxMi4wNjVsLTExLjAwMSA1Ljg2OS0xMS01Ljg2OXYtMTIuMTMxbDExLTYgMTEuMDAxIDYuMDY2em0tMjEuMDAxIDExLjQ2NWw5LjUgNS4wNjl2LTEwLjU3bC05LjUtNC45NDZ2MTAuNDQ3em0yMC4wMDEtMTAuMzg4bC05LjUwMSA0Ljg4OXYxMC41NjhsOS41MDEtNS4wNjl2LTEwLjM4OHptLTUuNTIgMS43MTZsLTkuNTM0LTQuOTY0LTQuMzQ5IDIuMzczIDkuNDA0IDQuODk2IDQuNDc5LTIuMzA1em0tOC40NzYtNS41NDFsOS41NjUgNC45OCAzLjgzMi0xLjk3Mi05LjQwNS01LjE4NS0zLjk5MiAyLjE3N3oiLz48L3N2Zz4=')
+    ON CONFLICT (name) DO NOTHING;
+
+-- Role Data
+INSERT INTO roles (id, name, description,icon)
+VALUES (1, 'Super Admin', 'Admin Role','PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yMyA2LjA2NnYxMi4wNjVsLTExLjAwMSA1Ljg2OS0xMS01Ljg2OXYtMTIuMTMxbDExLTYgMTEuMDAxIDYuMDY2em0tMjEuMDAxIDExLjQ2NWw5LjUgNS4wNjl2LTEwLjU3bC05LjUtNC45NDZ2MTAuNDQ3em0yMC4wMDEtMTAuMzg4bC05LjUwMSA0Ljg4OXYxMC41NjhsOS41MDEtNS4wNjl2LTEwLjM4OHptLTUuNTIgMS43MTZsLTkuNTM0LTQuOTY0LTQuMzQ5IDIuMzczIDkuNDA0IDQuODk2IDQuNDc5LTIuMzA1em0tOC40NzYtNS41NDFsOS41NjUgNC45OCAzLjgzMi0xLjk3Mi05LjQwNS01LjE4NS0zLjk5MiAyLjE3N3oiLz48L3N2Zz4=')
+    ON CONFLICT (name) DO NOTHING;
+
+-- Role Module Data
+INSERT INTO role_module (role_id, module_id,module_order)
+VALUES (1, 1, 1)
+    ON CONFLICT (role_id, module_id) DO NOTHING;
+INSERT INTO role_module (role_id, module_id,module_order)
+VALUES (1, 2, 2)
+    ON CONFLICT (role_id, module_id) DO NOTHING;
+INSERT INTO role_module (role_id, module_id,module_order)
+VALUES (1, 3, 3)
+    ON CONFLICT (role_id, module_id) DO NOTHING;
+INSERT INTO role_module (role_id, module_id,module_order)
+VALUES (1, 4, 4)
+    ON CONFLICT (role_id, module_id) DO NOTHING;
+
+-- App User Data
+INSERT INTO app_user (id,username, password, email, is_admin, is_active)
+VALUES (1,'admin', 'admin', 'admin@example.com', TRUE, TRUE)
+    ON CONFLICT (username) DO NOTHING;
+
+-- App User Role Data
+INSERT INTO app_user_roles (app_user_id, role_id,user_group)
+VALUES (1, 1,'JKPT')
+    ON CONFLICT (app_user_id, role_id,user_group) DO NOTHING;

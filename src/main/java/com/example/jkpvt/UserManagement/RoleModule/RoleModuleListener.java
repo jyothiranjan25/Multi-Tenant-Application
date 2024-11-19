@@ -22,8 +22,8 @@ public class RoleModuleListener implements ApplicationContextAware {
         if (roleModule.getModule() == null) {
             throw new RuntimeException("Module is mandatory");
         }
-        if(roleModule.getModelOrder() == null) {
-            roleModule.setModelOrder(0L);
+        if(roleModule.getModuleOrder() == null) {
+            roleModule.setModuleOrder(0L);
         }
         checkForDuplicateRoleModule(roleModule);
     }

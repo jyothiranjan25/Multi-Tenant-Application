@@ -14,5 +14,5 @@ public class RoleModuleDTO {
     private Long moduleId;
     private List<ModulesDTO> AddModules;
     private List<Long> removeModules;
-    private Long modelOrder;
+    private Long moduleOrder;
 }
