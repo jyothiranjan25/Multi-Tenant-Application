@@ -45,13 +45,7 @@ export default function Content() {
         maxWidth: 450,
       }}
     >
-      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <img
-          src="/static/images/illustrations/illustration_content.png"
-          alt="Content"
-          style={{ width: '100%', height: 'auto' }}
-        />
-      </Box>
+      <Box sx={{ display: { xs: 'none', md: 'flex' } }}></Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
           {item.icon}
