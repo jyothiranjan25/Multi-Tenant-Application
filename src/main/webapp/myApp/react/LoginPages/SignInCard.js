@@ -156,7 +156,7 @@ export default function SignInCard() {
             variant="outlined"
             color={emailError ? 'error' : 'primary'}
             sx={{ ariaLabel: 'email' }}
-            value={'jyothiranjan@gmail.com'}
+            value={'admin@example.com'}
           />
         </FormControl>
         <FormControl>
