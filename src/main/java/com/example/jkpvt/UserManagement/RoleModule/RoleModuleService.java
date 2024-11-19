@@ -25,7 +25,6 @@ public class RoleModuleService {
     private final RoleModuleDAO dao;
     private final RoleModuleResourcesService roleModuleResourcesService;
 
-
     @Transactional(readOnly = true,propagation = Propagation.REQUIRED)
     public List<RoleModuleDTO> get(RoleModuleDTO roleModuleDTO) {
         List<RoleModule> roleModules = dao.get(roleModuleDTO);
@@ -62,8 +61,8 @@ public class RoleModuleService {
             if (existingRoleModule == null) {
                 addList.add(createNewRoleModule(roleModuleDTO, module));
             } else {
-                if(roleModuleDTO.getModelOrder() != null) {
-                    existingRoleModule.setModelOrder(roleModuleDTO.getModelOrder());
+                if(roleModuleDTO.getModuleOrder() != null) {
+                    existingRoleModule.setModuleOrder(roleModuleDTO.getModuleOrder());
                 }
                 updateList.add(existingRoleModule);
             }
@@ -82,7 +81,7 @@ public class RoleModuleService {
         RoleModule newRoleModule = mapper.map(roleModuleDTO);
         Modules module = modulesService.getById(moduleDTO.getId());
         newRoleModule.setModule(module);
-        newRoleModule.setModelOrder(moduleDTO.getModelOrder());
+        newRoleModule.setModuleOrder(moduleDTO.getModuleOrder());
         return newRoleModule;
     }
 

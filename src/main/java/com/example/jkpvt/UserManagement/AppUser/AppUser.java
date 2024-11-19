@@ -13,7 +13,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_user" , indexes = {
+        @Index(name = "idx_app_user_username", columnList = "username"),
+        @Index(name = "idx_app_user_email", columnList = "email"),
+        @Index(name = "idx_app_user_is_admin", columnList = "is_admin"),
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uk_app_user_username", columnNames = {"username"}),
+        @UniqueConstraint(name = "uk_app_user_email", columnNames = {"email"})
+})
 @EntityListeners(AppUserListener.class)
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -21,7 +28,7 @@ import java.util.Set;
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username")

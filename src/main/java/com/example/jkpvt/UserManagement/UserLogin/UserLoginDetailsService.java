@@ -2,7 +2,6 @@ package com.example.jkpvt.UserManagement.UserLogin;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
-import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,18 +37,5 @@ public class UserLoginDetailsService {
     public void storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {
         SessionStorageUtil.setUserGroup(appUserRolesDTO.getUserGroup());
         SessionStorageUtil.setRoleId(appUserRolesDTO.getRoles().getId());
-        test();
-    }
-
-    public void test() {
-        String userName = SessionStorageUtil.getUserName();
-        String userGroup = SessionStorageUtil.getUserGroup();
-        Long roleId = SessionStorageUtil.getRoleId();
-        AppUserDTO appUserDTO = SessionStorageUtil.getUserLoginDetails();
-
-        System.out.println("UserName: " + userName);
-        System.out.println("userGroup: " + userGroup);
-        System.out.println("roleId: " + roleId);
-        System.out.println("appUserDTO: " + appUserDTO.toString());
     }
 }

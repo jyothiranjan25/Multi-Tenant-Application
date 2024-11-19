@@ -50,7 +50,7 @@ public class AppUserRolesListener implements ApplicationContextAware {
         appUserRolesDTO.setUserGroup(appUserRoles.getUserGroup());
         List<AppUserRolesDTO> appUserRole = applicationContext.getBean(AppUserRolesService.class).get(appUserRolesDTO);
         if (!appUserRole.isEmpty()) {
-            throw new CommonException("Data already exists");
+            throw new CommonException("Role already exists");
         }
     }
 }

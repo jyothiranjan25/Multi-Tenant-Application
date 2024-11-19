@@ -21,13 +21,13 @@ public class UserGroupService {
     private final UserGroupRepository repository;
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
-    public List<UserGroupDTO> get(UserGroupDTO userGroupDTO) {
+    public List<UserGroupDTO> getAll(UserGroupDTO userGroupDTO) {
         List<UserGroup> userGroup = dao.get(userGroupDTO);
         return mapper.map(userGroup);
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
-    public List<UserGroupDTO> getUserGroups(UserGroupDTO userGroupDTO) {
+    public List<UserGroupDTO> get(UserGroupDTO userGroupDTO) {
         List<UserGroup> userGroups = dao.get(userGroupDTO);
         List<UserGroupDTO> userGroupDTOList = new ArrayList<>();
         for (UserGroup userGroup : userGroups) {

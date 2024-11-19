@@ -92,7 +92,7 @@ public class ModulesService {
         }
     }
 
-    public Set<Resources> setResources(ModulesDTO modulesDTO) {
+    private Set<Resources> setResources(ModulesDTO modulesDTO) {
         List<Long> resourceIds = modulesDTO.getResourceIds().stream()
                 .map(Long::valueOf)
                 .collect(Collectors.toList());
@@ -123,7 +123,7 @@ public class ModulesService {
             Optional<RoleModule> roleModuleOptional = module.getRoleModule().stream()
                     .filter(roleModule -> roleModule.getRole().getId().equals(roleId))
                     .findFirst();
-            roleModuleOptional.ifPresent(roleModule -> modulesDTO.setModelOrder(roleModule.getModelOrder()));
+            roleModuleOptional.ifPresent(roleModule -> modulesDTO.setModuleOrder(roleModule.getModuleOrder()));
             modulesDTO.setResources(resourcesService.getResourceDtoList(new ArrayList<>(module.getResources())));
             modulesDTOS.add(modulesDTO);
         }

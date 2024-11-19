@@ -16,7 +16,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", indexes = {
+        @Index(name = "idx_roles_name", columnList = "name"),
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "uk_roles_name", columnNames = "name"),
+})
 @EntityListeners(RolesListener.class)
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
