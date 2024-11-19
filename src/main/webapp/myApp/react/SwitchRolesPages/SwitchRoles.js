@@ -49,24 +49,29 @@ const SwitchRoles = (props) => {
                       }}
                     >
                       <Avatar
-                        alt={data.roles.role_name}
-                        src="public/images/user.png"
+                        alt={data?.roles?.role_name}
+                        src={
+                          data?.roles?.role_icon
+                            ? 'data:image/svg+xml;base64,' +
+                              data?.roles?.role_icon
+                            : 'public/images/user.png'
+                        }
                         sx={{ width: 100, height: 100 }}
                       />
                     </Box>{' '}
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
-                        {data.roles.role_name}
+                        {data?.roles?.role_name}
                       </Typography>
                       <Typography gutterBottom variant="h6" component="div">
-                        {data.user_group}
+                        {data?.user_group}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: 'text.secondary' }}
-                      >
-                        {data.roles.role_description}
-                      </Typography>
+                      {/*<Typography*/}
+                      {/*  variant="body2"*/}
+                      {/*  sx={{ color: 'text.secondary' }}*/}
+                      {/*>*/}
+                      {/*  {data?.roles?.role_description}*/}
+                      {/*</Typography>*/}
                     </CardContent>
                   </CardActionArea>
                 </Card>

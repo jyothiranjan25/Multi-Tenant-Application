@@ -6,7 +6,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import GetAPIs from './GetApisService/GetAPIs';
 
 import {
@@ -27,16 +28,22 @@ export default function MenuContent() {
   }, []);
 
   useEffect(() => {
+    const dashboardItem = {
+      id: 0,
+      text: 'Dashboard',
+      icon: <DashboardIcon />,
+      props: { module_url: '/dashboard' },
+    };
     if (roleModulesData && roleModulesData.modules_resources) {
       const roleModules = roleModulesData.modules_resources
         .sort((a, b) => a.id - b.id) // Sort by order property
         .map((module) => ({
           id: module?.model_order,
           text: module.module_name,
-          icon: <HomeRoundedIcon />,
+          icon: <DisabledByDefaultIcon />,
           props: module,
         }));
-      setMainListItems(roleModules);
+      setMainListItems([dashboardItem, ...roleModules]);
     }
   }, [roleModulesData]);
 
@@ -68,3 +75,7 @@ export default function MenuContent() {
     </Stack>
   );
 }
+
+const icon = () => {
+  return <HomeRoundedIcon />;
+};

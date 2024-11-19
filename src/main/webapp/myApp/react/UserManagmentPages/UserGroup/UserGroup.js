@@ -225,18 +225,18 @@ const UserGroup = (props) => {
                       </Button>
                     </FormGrid>
                   ) : null}
-                  {isEdit && (
-                    <FormGrid size={{ xs: 4 }}>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        onClick={handleDelete}
-                      >
-                        Delete
-                      </Button>
-                    </FormGrid>
-                  )}
+                  {/*{isEdit && (*/}
+                  {/*  <FormGrid size={{ xs: 4 }}>*/}
+                  {/*    <Button*/}
+                  {/*      fullWidth*/}
+                  {/*      variant="outlined"*/}
+                  {/*      startIcon={<DeleteIcon />}*/}
+                  {/*      onClick={handleDelete}*/}
+                  {/*    >*/}
+                  {/*      Delete*/}
+                  {/*    </Button>*/}
+                  {/*  </FormGrid>*/}
+                  {/*)}*/}
                 </Grid>
               </Box>
             </Card>

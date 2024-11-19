@@ -55,6 +55,11 @@ const Roles = () => {
     { field: 'role_name', headerName: 'Name', flex: 0.5 },
     { field: 'role_description', headerName: 'Description', flex: 0.5 },
     {
+      field: 'role_icon',
+      headerName: 'Icon',
+      flex: 0.5,
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
