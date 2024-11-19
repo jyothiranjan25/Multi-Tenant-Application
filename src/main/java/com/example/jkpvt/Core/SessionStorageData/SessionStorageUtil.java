@@ -9,6 +9,7 @@ public class SessionStorageUtil {
 
     private static final String APP_USER_SESSION_KEY = "appUser";
     private static final String USER_NAME_SESSION_KEY = "userName";
+    private static final String USER_EMAIL_SESSION_KEY = "userEmail";
     private static final String USER_GROUP_SESSION_KEY = "userGroup";
     private static final String ROLE_SESSION_KEY = "roleId";
 
@@ -17,9 +18,9 @@ public class SessionStorageUtil {
         return (AppUserDTO) session.getAttribute(APP_USER_SESSION_KEY);
     }
 
-    public static void setUserLoginDetails(AppUserDTO appUserDTO) {
+    public static void setUserLoginDetails(AppUserDTO appUser) {
         HttpSession session = getCurrentSession();
-        session.setAttribute(APP_USER_SESSION_KEY, appUserDTO);
+        session.setAttribute(APP_USER_SESSION_KEY, appUser);
     }
 
     public static String getUserName() {
@@ -30,6 +31,16 @@ public class SessionStorageUtil {
     public static void setUserName(String userName) {
         HttpSession session = getCurrentSession();
         session.setAttribute(USER_NAME_SESSION_KEY, userName);
+    }
+
+    public static String geUserEmail() {
+        HttpSession session = getCurrentSession();
+        return (String) session.getAttribute(USER_EMAIL_SESSION_KEY);
+    }
+
+    public static void setUserEmail(String userEmail) {
+        HttpSession session = getCurrentSession();
+        session.setAttribute(USER_EMAIL_SESSION_KEY, userEmail);
     }
 
     public static String getUserGroup() {
