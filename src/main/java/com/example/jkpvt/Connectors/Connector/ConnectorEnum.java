@@ -1,4 +1,4 @@
-package com.example.jkpvt.Connectors;
+package com.example.jkpvt.Connectors.Connector;
 
 public enum ConnectorEnum {
     SSO,EMAIL,DATABASE,CLOUD_SERVICES;

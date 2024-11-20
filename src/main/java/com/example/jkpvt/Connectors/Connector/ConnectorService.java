@@ -1,4 +1,4 @@
-package com.example.jkpvt.Connectors;
+package com.example.jkpvt.Connectors.Connector;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
-package com.example.jkpvt.Connectors;
+package com.example.jkpvt.Connectors.Connector;
 
+import com.example.jkpvt.Connectors.ConnectorXref.ConnectorXref;
 import com.example.jkpvt.Core.AbstractModel.AbstractModel;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,4 +44,8 @@ public class Connector extends AbstractModel<Connector> {
 
     @Column(name = "icon",length = 4025)
     private String icon;
+
+    @OneToMany(mappedBy = "connector",cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<ConnectorXref> connectorXrefs;
 }
