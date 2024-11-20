@@ -1,6 +1,6 @@
 package com.example.jkpvt.UserManagement.Modules;
 
-import com.example.jkpvt.Core.JsonUtil.MapUtils;
+import com.example.jkpvt.Core.Json.JsonMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class ModulesController {
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<ModulesDTO> get(@RequestParam Map<String, String> queryParams) {
-        ModulesDTO modulesDTO = MapUtils.toDto(queryParams, ModulesDTO.class);
+        ModulesDTO modulesDTO = JsonMap.toDto(queryParams, ModulesDTO.class);
         return service.get(modulesDTO);
     }
 

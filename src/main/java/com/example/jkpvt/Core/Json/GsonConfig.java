@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.JsonUtil;
+package com.example.jkpvt.Core.Json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +17,7 @@ import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.example.jkpvt.Core.JsonUtil")
+@ComponentScan(basePackages = "com.example.jkpvt.Core.Json")
 public class GsonConfig implements WebMvcConfigurer {
 
     @Bean

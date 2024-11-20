@@ -1,6 +1,6 @@
 package com.example.jkpvt.UserManagement.UserLogin;
 
-import com.example.jkpvt.Core.JsonUtil.MapUtils;
+import com.example.jkpvt.Core.Json.JsonMap;
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class UserLoginDetailsController {
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<UserLoginDetailsDTO> getAllUserLoginDetails(@RequestParam Map<String, String> queryParams) {
-        UserLoginDetailsDTO userLoginDetailsDTO = MapUtils.toDto(queryParams, UserLoginDetailsDTO.class);
+        UserLoginDetailsDTO userLoginDetailsDTO = JsonMap.toDto(queryParams, UserLoginDetailsDTO.class);
         return service.get(userLoginDetailsDTO);
     }
 

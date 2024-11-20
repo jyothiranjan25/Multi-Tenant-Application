@@ -61,11 +61,14 @@ public class Resources {
     private Resources parentResource;
 
     @OneToMany(mappedBy = "parentResource", cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resources> childResources = new HashSet<>();
 
     @ManyToMany(mappedBy = "resources" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Modules> modules = new HashSet<>();
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
 }

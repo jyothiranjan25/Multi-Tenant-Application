@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core;
+package com.example.jkpvt.Core.Cache;
 
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -16,7 +16,7 @@ import java.time.Duration;
 
 @Configuration
 @EnableCaching
-public class EhCacheConfig {
+public class EhCache {
     @Bean
     public JCacheCacheManager cacheManager() {
         CachingProvider cachingProvider = Caching.getCachingProvider();
