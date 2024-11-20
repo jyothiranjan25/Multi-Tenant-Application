@@ -84,13 +84,4 @@
     <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
         <property name="cacheManagerUri" value="classpath:XMLConfiguration/ehCache.xml"/>
     </bean>
-
-    <!-- Register the GsonHttpMessageConverter -->
-    <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
-                <property name="gson" ref="gson"/>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
 </beans>
