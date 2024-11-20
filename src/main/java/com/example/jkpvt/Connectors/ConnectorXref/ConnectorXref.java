@@ -47,5 +47,6 @@ public class ConnectorXref extends BaseAbstractModel<ConnectorXref> {
     private Connector connector;
 
     @OneToMany(mappedBy = "connectorXref",cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ConnectorConfiguration> connectorConfigurations;
 }
