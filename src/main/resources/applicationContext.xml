@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <!-- Enable autowire -->
     <context:annotation-config/>
@@ -33,9 +33,9 @@
         </property>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="format_sql">false</prop>
+                <prop key="format_sql">true</prop>
                 <prop key="hibernate.transaction.jta.platform">
                     org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform
                 </prop>
@@ -43,12 +43,12 @@
                 <!-- EhCache configuration -->
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.default_batch_fetch_size">10</prop>
                 <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.cache.region.factory_class">
                     org.hibernate.cache.jcache.internal.JCacheRegionFactory
                 </prop>
                 <prop key="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</prop>
-                <prop key="hibernate.javax.cache.uri">classpath:XMLConfiguration/ehCache.xml</prop>
                 <prop key="hibernate.javax.cache.missing_cache_strategy">create</prop>
 
                 <!-- Envers configuration -->
@@ -75,13 +75,4 @@
 
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- CacheManager bean definition -->
-    <bean id="cacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
-        <constructor-arg ref="jCacheManager"/>
-    </bean>
-
-    <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
-        <property name="cacheManagerUri" value="classpath:XMLConfiguration/ehCache.xml"/>
-    </bean>
 </beans>

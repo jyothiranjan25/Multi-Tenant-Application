@@ -32,6 +32,9 @@ public class PaginationUtil {
             query.setFirstResult(pageOffset);  // Set the offset
             query.setMaxResults(pageSize);     // Set the limit
         }
+
+        // set Cacheable to true
+        query.setHint("org.hibernate.cacheable", true);
     }
 
     private static Integer getFieldValue(Object dto, String fieldName) {
