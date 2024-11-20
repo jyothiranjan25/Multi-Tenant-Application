@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core;
+package com.example.jkpvt.Core.Conditions;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
