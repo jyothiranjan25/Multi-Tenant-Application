@@ -11,6 +11,8 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserLoginDetails> get(UserLoginDetailsDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

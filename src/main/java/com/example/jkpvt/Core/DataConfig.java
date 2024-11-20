@@ -2,6 +2,7 @@ package com.example.jkpvt.Core;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -17,6 +18,7 @@ public class DataConfig {
     final static String PATH_URL = "/Database/InitialData.sql";
 
     @Bean
+    @Conditional(DataSourceInitializerCondition.class)
     public DataSourceInitializer dataSourceInitializer() {
         if (new ClassPathResource(PATH_URL).exists()) {
             DataSourceInitializer initializer = new DataSourceInitializer();

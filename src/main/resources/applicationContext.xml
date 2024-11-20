@@ -56,6 +56,9 @@
                 <prop key="hibernate.integration.envers.enabled">false</prop>
                 <prop key="org.hibernate.envers.audit_table_suffix">_AUD</prop>
                 <prop key="org.hibernate.envers.store_data_at_delete">true</prop>
+
+                <!-- Enable lazy loading without transaction -->
+                <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
             </props>
         </property>
     </bean>
@@ -90,5 +93,4 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
 </beans>

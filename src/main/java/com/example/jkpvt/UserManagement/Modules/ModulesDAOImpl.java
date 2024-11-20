@@ -9,6 +9,8 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ModulesDAOImpl implements ModulesDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Modules> get(ModulesDTO modulesDTO) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
