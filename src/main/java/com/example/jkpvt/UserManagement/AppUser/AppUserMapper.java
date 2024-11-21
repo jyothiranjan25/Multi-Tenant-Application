@@ -12,12 +12,11 @@ import java.util.List;
 public interface AppUserMapper {
 
     @Mapping(target = "appUserRoles", source = "appUserRoles")
-    AppUserDTO map(AppUser appUser);
+    AppUser map(AppUserDTO appUserDTO);
 
     @InheritConfiguration
     List<AppUserDTO> map(List<AppUser> appUserList);
 
     @InheritInverseConfiguration
-    @Mapping(target = "appUserRoles", source = "appUserRoles")
-    AppUser map(AppUserDTO appUserDTO);
+    AppUserDTO map(AppUser appUser);
 }

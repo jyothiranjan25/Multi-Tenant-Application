@@ -12,17 +12,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {RolesMapper.class, ModulesMapper.class, ResourcesMapper.class})
 public interface RoleModuleResourcesMapper {
-    @Mapping(target = "roleId", source = "role.id")
-    @Mapping(target = "moduleId", source = "module.id")
-    @Mapping(target = "resourceId", source = "resource.id")
-    RoleModuleResourcesDTO map(RoleModuleResources roleModuleResources);
+
+    @Mapping(target = "role.id", source = "roleId")
+    @Mapping(target = "module.id", source = "moduleId")
+    @Mapping(target = "resource.id", source = "resourceId")
+    RoleModuleResources map(RoleModuleResourcesDTO roleModuleResourcesDTO);
 
     @InheritConfiguration
     List<RoleModuleResourcesDTO> map(List<RoleModuleResources> roleModuleResources);
 
     @InheritInverseConfiguration
-    @Mapping(target = "role.id", source = "roleId")
-    @Mapping(target = "module.id", source = "moduleId")
-    @Mapping(target = "resource.id", source = "resourceId")
-    RoleModuleResources map(RoleModuleResourcesDTO roleModuleResourcesDTO);
+    RoleModuleResourcesDTO map(RoleModuleResources roleModuleResources);
 }
