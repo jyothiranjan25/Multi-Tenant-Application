@@ -8,11 +8,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserLoginDetailsMapper {
-    UserLoginDetailsDTO map(UserLoginDetails userLoginDetails);
+
+    UserLoginDetails map(UserLoginDetailsDTO userLoginDetailsDTO);
 
     @InheritConfiguration
     List<UserLoginDetailsDTO> map(List<UserLoginDetails> userLoginDetails);
 
     @InheritInverseConfiguration
-    UserLoginDetails map(UserLoginDetailsDTO userLoginDetailsDTO);
+    UserLoginDetailsDTO map(UserLoginDetails userLoginDetails);
 }
