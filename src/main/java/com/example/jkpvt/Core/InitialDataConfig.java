@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 @Configuration
 @RequiredArgsConstructor
 @Conditional(DataSourceInitializerCondition.class)
-public class DataConfig {
+public class InitialDataConfig {
 
     private final DataSource dataSource;
     final static String PATH_URL = "/Database/InitialData.sql";
