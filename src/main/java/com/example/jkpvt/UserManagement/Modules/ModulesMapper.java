@@ -8,15 +8,15 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = ResourcesMapper.class)
 public interface ModulesMapper {
 
-    @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParent")
-    ModulesDTO map(Modules modules);
+    Modules map(ModulesDTO modulesDTO);
 
     @InheritConfiguration(name = "map")
     List<ModulesDTO> map(List<Modules> modulesList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(target = "resources", ignore = true)
-    Modules map(ModulesDTO modulesDTO);
+    @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParent")
+    ModulesDTO map(Modules modules);
+
 
     @Named("mapModulesWithoutResources")
     @Mapping(target = "resources", qualifiedByName = "mapResourcesWithoutParentAndChild")

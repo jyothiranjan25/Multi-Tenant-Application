@@ -9,17 +9,15 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface UserGroupMapper {
 
-    @Mapping(source = "parentGroup", target = "parentGroup", qualifiedByName = "mapParentGroup")
-    @Mapping(source = "childGroups", target = "childGroups", qualifiedByName = "mapChildGroups")
-    UserGroupDTO map(UserGroup userGroup);
+    UserGroup map(UserGroupDTO userGroupDTO);
 
     @InheritConfiguration(name = "map")
     List<UserGroupDTO> map(List<UserGroup> userGroupList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(target = "parentGroup", ignore = true)
-    @Mapping(target = "childGroups", ignore = true)
-    UserGroup map(UserGroupDTO userGroupDTO);
+    @Mapping(source = "parentGroup", target = "parentGroup", qualifiedByName = "mapParentGroup")
+    @Mapping(source = "childGroups", target = "childGroups", qualifiedByName = "mapChildGroups")
+    UserGroupDTO map(UserGroup userGroup);
 
     @Named("mapParentGroup")
     default UserGroupDTO mapParentGroup(UserGroup parentGroup) {

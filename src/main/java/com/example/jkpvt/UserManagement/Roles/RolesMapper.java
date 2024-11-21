@@ -9,11 +9,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RolesMapper {
 
-    RolesDTO map(Roles roles);
+    Roles map(RolesDTO rolesDTO);
 
     @InheritConfiguration(name = "map")
     List<RolesDTO> map(List<Roles> roles);
 
     @InheritInverseConfiguration(name = "map")
-    Roles map(RolesDTO rolesDTO);
+    RolesDTO map(Roles roles);
 }
