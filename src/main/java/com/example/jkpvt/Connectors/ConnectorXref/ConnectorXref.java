@@ -31,13 +31,11 @@ public class ConnectorXref extends BaseAbstractModel<ConnectorXref> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String Name;
+    private String name;
 
-    @Column(name = "description",length = 1025)
+    @Column(length = 1025)
     private String description;
 
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private ConnectorXrefEnum status;
 

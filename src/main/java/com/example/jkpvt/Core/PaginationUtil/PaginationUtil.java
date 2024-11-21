@@ -1,8 +1,14 @@
 package com.example.jkpvt.Core.PaginationUtil;
 
+import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaginationUtil {
 
@@ -50,5 +56,42 @@ public class PaginationUtil {
     private static <T> void getTotalCount(TypedQuery<T> query) {
         // Get the total count of the query results
 //        System.out.println("Total count: " + query.getResultList().size());
+    }
+
+    public static <T> void addUserGroupFilter(List<Predicate> predicates, Root<T> root, CriteriaBuilder criteriaBuilder) {
+        String userGroup = SessionStorageUtil.getUserGroup();
+        if (userGroup != null) {
+            List<String> userGroups = getUserGroups(userGroup);
+
+            // Create predicates for each user group and combine with OR
+            List<Predicate> userGroupPredicates = new ArrayList<>();
+            if(userGroups.size() > 1) {
+                for (String group : userGroups) {
+                    userGroupPredicates.add(
+                            criteriaBuilder.like(criteriaBuilder.lower(root.get("userGroup")), group.toLowerCase())
+                    );
+                }
+            }else {
+                userGroupPredicates.add(
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("userGroup")), userGroups.getFirst().toLowerCase()+"%")
+                );
+            }
+            // Combine all predicates using CriteriaBuilder.or
+            predicates.add(criteriaBuilder.or(userGroupPredicates.toArray(new Predicate[0])));
+        }
+    }
+
+    private static List<String> getUserGroups(String userGroup) {
+        List<String> userGroups = new ArrayList<>();
+        String[] parts = userGroup.split("\\.");
+        StringBuilder current = new StringBuilder();
+        for (String part : parts) {
+            if (!current.isEmpty()) {
+                current.append(".");
+            }
+            current.append(part);
+            userGroups.add(current.toString());
+        }
+        return userGroups;
     }
 }

@@ -9,11 +9,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ConnectorMapper {
 
-    ConnectorDTO map(Connector connector);
+    Connector map(ConnectorDTO connectorDTO);
 
     @InheritConfiguration
     List<ConnectorDTO> map(List<Connector> connectors);
 
     @InheritInverseConfiguration
-    Connector map(ConnectorDTO connectorDTO);
+    ConnectorDTO map(Connector connector);
 }

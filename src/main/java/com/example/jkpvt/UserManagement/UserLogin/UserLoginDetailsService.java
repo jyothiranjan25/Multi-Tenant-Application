@@ -36,6 +36,6 @@ public class UserLoginDetailsService {
 
     public void storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {
         SessionStorageUtil.setUserGroup(appUserRolesDTO.getUserGroup());
-        SessionStorageUtil.setRoleId(appUserRolesDTO.getRoles().getId());
+        SessionStorageUtil.setAppUserRole(appUserRolesDTO);
     }
 }
