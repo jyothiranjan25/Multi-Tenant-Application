@@ -39,7 +39,7 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
                 throw new RoleNotFoundExemption("Role not found");
             }
             // Store the first AppUserDTO in the session
-            SessionStorageUtil.setUserLoginDetails(appUserDTOList.getFirst());
+            SessionStorageUtil.setAppUser(appUserDTOList.getFirst());
             SessionStorageUtil.setUserEmail(appUserDTOList.getFirst().getEmail());
             SessionStorageUtil.setUserName(appUserDTOList.getFirst().getUserName());
 

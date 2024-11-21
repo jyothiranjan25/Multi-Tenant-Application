@@ -35,7 +35,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             // Save login details in the database
             saveUserLoginDetails(request, authentication);
 
-            AppUserDTO appUserDTO = SessionStorageUtil.getUserLoginDetails();
+            AppUserDTO appUserDTO = SessionStorageUtil.getAppUser();
 
             String redirectUrl;
             if (appUserDTO.getAppUserRoles().size() > 1) {

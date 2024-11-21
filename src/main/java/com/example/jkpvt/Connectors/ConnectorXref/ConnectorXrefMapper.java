@@ -10,13 +10,13 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = ConnectorXrefMapper.class)
 public interface ConnectorXrefMapper {
 
-    @Mapping(target = "connector", source = "connector")
-    ConnectorXrefDTO map(ConnectorXref connector);
+    @Mapping(target = "connector.id", source = "connectorId")
+    ConnectorXref map(ConnectorXrefDTO connectorDTO);
 
     @InheritConfiguration
     List<ConnectorXrefDTO> map(List<ConnectorXref> connectors);
 
     @InheritInverseConfiguration
-    @Mapping(target = "connector.id", source = "connectorId")
-    ConnectorXref map(ConnectorXrefDTO connectorDTO);
+    ConnectorXrefDTO map(ConnectorXref connector);
+
 }
