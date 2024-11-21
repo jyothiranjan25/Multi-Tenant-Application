@@ -9,17 +9,15 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ResourcesMapper {
 
-    @Mapping(source = "parentResource", target = "parentResource", qualifiedByName = "mapParent")
-    @Mapping(source = "childResources", target = "childResources", qualifiedByName = "mapChild")
-    ResourcesDTO map(Resources resources);
+    Resources map(ResourcesDTO resourcesDTO);
 
     @InheritConfiguration(name = "map")
     List<ResourcesDTO> map(List<Resources> ResourcesList);
 
     @InheritInverseConfiguration(name = "map")
-    @Mapping(target = "parentResource", ignore = true)
-    @Mapping(target = "childResources", ignore = true)
-    Resources map(ResourcesDTO resourcesDTO);
+    @Mapping(source = "parentResource", target = "parentResource", qualifiedByName = "mapParent")
+    @Mapping(source = "childResources", target = "childResources", qualifiedByName = "mapChild")
+    ResourcesDTO map(Resources resources);
 
     @Named("mapResourcesWithoutParent")
     @Mapping(target = "parentResource", ignore = true) // Ignore parentResource in this case
