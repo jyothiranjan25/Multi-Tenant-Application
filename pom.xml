@@ -371,6 +371,15 @@
         </dependency>
         <!-- /Jakarta EE dependencies -->
 
+        <!-- SpringDoc OpenAPI -->
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.7.0-RC1</version>
+        </dependency>
+        <!-- /SpringDoc OpenAPI -->
+
         <!-- Java melody dependencies -->
         <!-- https://mvnrepository.com/artifact/net.bull.javamelody/javamelody-core -->
         <dependency>
