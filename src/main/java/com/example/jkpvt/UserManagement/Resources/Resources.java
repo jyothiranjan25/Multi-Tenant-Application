@@ -2,13 +2,15 @@ package com.example.jkpvt.UserManagement.Resources;
 
 import com.example.jkpvt.UserManagement.Modules.Modules;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResources;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.hibernate.envers.Audited;
 
 import java.util.HashSet;
@@ -57,19 +59,23 @@ public class Resources {
     private String resourceSubOrder;
 
     @ManyToOne
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_resources_parent_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Resources parentResource;
 
     @OneToMany(mappedBy = "parentResource", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resources> childResources = new HashSet<>();
 
     @ManyToMany(mappedBy = "resources" ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Modules> modules = new HashSet<>();
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
 }

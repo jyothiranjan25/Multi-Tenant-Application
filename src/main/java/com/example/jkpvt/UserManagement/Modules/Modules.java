@@ -4,12 +4,14 @@ import com.example.jkpvt.UserManagement.Resources.Resources;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModule;
 import com.example.jkpvt.UserManagement.RoleModule.RoleModuleResources.RoleModuleResources;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 
 import java.util.HashSet;
@@ -61,15 +63,18 @@ public class Modules {
             foreignKey = @ForeignKey(name = "fk_module_resources_module_id"),
             inverseForeignKey = @ForeignKey(name = "fk_module_resources_resource_id")
     )
+    @Fetch(FetchMode.SUBSELECT)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resources> resources = new HashSet<>();
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModule> roleModule = new HashSet<>();
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
 }

@@ -2,13 +2,14 @@ package com.example.jkpvt.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.UserManagement.AppUser.AppUser;
 import com.example.jkpvt.UserManagement.Roles.Roles;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.hibernate.envers.Audited;
 
 @Getter
@@ -32,11 +33,13 @@ public class AppUserRoles {
     private Long id;
 
     @ManyToOne
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "app_user_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_app_user_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AppUser appUser;
 
     @ManyToOne
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_role_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Roles roles;

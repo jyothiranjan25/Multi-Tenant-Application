@@ -2,10 +2,13 @@ package com.example.jkpvt.UserManagement.AppUser;
 
 import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRoles;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
 import java.util.Set;
@@ -32,13 +35,14 @@ public class AppUser {
     @TableGenerator(name = "hilo", table = "hilo_generator", initialValue = 1, allocationSize = 1)
     private Long id;
 
+    @NaturalId
     @Column(name = "username")
     private String userName;
 
-    @Column(name = "password", length = 1025)
+    @Column(length = 1025)
     private String password;
 
-    @Column(name = "email")
+    @NaturalId
     private String email;
 
     @Column(name = "is_admin", columnDefinition = "boolean default false")
@@ -48,6 +52,7 @@ public class AppUser {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AppUserRoles> appUserRoles;
 }

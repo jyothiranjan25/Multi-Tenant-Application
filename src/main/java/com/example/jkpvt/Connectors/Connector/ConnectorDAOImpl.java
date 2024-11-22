@@ -31,6 +31,7 @@ public class ConnectorDAOImpl implements ConnectorDAO{
 
             List<Predicate> predicates = Predicates(criteriaBuilder, root, connectorDTO);
 
+            criteriaQuery.where(predicates.toArray(new Predicate[0]));
             TypedQuery<Connector> query = session.createQuery(criteriaQuery);
 
             return query.getResultList();

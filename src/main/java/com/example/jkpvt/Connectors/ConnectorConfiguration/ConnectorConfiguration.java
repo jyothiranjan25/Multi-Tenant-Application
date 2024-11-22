@@ -2,11 +2,13 @@ package com.example.jkpvt.Connectors.ConnectorConfiguration;
 
 import com.example.jkpvt.Connectors.ConnectorXref.ConnectorXref;
 import com.example.jkpvt.Core.AbstractModel.BaseAbstractModel;
-import org.hibernate.annotations.Cache;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 
 @Getter
@@ -27,6 +29,7 @@ public class ConnectorConfiguration extends BaseAbstractModel<ConnectorConfigura
     private Long id;
 
     @ManyToOne
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "connector_xref_id", foreignKey = @ForeignKey(name = "fk_connector_configuration_connector_xref_id"))
     private ConnectorXref connectorXref;
 

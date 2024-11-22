@@ -1,13 +1,15 @@
 package com.example.jkpvt.UserManagement.UserGroup;
 
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.hibernate.envers.Audited;
 
 import java.util.Set;
@@ -45,12 +47,14 @@ public class UserGroup {
     private String qualifiedName;
 
     @ManyToOne
+    @Fetch(FetchMode.SELECT)
 //    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_user_group_parent_id", foreignKeyDefinition = "FOREIGN KEY (parent_id) REFERENCES user_group(id) ON DELETE CASCADE ON UPDATE CASCADE"))
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_user_group_parent_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserGroup parentGroup;
 
-    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UserGroup> childGroups;
 }
