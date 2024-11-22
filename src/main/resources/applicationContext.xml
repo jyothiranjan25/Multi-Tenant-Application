@@ -16,10 +16,6 @@
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
 
-    <!-- Enable caching -->
-    <cache:annotation-driven/>
-    <!-- /Enable caching -->
-
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
 
@@ -75,13 +71,4 @@
 
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- Register the GsonHttpMessageConverter -->
-    <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
-                <property name="gson" ref="gson"/>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
 </beans>

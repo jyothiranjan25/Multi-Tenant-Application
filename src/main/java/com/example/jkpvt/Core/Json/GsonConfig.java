@@ -45,6 +45,7 @@ public class GsonConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.clear();
         converters.add(gsonHttpMessageConverter(gson()));
     }
 }
