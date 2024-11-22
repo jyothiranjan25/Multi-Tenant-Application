@@ -1,7 +1,7 @@
 package com.example.jkpvt.UserManagement.UserGroup;
 
 
-import com.example.jkpvt.Core.JsonUtil.MapUtils;
+import com.example.jkpvt.Core.Json.JsonMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +17,13 @@ public class UserGroupController {
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public List<UserGroupDTO> getAll(@RequestParam Map<String, String> queryParams) {
-        UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
+        UserGroupDTO userGroupDTO = JsonMap.toDto(queryParams, UserGroupDTO.class);
         return service.getAll(userGroupDTO);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<UserGroupDTO> get(@RequestParam Map<String, String> queryParams) {
-        UserGroupDTO userGroupDTO = MapUtils.toDto(queryParams, UserGroupDTO.class);
+    public List<UserGroupDTO> get(@RequestParam java.util.Map<String, String> queryParams) {
+        UserGroupDTO userGroupDTO = JsonMap.toDto(queryParams, UserGroupDTO.class);
         return service.get(userGroupDTO);
     }
 

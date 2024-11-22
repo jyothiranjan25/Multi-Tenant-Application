@@ -1,4 +1,4 @@
-package com.example.jkpvt.UserManagement.Roles;
+package com.example.jkpvt.Connectors.ConnectorXref;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
@@ -11,31 +11,30 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jkpvt.Core.PaginationUtil.PaginationUtil.addUserGroupFilter;
+
 @Repository
 @RequiredArgsConstructor
-public class RolesDAOImpl implements RolesDAO {
+public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
-    public List<Roles> get(RolesDTO dto) {
+    public List<ConnectorXref> get(ConnectorXrefDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
-            Root<Roles> root = criteriaQuery.from(Roles.class);
+            CriteriaQuery<ConnectorXref> criteriaQuery = criteriaBuilder.createQuery(ConnectorXref.class);
+            Root<ConnectorXref> root = criteriaQuery.from(ConnectorXref.class);
 
             List<Predicate> predicates = buildPredicates(dto, criteriaBuilder, root);
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<Roles> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<ConnectorXref> query = entityManager.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, dto);
 
@@ -45,19 +44,16 @@ public class RolesDAOImpl implements RolesDAO {
         }
     }
 
-
-    private List<Predicate> buildPredicates(RolesDTO dto, CriteriaBuilder criteriaBuilder, Root<Roles> root) {
+    private List<Predicate> buildPredicates(ConnectorXrefDTO dto, CriteriaBuilder criteriaBuilder, Root<ConnectorXref> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
-        if (dto.getRoleName() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("roleName")), dto.getRoleName().toLowerCase()));
+        if (dto.getName() != null) {
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), dto.getName().toLowerCase()));
         }
-        if (dto.getRoleDescription() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("roleDescription")), dto.getRoleDescription().toLowerCase()));
-        }
+        addUserGroupFilter(predicates, root, criteriaBuilder);
         return predicates;
     }
 }

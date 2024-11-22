@@ -11,6 +11,8 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class UserGroupDAOImpl implements UserGroupDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserGroup> get(UserGroupDTO dto) {
         try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

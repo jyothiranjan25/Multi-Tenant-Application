@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.JsonUtil;
+package com.example.jkpvt.Core.Json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +45,7 @@ public class GsonConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.clear();
         converters.add(gsonHttpMessageConverter(gson()));
     }
 }

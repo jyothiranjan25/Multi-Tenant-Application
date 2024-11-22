@@ -1,6 +1,6 @@
 package com.example.jkpvt.UserManagement.Resources;
 
-import com.example.jkpvt.Core.JsonUtil.MapUtils;
+import com.example.jkpvt.Core.Json.JsonMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class ResourcesController {
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<ResourcesDTO> get(@RequestParam Map<String, String> queryParams) {
-        ResourcesDTO resourcesDTO = MapUtils.toDto(queryParams, ResourcesDTO.class);
+        ResourcesDTO resourcesDTO = JsonMap.toDto(queryParams, ResourcesDTO.class);
         return service.get(resourcesDTO);
     }
 

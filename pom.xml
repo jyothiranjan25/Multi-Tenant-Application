@@ -15,9 +15,9 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
         <!-- Spring Framework dependencies -->
-        <springFramework.version>6.1.12</springFramework.version>
+        <springFramework.version>6.1.15</springFramework.version>
         <springData.version>2023.1.2</springData.version>
-        <springSecurity.version>6.3.3</springSecurity.version>
+        <springSecurity.version>6.3.5</springSecurity.version>
         <springSession.version>3.3.2</springSession.version>
         <springBatch.version>5.1.2</springBatch.version>
         <!-- /Spring Framework dependencies -->
@@ -270,11 +270,10 @@
         <!-- /postgresSQL dependencies -->
 
         <!-- Redis dependencies -->
-        <!-- https://mvnrepository.com/artifact/io.lettuce/lettuce-core -->
         <dependency>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-            <version>6.3.2.RELEASE</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>5.2.0</version>
         </dependency>
         <!-- /Redis dependencies -->
 
