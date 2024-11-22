@@ -27,7 +27,8 @@ import org.hibernate.envers.Audited;
 public class RoleModule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "hilo")
+    @TableGenerator(name = "hilo", table = "hilo_generator", initialValue = 1, allocationSize = 1)
     private Long id;
 
     @ManyToOne
