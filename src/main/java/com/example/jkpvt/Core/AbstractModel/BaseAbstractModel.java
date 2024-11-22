@@ -3,6 +3,7 @@ package com.example.jkpvt.Core.AbstractModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class BaseAbstractModel<T> extends AbstractModel<T> {
     @Column(name = "modified_by")
     private String modifiedBy;
 
+    @Version
     @Column(name="modified_date")
     private LocalDateTime modifiedDate;
 }
