@@ -18,7 +18,7 @@ public class ConnectorService {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     public List<ConnectorDTO> get(ConnectorDTO connectorDTO) {
-        List<Connector> connector = repository.findAll();
+        List<Connector> connector = connectorDAO.get(connectorDTO);
         return mapper.map(connector);
     }
 
