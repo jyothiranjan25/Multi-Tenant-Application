@@ -17,7 +17,7 @@ public class JsonMap {
     }
 
     public static <T> T toDto(Map<String, String> map, Class<T> clazz) {
-        map.replaceAll((key, value) -> value.isEmpty() ? null : value);
+        map.replaceAll((key, value) -> (value == null || value.isEmpty()) ? null : value);
         String json = gson.toJson(map);
         return gson.fromJson(json, clazz);
     }
