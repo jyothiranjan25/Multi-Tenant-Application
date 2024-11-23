@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Entities.SearchFilter.SearchFilterDTO;
+import com.example.jkpvt.Entities.SearchFilter.SearchFilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +17,13 @@ public class ConnectorService {
     private final ConnectorDAO connectorDAO;
     private final ConnectorMapper mapper;
     private final ConnectorRepository repository;
+    private final SearchFilterService searchFilterService;
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    public List<ConnectorDTO> search(SearchFilterDTO searchFilterDTO,ConnectorDTO connectorDTO) {
+        List<Connector> connector = searchFilterService.search(Connector.class, searchFilterDTO, connectorDTO);
+        return mapper.map(connector);
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     public List<ConnectorDTO> get(ConnectorDTO connectorDTO) {
