@@ -1,7 +1,7 @@
 package com.example.jkpvt.Core.SessionStorageData;
 
-import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
-import com.example.jkpvt.UserManagement.AppUserRoles.AppUserRolesDTO;
+import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserDTO;
+import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRolesDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
