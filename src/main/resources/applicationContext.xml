@@ -40,7 +40,8 @@
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.generate_statistics">false</prop>
-                <prop key="hibernate.log_slow_query">true</prop>
+                <prop key="org.hibernate.jdbc.batch_size">20</prop>
+                <prop key="org.hibernate.log_slow_query">true</prop>
                 <prop key="hibernate.cache.region.factory_class">
                     org.hibernate.cache.jcache.internal.JCacheRegionFactory
                 </prop>
