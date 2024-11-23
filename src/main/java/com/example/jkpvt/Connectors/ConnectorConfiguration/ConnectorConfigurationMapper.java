@@ -10,14 +10,14 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ConnectorConfigurationMapper {
 
-    @Mapping(source = "connectorXref", target = "connectorXref")
-    ConnectorConfigurationDTO map(ConnectorConfiguration connectorConfiguration);
+    @Mapping(source = "connectorXrefId", target = "connectorXref.id")
+    ConnectorConfiguration map(ConnectorConfigurationDTO connectorConfigurationDTO);
 
     @InheritConfiguration
     List<ConnectorConfigurationDTO> map(List<ConnectorConfiguration> connectorConfigurations);
 
     @InheritInverseConfiguration
-    @Mapping(source = "connectorXrefId", target = "connectorXref.id")
-    ConnectorConfiguration map(ConnectorConfigurationDTO connectorConfigurationDTO);
+    @Mapping(target = "connectorXref", ignore = true)
+    ConnectorConfigurationDTO map(ConnectorConfiguration connectorConfiguration);
 
 }

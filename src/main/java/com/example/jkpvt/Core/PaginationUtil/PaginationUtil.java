@@ -41,6 +41,16 @@ public class PaginationUtil {
 
         // set Cacheable to true
         query.setHint("org.hibernate.cacheable", true);
+        /*
+         * Cache mode options:
+         * NORMAL: The default mode. Hibernate checks the cache for the data first, and if it doesn't find it, it will hit the database.
+         * IGNORE: Hibernate will ignore the cache and hit the database directly.
+         * GET: Hibernate will hit the cache directly and if it doesn't find the data, it will hit the database.
+         * PUT: Hibernate will put the data in the cache.
+         * REFRESH: Hibernate will hit the database and refresh the cache.
+         */
+        query.setHint("org.hibernate.cacheMode", "NORMAL");
+//        query.setHint("org.hibernate.readOnly", true);
     }
 
     private static Integer getFieldValue(Object dto, String fieldName) {
