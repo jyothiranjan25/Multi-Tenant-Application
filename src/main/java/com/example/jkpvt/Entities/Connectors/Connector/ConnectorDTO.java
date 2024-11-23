@@ -9,7 +9,7 @@ public class ConnectorDTO {
     private Long id;
     private String connectorName;
     private String description;
-    private ConnectorEnum type;
+    private ConnectorTypeEnum type;
     private Boolean status;
     private String icon;
 }

@@ -40,7 +40,7 @@ public class Connector extends AbstractModel<Connector> {
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
-    private ConnectorEnum type;
+    private ConnectorTypeEnum type;
 
     @Column(name="status")
     private Boolean status;
