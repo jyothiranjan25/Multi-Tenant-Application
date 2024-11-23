@@ -14,13 +14,13 @@ public class RoleModuleController {
     private final RoleModuleService roleModuleService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<RoleModuleDTO> get(@RequestParam Map<String, String> queryParams) {
+    private List<RoleModuleDTO> get(@RequestParam Map<String, String> queryParams) {
         RoleModuleDTO roleModuleDTO = JsonMap.toDto(queryParams, RoleModuleDTO.class);
         return roleModuleService.get(roleModuleDTO);
     }
 
     @PostMapping
-    public List<RoleModuleDTO> addOrRemove(@RequestBody RoleModuleDTO roleModuleDTO) {
+    private List<RoleModuleDTO> addOrRemove(@RequestBody RoleModuleDTO roleModuleDTO) {
         return roleModuleService.addOrRemove(roleModuleDTO);
     }
 }

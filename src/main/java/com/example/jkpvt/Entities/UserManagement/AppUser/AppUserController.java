@@ -15,23 +15,23 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<AppUserDTO> get(@RequestParam Map<String, String> queryParams) {
+    private List<AppUserDTO> get(@RequestParam Map<String, String> queryParams) {
         AppUserDTO appUserDTO = JsonMap.toDto(queryParams, AppUserDTO.class);
         return appUserService.get(appUserDTO);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public AppUserDTO create(@RequestBody AppUserDTO appUserDTO) {
+    private AppUserDTO create(@RequestBody AppUserDTO appUserDTO) {
         return appUserService.createAppUser(appUserDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public AppUserDTO update(@RequestBody AppUserDTO appUserDTO) {
+    private AppUserDTO update(@RequestBody AppUserDTO appUserDTO) {
         return appUserService.updateAppUser(appUserDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String delete(@RequestBody AppUserDTO appUserDTO) {
+    private String delete(@RequestBody AppUserDTO appUserDTO) {
         return appUserService.deleteAppUser(appUserDTO);
     }
 }

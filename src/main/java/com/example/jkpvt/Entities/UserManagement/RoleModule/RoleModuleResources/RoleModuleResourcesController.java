@@ -14,7 +14,7 @@ public class RoleModuleResourcesController {
     private final RoleModuleResourcesService roleModuleResourcesService;
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    public RoleModuleResourcesDTO update(@RequestBody RoleModuleResourcesDTO roleModuleResourcesDTO) {
+    private RoleModuleResourcesDTO update(@RequestBody RoleModuleResourcesDTO roleModuleResourcesDTO) {
         return roleModuleResourcesService.update(roleModuleResourcesDTO);
     }
 }
