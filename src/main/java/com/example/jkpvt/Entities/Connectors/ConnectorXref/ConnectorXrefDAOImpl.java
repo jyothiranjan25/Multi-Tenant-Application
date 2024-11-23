@@ -52,7 +52,7 @@ public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getName() != null) {
-            predicates.add(criteriaBuilder.like(root.get("name"), dto.getName()));
+            predicates.add(criteriaBuilder.ilike(root.get("name"), dto.getName()));
         }
         addUserGroupFilter(predicates, root, criteriaBuilder);
         return predicates;

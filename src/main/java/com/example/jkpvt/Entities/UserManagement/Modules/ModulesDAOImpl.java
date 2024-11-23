@@ -8,6 +8,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +26,8 @@ public class ModulesDAOImpl implements ModulesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Modules> get(ModulesDTO modulesDTO) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Modules> criteriaQuery = criteriaBuilder.createQuery(Modules.class);
             Root<Modules> root = criteriaQuery.from(Modules.class);
 
@@ -36,7 +38,7 @@ public class ModulesDAOImpl implements ModulesDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<Modules> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<Modules> query = session.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, modulesDTO);
 
@@ -46,20 +48,20 @@ public class ModulesDAOImpl implements ModulesDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(ModulesDTO dto, CriteriaBuilder criteriaBuilder, Root<Modules> root, Join<Modules, Resources> resourcesJoin) {
+    private List<Predicate> buildPredicates(ModulesDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<Modules> root, Join<Modules, Resources> resourcesJoin) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getModuleName() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("moduleName")), dto.getModuleName().toLowerCase()));
+           predicates.add(criteriaBuilder.ilike(root.get("moduleName"), dto.getModuleName()));
         }
         if (dto.getModuleDescription() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("moduleDescription")), dto.getModuleDescription().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("moduleDescription"), dto.getModuleDescription()));
         }
         if (dto.getModuleUrl() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("moduleUrl")), dto.getModuleUrl().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("moduleUrl"), dto.getModuleUrl()));
         }
 //         if (dto.getResourceName() != null) {
 //             predicates.add(criteriaBuilder.equal(resourcesJoin.get("resourceName"), dto.getResourceName()));

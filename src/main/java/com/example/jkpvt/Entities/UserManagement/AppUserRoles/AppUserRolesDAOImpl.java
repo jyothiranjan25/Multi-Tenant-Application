@@ -5,11 +5,12 @@ import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,8 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRoles> get(AppUserRolesDTO dto) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<AppUserRoles> criteriaQuery = criteriaBuilder.createQuery(AppUserRoles.class);
             Root<AppUserRoles> root = criteriaQuery.from(AppUserRoles.class);
 
@@ -35,7 +36,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<AppUserRoles> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<AppUserRoles> query = session.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, dto);
 
@@ -45,7 +46,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(AppUserRolesDTO dto, CriteriaBuilder criteriaBuilder, Root<AppUserRoles> root) {
+    private List<Predicate> buildPredicates(AppUserRolesDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<AppUserRoles> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
@@ -58,7 +59,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
             predicates.add(criteriaBuilder.equal(root.get("roles").get("id"), dto.getRolesId()));
         }
         if (dto.getUserGroup() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("userGroup")), dto.getUserGroup().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("userGroup"), dto.getUserGroup()));
         }
 
         return predicates;

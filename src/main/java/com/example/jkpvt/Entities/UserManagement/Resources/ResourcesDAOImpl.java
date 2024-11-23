@@ -5,11 +5,12 @@ import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,8 @@ public class ResourcesDAOImpl implements ResourcesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Resources> get(ResourcesDTO dto) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Resources> criteriaQuery = criteriaBuilder.createQuery(Resources.class);
             Root<Resources> root = criteriaQuery.from(Resources.class);
 
@@ -35,7 +36,7 @@ public class ResourcesDAOImpl implements ResourcesDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<Resources> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<Resources> query = session.createQuery(criteriaQuery);
 
             // Apply pagination
             PaginationUtil.applyPagination(query, dto);
@@ -46,23 +47,23 @@ public class ResourcesDAOImpl implements ResourcesDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(ResourcesDTO dto, CriteriaBuilder criteriaBuilder, Root<Resources> root) {
+    private List<Predicate> buildPredicates(ResourcesDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<Resources> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getResourceName() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceName")), dto.getResourceName().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("resourceName"), dto.getResourceName()));
         }
         if (dto.getResourceFullName() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceFullName")), dto.getResourceFullName().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("resourceFullName"), dto.getResourceFullName()));
         }
         if (dto.getResourceDescription() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceDescription")), dto.getResourceDescription().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("resourceDescription"), dto.getResourceDescription()));
         }
         if (dto.getResourceUrl() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("resourceUrl")), dto.getResourceUrl().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("resourceUrl"), dto.getResourceUrl()));
         }
         if (dto.getShowInMenu() != null) {
             boolean showInMenu = dto.getShowInMenu();

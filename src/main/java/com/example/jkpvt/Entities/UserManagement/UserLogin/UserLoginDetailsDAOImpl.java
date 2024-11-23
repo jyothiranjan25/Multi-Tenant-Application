@@ -5,11 +5,12 @@ import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +26,8 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserLoginDetails> get(UserLoginDetailsDTO dto) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<UserLoginDetails> criteriaQuery = criteriaBuilder.createQuery(UserLoginDetails.class);
             Root<UserLoginDetails> root = criteriaQuery.from(UserLoginDetails.class);
 
@@ -34,7 +35,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<UserLoginDetails> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<UserLoginDetails> query = session.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, dto);
 
@@ -44,14 +45,14 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(UserLoginDetailsDTO dto, CriteriaBuilder criteriaBuilder, Root<UserLoginDetails> root) {
+    private List<Predicate> buildPredicates(UserLoginDetailsDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<UserLoginDetails> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getUsername() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("username")), dto.getUsername().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("username"), dto.getUsername()));
         }
         return predicates;
     }

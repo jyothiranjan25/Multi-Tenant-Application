@@ -5,11 +5,12 @@ import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,8 @@ public class AppUserDAOImpl implements AppUserDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUser> get(AppUserDTO dto) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<AppUser> criteriaQuery = criteriaBuilder.createQuery(AppUser.class);
             Root<AppUser> root = criteriaQuery.from(AppUser.class);
 
@@ -35,7 +36,7 @@ public class AppUserDAOImpl implements AppUserDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<AppUser> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<AppUser> query = session.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, dto);
 
@@ -45,17 +46,17 @@ public class AppUserDAOImpl implements AppUserDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(AppUserDTO dto, CriteriaBuilder criteriaBuilder, Root<AppUser> root) {
+    private List<Predicate> buildPredicates(AppUserDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<AppUser> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
         }
         if (dto.getUserName() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("userName")), dto.getUserName().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("userName"), dto.getUserName()));
         }
         if (dto.getEmail() != null) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), dto.getEmail().toLowerCase()));
+            predicates.add(criteriaBuilder.ilike(root.get("email"), dto.getEmail()));
         }
         if (dto.getIsAdmin() != null) {
             predicates.add(criteriaBuilder.equal(root.get("isAdmin"), dto.getIsAdmin()));

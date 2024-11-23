@@ -5,11 +5,12 @@ import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,8 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RoleModuleResources> get(RoleModuleResourcesDTO dto) {
-        try {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        try(Session session = entityManager.unwrap(Session.class)) {
+            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<RoleModuleResources> criteriaQuery = criteriaBuilder.createQuery(RoleModuleResources.class);
             Root<RoleModuleResources> root = criteriaQuery.from(RoleModuleResources.class);
 
@@ -35,7 +36,7 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
 
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
-            TypedQuery<RoleModuleResources> query = entityManager.createQuery(criteriaQuery);
+            TypedQuery<RoleModuleResources> query = session.createQuery(criteriaQuery);
 
             PaginationUtil.applyPagination(query, dto);
 
@@ -45,7 +46,7 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
         }
     }
 
-    private List<Predicate> buildPredicates(RoleModuleResourcesDTO dto, CriteriaBuilder criteriaBuilder, Root<RoleModuleResources> root) {
+    private List<Predicate> buildPredicates(RoleModuleResourcesDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<RoleModuleResources> root) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (dto.getId() != null) {
