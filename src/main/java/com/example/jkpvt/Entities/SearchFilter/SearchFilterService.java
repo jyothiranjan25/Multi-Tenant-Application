@@ -33,12 +33,14 @@ public class SearchFilterService {
             Field[] dtoFields = dto.getClass().getDeclaredFields();
 
             // If search term is provided, build predicates for each string-like field
-            if (searchFilterDTO.getSearchTerm() != null) {
+            if (searchFilterDTO.getSearchTerm() != null && !searchFilterDTO.getSearchTerm().isEmpty()) {
                 // Build predicates for each string-like field
                 Predicate orPredicate = cb.disjunction();
                 for (var field : entityFields) {
                     if (field.getType().equals(String.class)) {
-                        orPredicate = cb.or(orPredicate, cb.ilike(cb.lower(root.get(field.getName())), "%" + searchFilterDTO.getSearchTerm() + "%"));
+                        orPredicate = cb.or(orPredicate, cb.ilike(root.get(field.getName()), "%" + searchFilterDTO.getSearchTerm() + "%"));
+                    } else if (field.getType().equals(Number.class)) {
+                        orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())), searchFilterDTO.getSearchTerm()));
                     }
                 }
                 predicates.add(orPredicate);
