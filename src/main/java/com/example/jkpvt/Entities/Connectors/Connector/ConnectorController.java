@@ -1,7 +1,6 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.Json.JsonMap;
-import com.example.jkpvt.Entities.SearchFilter.SearchFilterDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +16,8 @@ public class ConnectorController {
 
     @RequestMapping(method = RequestMethod.GET)
     private List<ConnectorDTO> search(@RequestParam Map<String, String> queryParams) {
-        SearchFilterDTO searchFilterDTO = JsonMap.toDto(queryParams, SearchFilterDTO.class);
         ConnectorDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorDTO.class);
-        return service.search(searchFilterDTO, connectorDTO);
+        return service.search(connectorDTO);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)

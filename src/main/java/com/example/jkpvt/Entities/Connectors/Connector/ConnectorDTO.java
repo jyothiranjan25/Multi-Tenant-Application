@@ -12,4 +12,5 @@ public class ConnectorDTO {
     private ConnectorTypeEnum type;
     private Boolean status;
     private String icon;
+    private String searchTerm;
 }
