@@ -41,7 +41,7 @@ public class SearchFilterService {
             }
 
             // Build predicates for each field in the DTO
-            predicates.addAll(addDtoPredicates(cb, root, entityFields, dtoFields, dto));
+            predicates.addAll(buildDtoPredicate(cb, root, entityFields, dtoFields, dto));
 
             // Add all predicates to the query
             query.where(predicates.toArray(new Predicate[0]));
@@ -52,7 +52,7 @@ public class SearchFilterService {
         }
     }
 
-    private <T> Predicate addStringPredicates(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
+    private <T> Predicate addStringTermPredicates(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
         // Build predicates for each string-like field
         Predicate orPredicate = cb.disjunction();
         for (var field : entityFields) {
@@ -97,6 +97,36 @@ public class SearchFilterService {
                     }
                 }
             }
+            return predicates;
+        } catch (Exception e) {
+            throw new CommonException(e.getMessage());
+        }
+    }
+
+    private <T,U> List<Predicate> buildDtoPredicate(HibernateCriteriaBuilder cb, Root<T> root, Field[] entityFields,Field[] dtoFields,U dto) {
+        try {
+            List<Predicate> predicates = new ArrayList<>();
+            Arrays.stream(dtoFields).forEach(
+                    dtoField ->{
+                        dtoField.setAccessible(true);
+                        Arrays.stream(entityFields)
+                                .filter(entityField -> entityField.getName().equals(dtoField.getName())
+                                        && entityField.getType().equals(dtoField.getType()))
+                                .forEach(entityField ->{
+                                    try {
+                                        Object value = dtoField.get(dto);
+                                        if (value != null && !value.toString().isEmpty()) {
+                                            if (entityField.getType().equals(String.class))
+                                                predicates.add(cb.ilike(root.get(entityField.getName()), value.toString()));
+                                            else
+                                                predicates.add(cb.equal(root.get(entityField.getName()), value));
+                                        }
+                                    } catch (Exception e) {
+                                        throw new CommonException(e.getMessage());
+                                    }
+                                });
+                    }
+            );
             return predicates;
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
