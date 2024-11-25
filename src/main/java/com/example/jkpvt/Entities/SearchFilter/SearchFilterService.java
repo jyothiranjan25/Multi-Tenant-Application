@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class SearchFilterService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public <T, U> List<T> search(Class<T> entityClass,String searchTerm, U dto) {
+    public <T, U> List<T> search(Class<T> entityClass, String searchTerm, U dto) {
         try {
             // Get the criteria builder
             HibernateCriteriaBuilder cb = (HibernateCriteriaBuilder) entityManager.getCriteriaBuilder();
@@ -34,20 +35,7 @@ public class SearchFilterService {
 
             // If search term is provided, build predicates for each string-like field
             if (searchTerm != null && !searchTerm.isEmpty()) {
-                // Build predicates for each string-like field
-                Predicate orPredicate = cb.disjunction();
-                for (var field : entityFields) {
-                    if (field.getType().equals(String.class)) {
-                        orPredicate = cb.or(orPredicate, cb.ilike(root.get(field.getName()), "%" + searchTerm + "%"));
-                    } else if (Number.class.isAssignableFrom(field.getType())) {
-                        orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())),"%" + searchTerm + "%"));
-                    }else if (field.getType().equals(Boolean.class)) {
-                        orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())),"%" + searchTerm + "%"));
-                    } else if (field.getType().isEnum()) {
-                        orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())),"%" + searchTerm + "%"));
-                    }
-                }
-                predicates.add(orPredicate);
+                predicates.add(buildSearchTermPredicate(cb, root, searchTerm, entityFields));
             }
 
             // Build predicates for each field in the DTO
@@ -69,5 +57,33 @@ public class SearchFilterService {
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
+    }
+
+    private <T> Predicate addStringPredicates(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
+        // Build predicates for each string-like field
+        Predicate orPredicate = cb.disjunction();
+        for (var field : entityFields) {
+            if (field.getType().equals(String.class)) {
+                orPredicate = cb.or(orPredicate, cb.ilike(root.get(field.getName()), "%" + searchTerm + "%"));
+            } else if (Number.class.isAssignableFrom(field.getType()) || field.getType().equals(Boolean.class) || field.getType().isEnum()) {
+                orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())), "%" + searchTerm + "%"));
+            }
+        }
+        return orPredicate;
+    }
+
+    private <T> Predicate buildSearchTermPredicate(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
+        List<Predicate> predicates = new ArrayList<>();
+        Arrays.stream(entityFields)
+                .filter(field -> field.getType().equals(String.class) || Number.class.isAssignableFrom(field.getType())
+                        || field.getType().equals(Boolean.class) || field.getType().isEnum())
+                .forEach(field -> {
+                    if (field.getType().equals(String.class)) {
+                        predicates.add(cb.ilike(root.get(field.getName()), "%" + searchTerm + "%"));
+                    } else {
+                        predicates.add(cb.ilike(cb.toString(root.get(field.getName())), "%" + searchTerm + "%"));
+                    }
+                });
+        return cb.or(predicates.toArray(new Predicate[0]));
     }
 }
