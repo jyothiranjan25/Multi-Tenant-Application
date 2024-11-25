@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SearchFilterDTO {
+public class commonFilterDTO {
     private String searchTerm;
-    private Long pageOffset;
-    private Long pageSize;
+    private Integer pageOffset;
+    private Integer pageSize;
 }

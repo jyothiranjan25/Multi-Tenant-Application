@@ -1,5 +1,6 @@
 package com.example.jkpvt.Entities.UserManagement.Resources;
 
+import com.example.jkpvt.Entities.SearchFilter.commonFilterDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ResourcesDTO {
+public class ResourcesDTO extends commonFilterDTO {
     private Long id;
     private String resourceName;
     private String resourceFullName;
@@ -19,6 +20,4 @@ public class ResourcesDTO {
     private Long parentId;
     private ResourcesDTO parentResource;
     private Set<ResourcesDTO> childResources;
-    private Integer pageOffset;
-    private Integer pageSize;
 }
