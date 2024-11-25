@@ -9,4 +9,5 @@ public class commonFilterDTO {
     private String searchTerm;
     private Integer pageOffset;
     private Integer pageSize;
+    private Integer totalRecords;
 }
