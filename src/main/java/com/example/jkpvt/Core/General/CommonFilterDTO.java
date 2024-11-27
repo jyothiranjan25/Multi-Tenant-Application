@@ -17,7 +17,6 @@ public abstract class CommonFilterDTO<T> {
     private List<CommonFilterDTO> notIn;
     private List<Long> idIn;
     private String orderProperty;
-    private Boolean nToManyFiltersExist = true;
 
     public enum OrderType {
         asc("asc"),

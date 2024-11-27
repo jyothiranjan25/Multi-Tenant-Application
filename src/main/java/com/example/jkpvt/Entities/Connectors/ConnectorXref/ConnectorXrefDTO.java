@@ -1,5 +1,6 @@
 package com.example.jkpvt.Entities.Connectors.ConnectorXref;
 
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Entities.Connectors.Connector.ConnectorDTO;
 import com.example.jkpvt.Entities.Connectors.ConnectorConfiguration.ConnectorConfigurationDTO;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ConnectorXrefDTO {
+public class ConnectorXrefDTO extends CommonFilterDTO<ConnectorXrefDTO> {
     private Long id;
     private String Name;
     private String description;

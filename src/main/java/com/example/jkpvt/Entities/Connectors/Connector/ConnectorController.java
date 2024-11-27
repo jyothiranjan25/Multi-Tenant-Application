@@ -23,9 +23,11 @@ public class ConnectorController {
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<ConnectorDTO> get(@RequestParam Map<String, String> queryParams) {
+    private ConnectorDTO get(@RequestParam Map<String, String> queryParams) {
         ConnectorDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorDTO.class);
-        return service.get(connectorDTO);
+        List<ConnectorDTO> connectors = service.get(connectorDTO);
+        connectorDTO.setData(connectors);
+        return connectorDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

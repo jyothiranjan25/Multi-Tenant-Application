@@ -1,7 +1,6 @@
 package com.example.jkpvt.Entities.Connectors.ConnectorXref;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.jkpvt.Core.PaginationUtil.PaginationUtil.addUserGroupFilter;
+import static com.example.jkpvt.Core.PaginationUtil.PaginationUtil.applyPagination;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
 
             TypedQuery<ConnectorXref> query = session.createQuery(criteriaQuery);
 
-            PaginationUtil.applyPagination(query, dto);
+            applyPagination(query, dto);
 
             return query.getResultList();
         } catch (Exception e) {

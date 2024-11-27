@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jkpvt.Core.PaginationUtil.PaginationUtil.applyPagination;
+
 @Repository
 public class ConnectorDAOImpl implements ConnectorDAO{
 
@@ -34,8 +36,9 @@ public class ConnectorDAOImpl implements ConnectorDAO{
             criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
             TypedQuery<Connector> query = session.createQuery(criteriaQuery);
-
-            return query.getResultList();
+            applyPagination(query, connectorDTO);
+            List<Connector> connectors = query.getResultList();
+            return connectors;
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
