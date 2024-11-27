@@ -1,7 +1,6 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Entities.Connectors.ConnectorXref.ConnectorXref;
-import com.example.jkpvt.Core.AbstractModel.AbstractModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +24,7 @@ import java.util.Set;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Audited
-public class Connector extends AbstractModel<Connector> {
+public class Connector{
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "hilo")

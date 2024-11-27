@@ -37,8 +37,7 @@ public class ConnectorDAOImpl implements ConnectorDAO{
 
             TypedQuery<Connector> query = session.createQuery(criteriaQuery);
             applyPagination(query, connectorDTO);
-            List<Connector> connectors = query.getResultList();
-            return connectors;
+            return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }

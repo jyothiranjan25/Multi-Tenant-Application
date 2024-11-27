@@ -21,7 +21,7 @@ import org.hibernate.envers.Audited;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Audited
-public class ConnectorConfiguration extends BaseAbstractModel<ConnectorConfiguration> {
+public class ConnectorConfiguration extends BaseAbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "hilo")

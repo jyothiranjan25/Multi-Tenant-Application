@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @MappedSuperclass
 @EntityListeners(BaseEntityListener.class)
-public class BaseAbstractModel<T> extends AbstractModel<T> {
+public class BaseAbstractModel {
 
     @Column(name = "user_group")
     private String userGroup;

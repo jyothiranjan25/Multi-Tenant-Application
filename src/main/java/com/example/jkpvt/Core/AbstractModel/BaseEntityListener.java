@@ -7,7 +7,7 @@ import jakarta.persistence.PreUpdate;
 public class BaseEntityListener {
 
     @PrePersist
-    public void prePersist(BaseAbstractModel<?> entity) {
+    public void prePersist(BaseAbstractModel entity) {
         String userGroup = SessionStorageUtil.getUserGroup();
         String modifiedBy = SessionStorageUtil.getUserName();
 
@@ -16,7 +16,7 @@ public class BaseEntityListener {
     }
 
     @PreUpdate
-    public void PreUpdate(BaseAbstractModel<?> entity) {
+    public void PreUpdate(BaseAbstractModel entity) {
         String modifiedBy = SessionStorageUtil.getUserName();
         entity.setModifiedBy(modifiedBy);
     }

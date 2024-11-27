@@ -27,7 +27,7 @@ import java.util.Set;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Audited
-public class ConnectorXref extends BaseAbstractModel<ConnectorXref> {
+public class ConnectorXref extends BaseAbstractModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "hilo")
