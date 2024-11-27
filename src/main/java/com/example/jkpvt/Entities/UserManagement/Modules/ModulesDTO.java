@@ -1,6 +1,6 @@
 package com.example.jkpvt.Entities.UserManagement.Modules;
 
-import com.example.jkpvt.Entities.SearchFilter.commonFilterDTO;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Entities.UserManagement.Resources.ResourcesDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ModulesDTO extends commonFilterDTO {
+public class ModulesDTO extends CommonFilterDTO {
     private Long id;
     private String moduleName;
     private String moduleDescription;

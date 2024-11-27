@@ -15,9 +15,11 @@ public class ConnectorController {
     private final ConnectorService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    private List<ConnectorDTO> search(@RequestParam Map<String, String> queryParams) {
+    private ConnectorDTO search(@RequestParam Map<String, String> queryParams) {
         ConnectorDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorDTO.class);
-        return service.search(connectorDTO);
+        List<ConnectorDTO> connectors = service.search(connectorDTO);
+        connectorDTO.setData(connectors);
+        return connectorDTO;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)

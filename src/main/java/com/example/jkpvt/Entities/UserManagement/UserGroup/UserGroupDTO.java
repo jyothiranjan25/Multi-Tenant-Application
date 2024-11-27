@@ -1,7 +1,7 @@
 package com.example.jkpvt.Entities.UserManagement.UserGroup;
 
 
-import com.example.jkpvt.Entities.SearchFilter.commonFilterDTO;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class UserGroupDTO extends commonFilterDTO {
+public class UserGroupDTO extends CommonFilterDTO {
     private Long id;
     private String groupName;
     private String groupDescription;

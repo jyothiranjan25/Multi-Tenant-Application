@@ -1,6 +1,6 @@
 package com.example.jkpvt.Entities.UserManagement.Resources;
 
-import com.example.jkpvt.Entities.SearchFilter.commonFilterDTO;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ResourcesDTO extends commonFilterDTO {
+public class ResourcesDTO extends CommonFilterDTO {
     private Long id;
     private String resourceName;
     private String resourceFullName;

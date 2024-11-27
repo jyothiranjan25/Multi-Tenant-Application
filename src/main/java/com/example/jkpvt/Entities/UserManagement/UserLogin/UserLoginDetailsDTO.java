@@ -1,6 +1,6 @@
 package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
-import com.example.jkpvt.Entities.SearchFilter.commonFilterDTO;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserLoginDetailsDTO extends commonFilterDTO {
+public class UserLoginDetailsDTO extends CommonFilterDTO {
     private Long id;
     private String username;
     private String sessionId;
