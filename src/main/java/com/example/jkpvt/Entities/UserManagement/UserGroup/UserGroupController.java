@@ -1,12 +1,14 @@
 package com.example.jkpvt.Entities.UserManagement.UserGroup;
 
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,15 +18,17 @@ public class UserGroupController {
     private final UserGroupService service;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    private List<UserGroupDTO> getAll(@RequestParam Map<String, String> queryParams) {
-        UserGroupDTO userGroupDTO = JsonMap.toDto(queryParams, UserGroupDTO.class);
-        return service.getAll(userGroupDTO);
+    private UserGroupDTO getAll(@QueryParams UserGroupDTO userGroupDTO) {
+        List<UserGroupDTO> userGroups = service.getAll(userGroupDTO);
+        userGroupDTO.setData(userGroups);
+        return userGroupDTO;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<UserGroupDTO> get(@RequestParam java.util.Map<String, String> queryParams) {
-        UserGroupDTO userGroupDTO = JsonMap.toDto(queryParams, UserGroupDTO.class);
-        return service.get(userGroupDTO);
+    private UserGroupDTO get(@QueryParams UserGroupDTO userGroupDTO) {
+        List<UserGroupDTO> userGroups = service.get(userGroupDTO);
+        userGroupDTO.setData(userGroups);
+        return userGroupDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

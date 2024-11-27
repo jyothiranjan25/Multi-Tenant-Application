@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.Connectors.ConnectorXref;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/connectorsXref")
@@ -15,9 +17,10 @@ public class ConnectorXrefController {
     private final ConnectorXrefService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<ConnectorXrefDTO> get(@RequestParam Map<String, String> queryParams) {
-        ConnectorXrefDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorXrefDTO.class);
-        return service.get(connectorDTO);
+    private ConnectorXrefDTO get(@QueryParams ConnectorXrefDTO connectorDTO) {
+        List<ConnectorXrefDTO> connectors = service.get(connectorDTO);
+        connectorDTO.setData(connectors);
+        return connectorDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

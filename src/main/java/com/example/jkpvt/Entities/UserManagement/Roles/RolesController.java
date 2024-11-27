@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.UserManagement.Roles;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +17,10 @@ public class RolesController {
     private final RolesService rolesService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<RolesDTO> Get(@RequestParam Map<String, String> queryParams) {
-        RolesDTO rolesDTO = JsonMap.toDto(queryParams, RolesDTO.class);
-        return rolesService.get(rolesDTO);
+    private RolesDTO Get(@QueryParams RolesDTO rolesDTO) {
+        List<RolesDTO> roles = rolesService.get(rolesDTO);
+        rolesDTO.setData(roles);
+        return rolesDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

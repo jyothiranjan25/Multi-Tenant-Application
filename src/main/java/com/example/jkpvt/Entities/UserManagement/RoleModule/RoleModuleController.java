@@ -1,11 +1,10 @@
 package com.example.jkpvt.Entities.UserManagement.RoleModule;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/roleModule")
@@ -14,9 +13,10 @@ public class RoleModuleController {
     private final RoleModuleService roleModuleService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<RoleModuleDTO> get(@RequestParam Map<String, String> queryParams) {
-        RoleModuleDTO roleModuleDTO = JsonMap.toDto(queryParams, RoleModuleDTO.class);
-        return roleModuleService.get(roleModuleDTO);
+    private RoleModuleDTO get(@QueryParams RoleModuleDTO roleModuleDTO) {
+        List<RoleModuleDTO> roleModules = roleModuleService.get(roleModuleDTO);
+        roleModuleDTO.setData(roleModules);
+        return roleModuleDTO;
     }
 
     @PostMapping

@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +17,10 @@ public class AppUserRolesController {
     private final AppUserRolesService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<AppUserRolesDTO> get(@RequestParam Map<String, String> queryParams) {
-        AppUserRolesDTO appUserRolesDTO = JsonMap.toDto(queryParams, AppUserRolesDTO.class);
-        return service.get(appUserRolesDTO);
+    private AppUserRolesDTO get(@QueryParams AppUserRolesDTO appUserRolesDTO) {
+        List<AppUserRolesDTO> appUserRoles = service.get(appUserRolesDTO);
+        appUserRolesDTO.setData(appUserRoles);
+        return appUserRolesDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

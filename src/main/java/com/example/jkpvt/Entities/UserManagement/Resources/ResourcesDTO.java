@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ResourcesDTO extends CommonFilterDTO {
+public class ResourcesDTO extends CommonFilterDTO<ResourcesDTO> {
     private Long id;
     private String resourceName;
     private String resourceFullName;

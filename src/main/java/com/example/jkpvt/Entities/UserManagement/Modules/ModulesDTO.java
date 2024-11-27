@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ModulesDTO extends CommonFilterDTO {
+public class ModulesDTO extends CommonFilterDTO<ModulesDTO> {
     private Long id;
     private String moduleName;
     private String moduleDescription;

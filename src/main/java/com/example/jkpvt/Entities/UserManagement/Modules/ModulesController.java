@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.UserManagement.Modules;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +17,10 @@ public class ModulesController {
     private final ModulesService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<ModulesDTO> get(@RequestParam Map<String, String> queryParams) {
-        ModulesDTO modulesDTO = JsonMap.toDto(queryParams, ModulesDTO.class);
-        return service.get(modulesDTO);
+    private ModulesDTO get(@QueryParams ModulesDTO modulesDTO) {
+        List<ModulesDTO> modules = service.get(modulesDTO);
+        modulesDTO.setData(modules);
+        return modulesDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

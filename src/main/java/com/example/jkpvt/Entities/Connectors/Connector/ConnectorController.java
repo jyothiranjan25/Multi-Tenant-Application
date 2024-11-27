@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/connectors")
@@ -15,16 +17,14 @@ public class ConnectorController {
     private final ConnectorService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    private ConnectorDTO search(@RequestParam Map<String, String> queryParams) {
-        ConnectorDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorDTO.class);
+    private ConnectorDTO search(@QueryParams ConnectorDTO connectorDTO) {
         List<ConnectorDTO> connectors = service.search(connectorDTO);
         connectorDTO.setData(connectors);
         return connectorDTO;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private ConnectorDTO get(@RequestParam Map<String, String> queryParams) {
-        ConnectorDTO connectorDTO = JsonMap.toDto(queryParams, ConnectorDTO.class);
+    private ConnectorDTO get(@QueryParams ConnectorDTO connectorDTO) {
         List<ConnectorDTO> connectors = service.get(connectorDTO);
         connectorDTO.setData(connectors);
         return connectorDTO;

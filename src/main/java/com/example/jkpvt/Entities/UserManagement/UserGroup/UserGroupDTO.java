@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class UserGroupDTO extends CommonFilterDTO {
+public class UserGroupDTO extends CommonFilterDTO<UserGroupDTO> {
     private Long id;
     private String groupName;
     private String groupDescription;

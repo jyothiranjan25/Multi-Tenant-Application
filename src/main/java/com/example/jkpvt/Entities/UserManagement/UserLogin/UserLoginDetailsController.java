@@ -1,12 +1,14 @@
 package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRolesDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,9 +18,10 @@ public class UserLoginDetailsController {
     private final UserLoginDetailsService service;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<UserLoginDetailsDTO> getAllUserLoginDetails(@RequestParam Map<String, String> queryParams) {
-        UserLoginDetailsDTO userLoginDetailsDTO = JsonMap.toDto(queryParams, UserLoginDetailsDTO.class);
-        return service.get(userLoginDetailsDTO);
+    private UserLoginDetailsDTO getAllUserLoginDetails(@QueryParams UserLoginDetailsDTO userLoginDetailsDTO) {
+        List<UserLoginDetailsDTO> userLoginDetails = service.get(userLoginDetailsDTO);
+        userLoginDetailsDTO.setData(userLoginDetails);
+        return userLoginDetailsDTO;
     }
 
     @RequestMapping(value = "/store", method = RequestMethod.POST)

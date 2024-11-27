@@ -1,11 +1,13 @@
 package com.example.jkpvt.Entities.UserManagement.AppUser;
 
-import com.example.jkpvt.Core.Json.JsonMap;
+import com.example.jkpvt.Core.Json.QueryParams;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +17,10 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    private List<AppUserDTO> get(@RequestParam Map<String, String> queryParams) {
-        AppUserDTO appUserDTO = JsonMap.toDto(queryParams, AppUserDTO.class);
-        return appUserService.get(appUserDTO);
+    private AppUserDTO get(@QueryParams AppUserDTO appUserDTO) {
+        List<AppUserDTO> appUsers = appUserService.get(appUserDTO);
+        appUserDTO.setData(appUsers);
+        return appUserDTO;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
