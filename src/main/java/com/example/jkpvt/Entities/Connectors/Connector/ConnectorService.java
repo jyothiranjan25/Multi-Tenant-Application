@@ -1,6 +1,7 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.SearchFilter.SearchFilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class ConnectorService {
 
     @Transactional
     public Connector getById(Long id) {
-        return repository.findById(id).orElseThrow(()-> new CommonException("Connector not found"));
+        return repository.findById(id).orElseThrow(()-> new CommonException(Messages.getMessage(ConnectorMessages.ID_NOT_FOUND)));
     }
 
     public void updateConnectorData(Connector connector, ConnectorDTO connectorDTO) {
