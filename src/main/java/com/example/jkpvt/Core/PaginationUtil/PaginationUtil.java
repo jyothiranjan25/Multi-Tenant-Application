@@ -1,12 +1,12 @@
 package com.example.jkpvt.Core.PaginationUtil;
 
+import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +20,14 @@ public class PaginationUtil {
      * @param dto   The DTO containing pagination parameters.
      * @param <T>   The type of the query result.
      */
-    public static <T> void applyPagination(TypedQuery<T> query, Object dto) {
-
-        Integer pageOffset = getFieldValue(dto, "pageOffset");
-        Integer pageSize = getFieldValue(dto, "pageSize");
-
+    public static <T> void applyPagination(TypedQuery<T> query, CommonFilterDTO dto) {
         // Get the total count of the query results
-        getTotalCount(query);
+        getTotalCount(query, dto);
 
         // Apply pagination if both fields are provided
-        if (pageOffset != null && pageSize != null) {
+        if (dto.getPageOffset() != null && dto.getPageSize() != null) {
+            int pageOffset = dto.getPageOffset();
+            int pageSize = dto.getPageSize();
             // Adjust the pageOffset to be 0-based (since JPA uses 0-based index)
             if (pageOffset < 0) pageOffset = 0;
             else pageOffset = (pageOffset) * pageSize;
@@ -53,19 +51,10 @@ public class PaginationUtil {
 //        query.setHint("org.hibernate.readOnly", true);
     }
 
-    private static Integer getFieldValue(Object dto, String fieldName) {
-        try {
-            Field field = dto.getClass().getDeclaredField(fieldName); // Access the fields using reflection and set them accessible
-            field.setAccessible(true);  // Make private fields accessible
-            return (Integer) field.get(dto); // Retrieve values from the fields
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private static <T> void getTotalCount(TypedQuery<T> query) {
+    private static <T> void getTotalCount(TypedQuery<T> query, CommonFilterDTO dto) {
         // Get the total count of the query results
-//        System.out.println("Total count: " + query.getResultList().size());
+        Integer totalCount = query.getResultList().size();
+        dto.setTotalCount(totalCount);
     }
 
     public static <T> void addUserGroupFilter(List<Predicate> predicates, Root<T> root, CriteriaBuilder criteriaBuilder) {
