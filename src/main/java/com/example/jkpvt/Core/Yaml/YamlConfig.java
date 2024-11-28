@@ -7,17 +7,22 @@ import java.io.InputStream;
 import java.util.Map;
 
 public class YamlConfig {
+
+    private static final Yaml YAML = new Yaml();
+
     public static String getValueForKey(String key, String filePath) {
-        Yaml yaml = new Yaml();
         try (InputStream inputStream = YamlConfig.class.getClassLoader().getResourceAsStream(filePath)) {
-            Map<String, Object> yamlMap = yaml.load(inputStream);
+            if (inputStream == null) {
+                throw new IOException("File not found: " + filePath);
+            }
+            Map<String, Object> yamlMap = YAML.load(inputStream);
             return getValue(yamlMap, key);
         } catch (IOException e) {
             return key;
         }
     }
 
-    public static String getValue(Map<String, Object> yamlMap, String key) {
+    private static String getValue(Map<String, Object> yamlMap, String key) {
         String[] keys = key.split("\\.");
         Map<String, Object> currentMap = yamlMap;
 
@@ -31,10 +36,6 @@ public class YamlConfig {
         }
 
         Object finalValue = currentMap.get(keys[keys.length - 1]);
-        if (finalValue instanceof String) {
-            return (String) finalValue;
-        } else {
-            return key;
-        }
+        return finalValue instanceof String ? (String) finalValue : key;
     }
 }

@@ -3,21 +3,22 @@ package com.example.jkpvt.Core.Messages;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.IllegalFormatException;
+
 @Getter
 @Setter
 public class Messages {
-    String code;
-
-    Object[] args;
-
-    boolean returnCodeAsValue = false;
+    private String code;
+    private Object[] args;
+    private boolean returnCodeAsValue = false;
 
     public Messages(String code, Object[] args) {
-        setValueFromCode(code);
+        this(code);
         this.args = args;
     }
 
     public Messages(String code) {
+        this();
         setValueFromCode(code);
     }
 
@@ -55,7 +56,7 @@ public class Messages {
         }
         try {
             return String.format(message, args);
-        } catch (Exception e) {
+        } catch (IllegalFormatException e) {
             return message;
         }
     }
