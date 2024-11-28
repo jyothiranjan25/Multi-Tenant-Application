@@ -1,4 +1,4 @@
 CONNECTOR:
-  ID_NOT_FOUND: "ID not found"
+  ID_NOT_FOUND: "ID %1$s not found"
   DUPLICATE_CONNECTOR: "Duplicate connector"
   OBJECT_NOT_FOUND: "Object not found"

@@ -56,7 +56,10 @@ public class ConnectorService {
 
     @Transactional
     public Connector getById(Long id) {
-        return repository.findById(id).orElseThrow(()-> new CommonException(Messages.getMessage(ConnectorMessages.ID_NOT_FOUND)));
+        return repository.findById(id).orElseThrow(() -> {
+            Object[] args = new Object[]{id};
+            return new CommonException(Messages.getMessage(ConnectorMessages.ID_NOT_FOUND, args));
+        });
     }
 
     public void updateConnectorData(Connector connector, ConnectorDTO connectorDTO) {
