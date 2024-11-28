@@ -113,22 +113,12 @@ public class CriteriaBuilderWrapper<T> {
     }
 
     /**
-     * Adds an "IN" condition for a list of objects.
-     *
-     * @param key    The field name.
-     * @param values The list of values to match.
-     */
-    public void InObjects(String key, List<Object> values) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
-    }
-
-    /**
      * Adds an "IN" condition for a list of strings.
      *
      * @param key    The field name.
      * @param values The list of values to match.
      */
-    public void InString(String key, List<String> values) {
+    public <U> void In(String key, List<U> values) {
         finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
     }
 
@@ -196,7 +186,7 @@ public class CriteriaBuilderWrapper<T> {
          * PUT: Hibernate will put the data in the cache.
          * REFRESH: Hibernate will hit the database and refresh the cache.
          */
-        query.setHint("org.hibernate.cacheMode", "IGNORE");
+        query.setHint("org.hibernate.cacheMode", "NORMAL");
         query.setHint("org.hibernate.readOnly", true);
     }
 
@@ -216,7 +206,7 @@ public class CriteriaBuilderWrapper<T> {
 
             // Create predicates for each user group and combine with OR
             if (userGroups.size() > 1) {
-                InString("userGroup", userGroups);
+                In("userGroup", userGroups);
             } else {
                 ILike("userGroup", userGroups.getFirst() + "%");
             }
