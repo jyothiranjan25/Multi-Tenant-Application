@@ -2,7 +2,6 @@ package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
-import com.example.jkpvt.Core.General.CriteriaBuilderWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -30,12 +29,10 @@ public class ConnectorDAOImpl implements ConnectorDAO{
             HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Connector> criteriaQuery = criteriaBuilder.createQuery(Connector.class);
             Root<Connector> root = criteriaQuery.from(Connector.class);
-
-            CriteriaBuilderWrapper cbw = new CriteriaBuilderWrapper(root,criteriaQuery,criteriaBuilder,connectorDTO);
-            cbw.orderBy("id");
-            cbw.getFullyQualifiedPath("");
-            Query query = session.createQuery(cbw.getQuery());
-            addPaginationFilters(connectorDTO, query);
+            List<Predicate> predicates = Predicates(criteriaBuilder, root, connectorDTO);
+            Predicate finalPredicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            criteriaQuery.where(finalPredicate);
+            Query<Connector> query = session.createQuery(criteriaQuery);
             return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
