@@ -32,5 +32,9 @@ public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
             cbw.Equal("id", dto.getId());
         if(dto.getName() != null)
             cbw.ILike("name", dto.getName());
+        if(dto.getDescription() != null)
+            cbw.ILike("description", dto.getDescription());
+        if(dto.getStatus() != null)
+            cbw.Equal("status", dto.getStatus());
     }
 }
