@@ -17,19 +17,4 @@ public abstract class CommonFilterDTO<T> {
     private Integer pageSize;
     private Integer totalCount;
     private List<T> data;
-    private List<OrderByDTO> orderDetails;
-
-
-    public enum OrderType {
-        asc("asc"),
-        desc("desc");
-
-        @Getter
-        @Setter
-        private String value;
-
-        OrderType(String value) {
-            this.value = value;
-        }
-    }
 }

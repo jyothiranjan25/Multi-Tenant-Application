@@ -5,6 +5,7 @@ import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Getter;
@@ -50,8 +51,9 @@ public class CriteriaBuilderWrapper<T> {
      *
      * @return A Query object ready for execution.
      */
-    private Query getFinalQuery() {
+    public Query getFinalQuery() {
         addUserGroupFilter();
+        OrderById();
         criteriaQuery.where(finalPredicate);
         Query query = session.createQuery(criteriaQuery);
         addPaginationFilters(filter, query);
@@ -82,6 +84,9 @@ public class CriteriaBuilderWrapper<T> {
 
     /**
      * Adds a "not equal" condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
      */
     public void NotEqual(String key, Object value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.notEqual(root.get(key), value));
@@ -89,6 +94,9 @@ public class CriteriaBuilderWrapper<T> {
 
     /**
      * Adds a "like" condition to the query for partial matching.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
      */
     public void Like(String key, String value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.like(root.get(key), value));
@@ -96,6 +104,9 @@ public class CriteriaBuilderWrapper<T> {
 
     /**
      * Adds a case-insensitive "like" condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
      */
     public void ILike(String key, String value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.ilike(root.get(key), value));
@@ -103,6 +114,9 @@ public class CriteriaBuilderWrapper<T> {
 
     /**
      * Adds an "IN" condition for a list of objects.
+     *
+     * @param key    The field name.
+     * @param values The list of values to match.
      */
     public void InObjects(String key, List<Object> values) {
         finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
@@ -110,9 +124,45 @@ public class CriteriaBuilderWrapper<T> {
 
     /**
      * Adds an "IN" condition for a list of strings.
+     *
+     * @param key    The field name.
+     * @param values The list of values to match.
      */
     public void InString(String key, List<String> values) {
         finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
+    }
+
+    /**
+     * Adds ORDER BY clause to the query.
+     *
+     * @param key       The field name to order by.
+     * @param ascending True for ascending order, false for descending order.
+     *
+     * Default order is by ID in ascending order.
+     */
+    public void OrderBy(String key, boolean ascending) {
+        List<Order> orderList = criteriaQuery.getOrderList();
+
+        // Remove existing default 'ORDER BY id ASC' if it's set
+        if (orderList != null && !orderList.isEmpty() && orderList.getFirst().getExpression().equals(root.get("id"))) {
+            criteriaQuery.getOrderList().clear();
+        }
+
+        // Add new ORDER BY clause
+        if (ascending) {
+            criteriaQuery.orderBy(criteriaBuilder.asc(root.get(key)));
+        } else {
+            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(key)));
+        }
+    }
+
+    /**
+     * default Orders the query results by ID in ascending order.
+     */
+    private void OrderById() {
+        if (criteriaQuery.getOrderList().isEmpty()) {
+            OrderBy("id", true);
+        }
     }
 
     /**
