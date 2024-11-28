@@ -1,3 +1,6 @@
+Common_Messages:
+  APPLICATION_ERROR: "Something went wrong"
+
 CONNECTOR:
   ID_NOT_FOUND: "ID %1$s not found"
   DUPLICATE_CONNECTOR: "Duplicate connector"

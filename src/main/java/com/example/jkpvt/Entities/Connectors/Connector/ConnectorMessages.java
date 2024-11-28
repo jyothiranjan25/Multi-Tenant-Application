@@ -13,8 +13,8 @@ public enum ConnectorMessages implements MessagesCodes {
         this.message = message;
     }
 
+    @Override
     public String getValue() {
         return message;
     }
-
 }

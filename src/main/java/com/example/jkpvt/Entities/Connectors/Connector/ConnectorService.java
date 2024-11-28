@@ -1,6 +1,7 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.SearchFilter.SearchFilterService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class ConnectorService {
             connector = repository.save(connector);
             return mapper.map(connector);
         } catch (Exception e){
-            throw new CommonException(e.getMessage());
+            throw new CommonException(Messages.getMessage(CommonMessages.APPLICATION_ERROR));
         }
     }
 
@@ -50,7 +51,7 @@ public class ConnectorService {
             connector = repository.save(connector);
             return mapper.map(connector);
         } catch (Exception e){
-            throw new CommonException(e.getMessage());
+            throw new CommonException(Messages.getMessage(CommonMessages.APPLICATION_ERROR));
         }
     }
 
