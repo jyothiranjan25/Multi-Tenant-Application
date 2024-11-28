@@ -213,7 +213,6 @@ public class CriteriaBuilderWrapper<T> {
         }else{
             throw new CommonException("User group is not found for the user");
         }
-
     }
 
     /**
