@@ -121,7 +121,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param filter The filter DTO containing pagination details.
      * @param query  The query object to modify.
      */
-    public void addPaginationFilters(CommonFilterDTO filter, Query query) {
+    private void addPaginationFilters(CommonFilterDTO filter, Query query) {
         if (filter.getPageOffset() != null && filter.getPageSize() != null) {
             int pageOffset = filter.getPageOffset() * filter.getPageSize();
             query.setFirstResult(Math.max(pageOffset, 0)); // Apply offset
@@ -132,7 +132,7 @@ public class CriteriaBuilderWrapper<T> {
     /**
      * Adds Hibernate-specific query hints for caching and performance optimization.
      */
-    public void addHibernateFilters(Query query) {
+    private void addHibernateFilters(Query query) {
         // set Cacheable to true
         query.setHint("org.hibernate.cacheable", true);
         /*
@@ -153,7 +153,7 @@ public class CriteriaBuilderWrapper<T> {
      * <p>Filters the data based on the user group of the current user.
      * If the user group is not found, an exception is thrown.
      */
-    public void addUserGroupFilter() {
+    private void addUserGroupFilter() {
         Field field = getField("userGroup");
         if(field == null) return;
 
