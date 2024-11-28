@@ -28,6 +28,13 @@ public class CriteriaBuilderWrapper<T> {
     private final Root<T> root;
     private Predicate finalPredicate;
 
+    /**
+     * Initializes the CriteriaBuilderWrapper with the entity class, session, and filter data.
+     *
+     * @param entityClass The class type of the entity.
+     * @param session     The Hibernate session used for query execution.
+     * @param filter      The filter DTO containing pagination and filtering criteria.
+     */
     public CriteriaBuilderWrapper(Class<T> entityClass, Session session, CommonFilterDTO filter) {
         this.entityClass = entityClass;
         this.session = session;
@@ -38,6 +45,11 @@ public class CriteriaBuilderWrapper<T> {
         this.finalPredicate = criteriaBuilder.conjunction();
     }
 
+    /**
+     * Constructs and returns the final query with applied filters, pagination, and cache hints.
+     *
+     * @return A Query object ready for execution.
+     */
     private Query getFinalQuery() {
         addUserGroupFilter();
         criteriaQuery.where(finalPredicate);
@@ -47,6 +59,11 @@ public class CriteriaBuilderWrapper<T> {
         return query;
     }
 
+    /**
+     * Executes the query and returns the result list.
+     *
+     * @return A list of entities matching the query.
+     */
     public List<T> getResultList() {
         List<T> result = getFinalQuery().getResultList();
         filter.setTotalCount(result.size());
@@ -54,50 +71,67 @@ public class CriteriaBuilderWrapper<T> {
     }
 
     /**
-     *  Equal Predicate
-     * @param key
-     * @param value
+     * Adds an equal condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
      */
     public void Equal(String key, Object value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.equal(root.get(key), value));
     }
 
+    /**
+     * Adds a "not equal" condition to the query.
+     */
     public void NotEqual(String key, Object value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.notEqual(root.get(key), value));
     }
 
+    /**
+     * Adds a "like" condition to the query for partial matching.
+     */
     public void Like(String key, String value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.like(root.get(key), value));
     }
 
+    /**
+     * Adds a case-insensitive "like" condition to the query.
+     */
     public void ILike(String key, String value) {
         finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.ilike(root.get(key), value));
     }
 
+    /**
+     * Adds an "IN" condition for a list of objects.
+     */
     public void InObjects(String key, List<Object> values) {
         finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
     }
 
+    /**
+     * Adds an "IN" condition for a list of strings.
+     */
     public void InString(String key, List<String> values) {
         finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
     }
 
-
+    /**
+     * Applies pagination filters (offset and limit) to the query.
+     *
+     * @param filter The filter DTO containing pagination details.
+     * @param query  The query object to modify.
+     */
     public void addPaginationFilters(CommonFilterDTO filter, Query query) {
-        // Apply pagination if both fields are provided
         if (filter.getPageOffset() != null && filter.getPageSize() != null) {
-            int pageOffset = filter.getPageOffset();
-            int pageSize = filter.getPageSize();
-            // Adjust the pageOffset to be 0-based (since JPA uses 0-based index)
-            if (pageOffset < 0) pageOffset = 0;
-            else pageOffset = (pageOffset) * pageSize;
-
-            // Apply pagination
-            query.setFirstResult(pageOffset);  // Set the offset
-            query.setMaxResults(pageSize);     // Set the limit
+            int pageOffset = filter.getPageOffset() * filter.getPageSize();
+            query.setFirstResult(Math.max(pageOffset, 0)); // Apply offset
+            query.setMaxResults(filter.getPageSize());     // Apply limit
         }
     }
 
+    /**
+     * Adds Hibernate-specific query hints for caching and performance optimization.
+     */
     public void addHibernateFilters(Query query) {
         // set Cacheable to true
         query.setHint("org.hibernate.cacheable", true);
@@ -113,6 +147,12 @@ public class CriteriaBuilderWrapper<T> {
         query.setHint("org.hibernate.readOnly", true);
     }
 
+    /**
+     * Adds filtering logic for user group-based data access control.
+     *
+     * <p>Filters the data based on the user group of the current user.
+     * If the user group is not found, an exception is thrown.
+     */
     public void addUserGroupFilter() {
         Field field = getField("userGroup");
         if(field == null) return;
@@ -133,6 +173,12 @@ public class CriteriaBuilderWrapper<T> {
 
     }
 
+    /**
+     * Splits a user group string into hierarchical parts for filtering.
+     *
+     * @param userGroup The user group string.
+     * @return A list of hierarchical user groups.
+     */
     private static List<String> getUserGroups(String userGroup) {
         List<String> userGroups = new ArrayList<>();
         if(userGroup == null) return userGroups;
@@ -148,6 +194,12 @@ public class CriteriaBuilderWrapper<T> {
         return userGroups;
     }
 
+    /**
+     * Gets a field from the superclass of the entity class.
+     *
+     * @param fieldName The name of the field.
+     * @return The field object if found, otherwise null.
+     */
     private Field getField(String fieldName) {
         try {
             return entityClass.getSuperclass().getDeclaredField(fieldName);
