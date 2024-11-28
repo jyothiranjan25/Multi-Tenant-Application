@@ -141,19 +141,22 @@ public class CriteriaBuilderWrapper<T> {
      * Default order is by ID in ascending order.
      */
     public void OrderBy(String key, boolean ascending) {
-        List<Order> orderList = criteriaQuery.getOrderList();
+        List<Order> currentOrders = new ArrayList<>(criteriaQuery.getOrderList());
 
-        // Remove existing default 'ORDER BY id ASC' if it's set
-        if (orderList != null && !orderList.isEmpty() && orderList.getFirst().getExpression().equals(root.get("id"))) {
-            criteriaQuery.getOrderList().clear();
+        // Remove default 'ORDER BY id ASC' if it exists
+        if (!currentOrders.isEmpty() && currentOrders.getFirst().getExpression().equals(root.get("id"))) {
+            currentOrders.clear();
         }
 
         // Add new ORDER BY clause
         if (ascending) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(root.get(key)));
+            currentOrders.add(criteriaBuilder.asc(root.get(key)));
         } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(root.get(key)));
+            currentOrders.add(criteriaBuilder.desc(root.get(key)));
         }
+
+        // Set the updated order list back to the query
+        criteriaQuery.orderBy(currentOrders);
     }
 
     /**
@@ -193,7 +196,7 @@ public class CriteriaBuilderWrapper<T> {
          * PUT: Hibernate will put the data in the cache.
          * REFRESH: Hibernate will hit the database and refresh the cache.
          */
-        query.setHint("org.hibernate.cacheMode", "NORMAL");
+        query.setHint("org.hibernate.cacheMode", "IGNORE");
         query.setHint("org.hibernate.readOnly", true);
     }
 
