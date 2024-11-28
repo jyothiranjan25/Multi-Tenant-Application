@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class UserLoginDetailsDTO extends CommonFilterDTO<UserLoginDetailsDTO> {
-    private Long id;
     private String username;
     private String sessionId;
     private LocalDateTime loginTime;

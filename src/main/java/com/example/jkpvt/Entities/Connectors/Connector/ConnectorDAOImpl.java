@@ -1,13 +1,15 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
+import com.example.jkpvt.Core.General.CriteriaBuilderWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.jkpvt.Core.PaginationUtil.PaginationUtil.applyPagination;
 
 @Repository
 public class ConnectorDAOImpl implements ConnectorDAO{
@@ -31,16 +31,25 @@ public class ConnectorDAOImpl implements ConnectorDAO{
             CriteriaQuery<Connector> criteriaQuery = criteriaBuilder.createQuery(Connector.class);
             Root<Connector> root = criteriaQuery.from(Connector.class);
 
-            List<Predicate> predicates = Predicates(criteriaBuilder, root, connectorDTO);
-
-            criteriaQuery.where(predicates.toArray(new Predicate[0]));
-
-            TypedQuery<Connector> query = session.createQuery(criteriaQuery);
-            applyPagination(query, connectorDTO);
+            CriteriaBuilderWrapper cbw = new CriteriaBuilderWrapper(root,criteriaQuery,criteriaBuilder,connectorDTO);
+            cbw.orderBy("id");
+            cbw.getFullyQualifiedPath("");
+            Query query = session.createQuery(cbw.getQuery());
+            addPaginationFilters(connectorDTO, query);
             return query.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
+    }
+
+    protected void addPaginationFilters(CommonFilterDTO filter, Query query) {
+        if (filter.getPageSize() != null && filter.getPageOffset() != null) {
+            query
+                    .setFirstResult(filter.getPageOffset() * filter.getPageSize())
+                    .setMaxResults(filter.getPageSize());
+        }
+        int TotalCount = query.getResultList().size();
+        filter.setTotalCount(TotalCount);
     }
 
     private List<Predicate> Predicates(HibernateCriteriaBuilder c, Root<Connector> root, ConnectorDTO connectorDTO) {

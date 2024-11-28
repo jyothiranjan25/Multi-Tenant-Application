@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConnectorDTO extends CommonFilterDTO<ConnectorDTO> {
-    private Long id;
     private String connectorName;
     private String description;
     private ConnectorTypeEnum type;

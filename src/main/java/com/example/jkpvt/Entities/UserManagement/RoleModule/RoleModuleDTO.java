@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class RoleModuleDTO extends CommonFilterDTO<RoleModuleDTO> {
-    private Long id;
     private Long roleId;
     private Long moduleId;
     private List<ModulesDTO> AddModules;

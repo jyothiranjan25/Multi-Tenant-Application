@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
@@ -32,6 +33,8 @@ public class GsonConfig implements WebMvcConfigurer {
 
         // Register custom TypeAdapter for LocalDateTime
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        // Register the custom deserializer for Map<String, String> to trim all values
+        gsonBuilder.registerTypeAdapter(Map.class, new TrimmedStringMapDeserializer());
 
         // Create and return the custom Gson instance
         return gsonBuilder.create();

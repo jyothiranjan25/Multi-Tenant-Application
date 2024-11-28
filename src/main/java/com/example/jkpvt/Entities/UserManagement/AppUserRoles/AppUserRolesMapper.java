@@ -14,6 +14,7 @@ public interface AppUserRolesMapper {
 
     @Mapping(target = "appUser.id", source = "appUserId")
     @Mapping(target = "roles", source = "roles")
+    @Mapping(target = "userGroup", source = "userGroupDTO.groupName")
     AppUserRoles map(AppUserRolesDTO appUserRolesDTO);
 
     @InheritConfiguration
