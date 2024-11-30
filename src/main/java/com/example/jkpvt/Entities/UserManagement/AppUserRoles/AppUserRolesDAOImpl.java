@@ -4,7 +4,6 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CriteriaBuilder.CriteriaBuilderWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -39,8 +38,8 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
         if(dto.getAppUserId() != null)
             cbw.Equal("appUser.id", dto.getAppUserId());
 
-        cbw.join("roles", "r", JoinType.INNER);
+        cbw.join("roles");
         if(dto.getRolesId() != null)
-            cbw.Equal("r.id", dto.getRolesId());
+            cbw.Equal("roles.id", dto.getRolesId());
     }
 }
