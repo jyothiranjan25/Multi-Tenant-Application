@@ -73,6 +73,7 @@ public class CriteriaBuilderWrapper<T> {
         return result;
     }
 
+
     /**
      * Adds an equal condition to the query.
      *
@@ -80,7 +81,18 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void Equal(String key, Object value) {
-        addAndPredicate(criteriaBuilder.equal(getExpression(key), value));
+        Equal(key, value, true);
+    }
+
+    /**
+     * Adds an equal condition to the query with the given operator.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
+     * @param isAnd True for AND operator, false for OR operator.
+     */
+    public void Equal(String key, Object value, boolean isAnd) {
+        addPredicate(criteriaBuilder.equal(getExpression(key), value), isAnd);
     }
 
     /**
@@ -90,7 +102,28 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void NotEqual(String key, Object value) {
-        addAndPredicate(criteriaBuilder.notEqual(getExpression(key), value));
+        NotEqual(key, value, true);
+    }
+
+    /**
+     * Adds a "not equal" condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
+     * @param isAnd True for AND operator, false for OR operator.
+     */
+    public void NotEqual(String key, Object value, boolean isAnd) {
+        addPredicate(criteriaBuilder.notEqual(getExpression(key), value), isAnd);
+    }
+
+    /**
+     * Adds a "greater than" condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
+     */
+    public void Like(String key, String value) {
+        Like(key, value, true);
     }
 
     /**
@@ -98,9 +131,10 @@ public class CriteriaBuilderWrapper<T> {
      *
      * @param key   The field name.
      * @param value The value to match.
+     * @param isAnd True for AND operator, false for OR operator.
      */
-    public void Like(String key, String value) {
-        addAndPredicate(criteriaBuilder.like(getExpression(key).as(String.class), value));
+    public void Like(String key, String value, boolean isAnd) {
+        addPredicate(criteriaBuilder.like(getExpression(key).as(String.class), value), isAnd);
     }
 
     /**
@@ -110,7 +144,18 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void ILike(String key, String value) {
-        addAndPredicate(criteriaBuilder.ilike(getExpression(key).as(String.class), value));
+        ILike(key, value, true);
+    }
+
+    /**
+     * Adds a case-insensitive "like" condition to the query.
+     *
+     * @param key   The field name.
+     * @param value The value to match.
+     * @param isAnd True for AND operator, false for OR operator.
+     */
+    public void ILike(String key, String value, boolean isAnd) {
+        addPredicate(criteriaBuilder.ilike(getExpression(key).as(String.class), value), isAnd);
     }
 
     /**
@@ -120,7 +165,18 @@ public class CriteriaBuilderWrapper<T> {
      * @param values The list of values to match.
      */
     public <U> void In(String key, List<U> values) {
-        addAndPredicate(getExpression(key).in(values));
+        In(key, values, true);
+    }
+
+    /**
+     * Adds an "IN" condition for a list of strings.
+     *
+     * @param key    The field name.
+     * @param values The list of values to match.
+     * @param isAnd True for AND operator, false for OR operator.
+     */
+    public <U> void In(String key, List<U> values, boolean isAnd) {
+        addPredicate(getExpression(key).in(values), isAnd);
     }
 
     /**
@@ -129,7 +185,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param key The field name to join.
      */
     public void join(String key) {
-       join(key, key);
+        join(key, key);
     }
 
     /**
@@ -164,7 +220,7 @@ public class CriteriaBuilderWrapper<T> {
             if (join != null) {
                 return join.get(field);
             }else {
-               throw new CommonException("Join not found for alias: " + alias);
+                throw new CommonException("Join not found for alias: " + alias);
             }
         }
         return root.get(key);
@@ -189,9 +245,9 @@ public class CriteriaBuilderWrapper<T> {
 
         // Add new ORDER BY clause
         if (ascending) {
-            currentOrders.add(criteriaBuilder.asc(root.get(key)));
+            currentOrders.add(criteriaBuilder.asc(getExpression(key)));
         } else {
-            currentOrders.add(criteriaBuilder.desc(root.get(key)));
+            currentOrders.add(criteriaBuilder.desc(getExpression(key)));
         }
 
         // Set the updated order list back to the query
@@ -295,6 +351,21 @@ public class CriteriaBuilderWrapper<T> {
             return entityClass.getSuperclass().getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
             return null;
+        }
+    }
+
+
+    /**
+     * Adds a predicate to the final predicate with the given operator.
+     *
+     * @param predicate The predicate to add.
+     * @param isAnd     True for AND operator, false for OR operator.
+     */
+    private void addPredicate(Predicate predicate, boolean isAnd) {
+        if (isAnd) {
+            addAndPredicate(predicate);
+        } else {
+            addOrPredicate(predicate);
         }
     }
 
