@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class AppUserRolesDTO extends CommonFilterDTO<AppUserRolesDTO> {
     private RolesDTO roles;
-    private UserGroupDTO userGroupDTO;
+    private UserGroupDTO userGroupDto;
     private Long appUserId;
     private Long rolesId;
 }
