@@ -4,10 +4,7 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import jakarta.persistence.Query;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Order;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Session;
@@ -15,7 +12,9 @@ import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -28,6 +27,8 @@ public class CriteriaBuilderWrapper<T> {
     private final CriteriaQuery<T> criteriaQuery;
     private final Root<T> root;
     private Predicate finalPredicate;
+
+    private final Map<String, Join<T, ?>> joins = new HashMap<>();
 
     /**
      * Initializes the CriteriaBuilderWrapper with the entity class, session, and filter data.
@@ -51,12 +52,12 @@ public class CriteriaBuilderWrapper<T> {
      *
      * @return A Query object ready for execution.
      */
-    public Query getFinalQuery() {
+    public Query buildFinalQuery() {
         addUserGroupFilter();
-        OrderById();
+        applyDefaultOrderById();
         criteriaQuery.where(finalPredicate);
         Query query = session.createQuery(criteriaQuery);
-        addPaginationFilters(filter, query);
+        applyPaginationFilters(query);
         addHibernateFilters(query);
         return query;
     }
@@ -67,7 +68,7 @@ public class CriteriaBuilderWrapper<T> {
      * @return A list of entities matching the query.
      */
     public List<T> getResultList() {
-        List<T> result = getFinalQuery().getResultList();
+        List<T> result = buildFinalQuery().getResultList();
         filter.setTotalCount(result.size());
         return result;
     }
@@ -79,7 +80,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void Equal(String key, Object value) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.equal(root.get(key), value));
+        addAndPredicate(criteriaBuilder.equal(getExpression(key), value));
     }
 
     /**
@@ -89,7 +90,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void NotEqual(String key, Object value) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.notEqual(root.get(key), value));
+        addAndPredicate(criteriaBuilder.notEqual(getExpression(key), value));
     }
 
     /**
@@ -99,7 +100,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void Like(String key, String value) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.like(root.get(key), value));
+        addAndPredicate(criteriaBuilder.like(getExpression(key).as(String.class), value));
     }
 
     /**
@@ -109,7 +110,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param value The value to match.
      */
     public void ILike(String key, String value) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, criteriaBuilder.ilike(root.get(key), value));
+        addAndPredicate(criteriaBuilder.ilike(getExpression(key).as(String.class), value));
     }
 
     /**
@@ -119,8 +120,56 @@ public class CriteriaBuilderWrapper<T> {
      * @param values The list of values to match.
      */
     public <U> void In(String key, List<U> values) {
-        finalPredicate = criteriaBuilder.and(finalPredicate, root.get(key).in(values));
+        addAndPredicate(getExpression(key).in(values));
     }
+
+    /**
+     * Adds a join condition to the query.
+     *
+     * @param key The field name to join.
+     */
+    public void join(String key) {
+       join(key, key);
+    }
+
+    /**
+     * Adds a join condition to the query.
+     *
+     * @param key The field name to join.
+     * @param alias The alias for the joined entity.
+     */
+    public void join(String key, String alias) {
+        join(key, alias, JoinType.LEFT);
+    }
+
+    /**
+     * Adds a join condition to the query.
+     *
+     * @param key The field name to join.
+     * @param alias The alias for the joined entity.
+     * @param joinType The type of join to perform.
+     */
+    public void join(String key, String alias, JoinType joinType) {
+        Join<T, ?> join = root.join(key, joinType);
+        join.alias(alias);
+        joins.put(alias, join);
+    }
+
+    private Expression<T> getExpression(String key) {
+        String[] parts = key.split("\\.");
+        if (parts.length == 2) {
+            String alias = parts[0];
+            String field = parts[1];
+            Join<T, ?> join = joins.get(alias);
+            if (join != null) {
+                return join.get(field);
+            }else {
+               throw new CommonException("Join not found for alias: " + alias);
+            }
+        }
+        return root.get(key);
+    }
+
 
     /**
      * Adds ORDER BY clause to the query.
@@ -152,7 +201,7 @@ public class CriteriaBuilderWrapper<T> {
     /**
      * default Orders the query results by ID in ascending order.
      */
-    private void OrderById() {
+    private void applyDefaultOrderById() {
         if (criteriaQuery.getOrderList().isEmpty()) {
             OrderBy("id", true);
         }
@@ -161,10 +210,9 @@ public class CriteriaBuilderWrapper<T> {
     /**
      * Applies pagination filters (offset and limit) to the query.
      *
-     * @param filter The filter DTO containing pagination details.
      * @param query  The query object to modify.
      */
-    private void addPaginationFilters(CommonFilterDTO filter, Query query) {
+    private void applyPaginationFilters(Query query) {
         if (filter.getPageOffset() != null && filter.getPageSize() != null) {
             int pageOffset = filter.getPageOffset() * filter.getPageSize();
             query.setFirstResult(Math.max(pageOffset, 0)); // Apply offset
@@ -248,5 +296,23 @@ public class CriteriaBuilderWrapper<T> {
         } catch (NoSuchFieldException e) {
             return null;
         }
+    }
+
+    /**
+     * Combines the given predicate with the final predicate using the AND operator.
+     *
+     * @param predicate The predicate to add.
+     */
+    private void addAndPredicate(Predicate predicate) {
+        finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
+    }
+
+    /**
+     * Combines the given predicate with the final predicate using the OR operator.
+     *
+     * @param predicate The predicate to add.
+     */
+    private void addOrPredicate(Predicate predicate) {
+        finalPredicate = criteriaBuilder.or(finalPredicate, predicate);
     }
 }
