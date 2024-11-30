@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.hibernate.Session;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class SearchFilterService {
 
     @Transactional(readOnly = true)
     public <T, U> List<T> search(Class<T> entityClass, String searchTerm, U dto) {
-        try {
+        try(Session session = entityManager.unwrap(Session.class)) {
             // Get the criteria builder
             HibernateCriteriaBuilder cb = (HibernateCriteriaBuilder) entityManager.getCriteriaBuilder();
             CriteriaQuery<T> query = cb.createQuery(entityClass);
