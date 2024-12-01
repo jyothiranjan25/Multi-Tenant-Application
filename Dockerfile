@@ -12,7 +12,7 @@ COPY src ./src
 COPY src/main/resources/DatabaseContextFile-sample.xml src/main/resources/DatabaseContextFile.xml
 
 # Update the parameters inside the DatabaseContextFile.xml using sed with proper delimiters
-RUN sed -i 's|<property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/test"/>|<property name="jdbcUrl" value="jdbc:postgresql://postgres:5432/foerign"/>|g' src/main/resources/DatabaseContextFile.xml
+RUN sed -i 's|<property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/test"/>|<property name="jdbcUrl" value="jdbc:postgresql://postgres:5432/springApp"/>|g' src/main/resources/DatabaseContextFile.xml
 RUN sed -i 's|<property name="username" value="postgres"/>|<property name="username" value="postgres"/>|g' src/main/resources/DatabaseContextFile.xml
 RUN sed -i 's|<property name="password" value="postgres"/>|<property name="password" value="postgres"/>|g' src/main/resources/DatabaseContextFile.xml
 #RUN sed -i 's|<prop key="initialize.initialData.enabled">false</prop>|<prop key="initialize.initialData.enabled">true</prop>|g' src/main/resources/applicationContext.xml

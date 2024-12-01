@@ -3,7 +3,7 @@ services:
     image: postgres:16
     container_name: postgres_db
     environment:
-      POSTGRES_DB: foerign
+      POSTGRES_DB: springApp
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -14,6 +14,8 @@ services:
   redis:
     image: redis:latest
     container_name: redis_db
+    volumes:
+      - redis_data:/data
     networks:
       - app-network
     ports:
@@ -27,6 +29,7 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - redis
     networks:
       - app-network
 
@@ -36,4 +39,6 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local
