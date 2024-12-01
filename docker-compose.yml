@@ -19,7 +19,7 @@ services:
     networks:
       - app-network
     ports:
-      - "6379:6379"  # Exposes Redis on default port 6379
+      - "6379:6379"
   app:
     build:
       context: .
