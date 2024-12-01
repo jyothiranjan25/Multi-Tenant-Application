@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class RolesDTO extends CommonFilterDTO<RolesDTO> {
-    private Long id;
     private String roleName;
     private String roleDescription;
     private String roleIcon;

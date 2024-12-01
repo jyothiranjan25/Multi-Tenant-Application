@@ -8,6 +8,10 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class CommonFilterDTO<T> {
+    private Long id;
+    private String userGroup;
+    private String modifiedBy;
+    private String modifiedDate;
     private String searchTerm;
     private Integer pageOffset;
     private Integer pageSize;

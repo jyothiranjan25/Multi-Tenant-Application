@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class AppUserDTO extends CommonFilterDTO<AppUserDTO> {
-    private Long id;
     private String userName;
     private String password;
     private String email;

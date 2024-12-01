@@ -32,22 +32,26 @@ public class QueryParamsArgumentResolver implements HandlerMethodArgumentResolve
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Class<?> dtoClass = parameter.getParameterType();
+try {
+    // Get parameters from URL query
+    Map<String, String[]> parameterMap = webRequest.getParameterMap();
+    Map<String, String> singleValueMap = parameterMap.entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0].trim()));
 
-        // Get parameters from URL query
-        Map<String, String[]> parameterMap = webRequest.getParameterMap();
-        Map<String, String> singleValueMap = parameterMap.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue()[0]));
+    // Get parameters from request body
+    String body = webRequest.getNativeRequest(HttpServletRequest.class).getReader().lines()
+            .collect(Collectors.joining(System.lineSeparator()));
+    Map<String, String> bodyMap = gson.fromJson(body, Map.class);
 
-        // Get parameters from request body
-        String body = webRequest.getNativeRequest(HttpServletRequest.class).getReader().lines()
-                .collect(Collectors.joining(System.lineSeparator()));
-        Map<String, String> bodyMap = gson.fromJson(body, Map.class);
+    // Merge both maps
+    if (bodyMap != null) {
+        singleValueMap.putAll(bodyMap);
+    }
 
-        // Merge both maps
-        if(bodyMap != null)
-            singleValueMap.putAll(bodyMap);
-
-        String json = gson.toJson(singleValueMap);
-        return gson.fromJson(json, dtoClass);
+    String json = gson.toJson(singleValueMap);
+    return gson.fromJson(json, dtoClass);
+} catch (Exception e) {
+    throw new RuntimeException(e);
+}
     }
 }

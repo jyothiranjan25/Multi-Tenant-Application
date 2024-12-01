@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ConnectorXrefDTO extends CommonFilterDTO<ConnectorXrefDTO> {
-    private Long id;
     private String Name;
     private String description;
     private ConnectorXrefEnum status;

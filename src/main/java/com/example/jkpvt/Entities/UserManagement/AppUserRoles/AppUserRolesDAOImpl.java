@@ -1,21 +1,15 @@
 package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.Core.PaginationUtil.PaginationUtil;
+import com.example.jkpvt.Core.General.CriteriaBuilder.CriteriaBuilderWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -28,40 +22,24 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRoles> get(AppUserRolesDTO dto) {
         try(Session session = entityManager.unwrap(Session.class)) {
-            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<AppUserRoles> criteriaQuery = criteriaBuilder.createQuery(AppUserRoles.class);
-            Root<AppUserRoles> root = criteriaQuery.from(AppUserRoles.class);
-
-            List<Predicate> predicates = buildPredicates(dto, criteriaBuilder, root);
-
-            criteriaQuery.where(predicates.toArray(new Predicate[0]));
-
-            TypedQuery<AppUserRoles> query = session.createQuery(criteriaQuery);
-
-            PaginationUtil.applyPagination(query, dto);
-
-            return query.getResultList();
+            CriteriaBuilderWrapper<AppUserRoles> cbw = new CriteriaBuilderWrapper<>(AppUserRoles.class, session, dto);
+            addPredicate(cbw, dto);
+            return cbw.getResultList();
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
         }
     }
 
-    private List<Predicate> buildPredicates(AppUserRolesDTO dto, HibernateCriteriaBuilder criteriaBuilder, Root<AppUserRoles> root) {
-        List<Predicate> predicates = new ArrayList<>();
+    private void addPredicate(CriteriaBuilderWrapper<AppUserRoles> cbw, AppUserRolesDTO dto) {
+        if(dto.getId() != null)
+            cbw.Equal("id", dto.getId());
 
-        if (dto.getId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("id"), dto.getId()));
-        }
-        if (dto.getAppUserId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("appUser").get("id"), dto.getAppUserId()));
-        }
-        if (dto.getRolesId() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("roles").get("id"), dto.getRolesId()));
-        }
-        if (dto.getUserGroup() != null) {
-            predicates.add(criteriaBuilder.ilike(root.get("userGroup"), dto.getUserGroup()));
-        }
+        cbw.join("appUser");
+        if(dto.getAppUserId() != null)
+            cbw.Equal("appUser.id", dto.getAppUserId());
 
-        return predicates;
+        cbw.join("roles");
+        if(dto.getRolesId() != null)
+            cbw.Equal("roles.id", dto.getRolesId());
     }
 }
