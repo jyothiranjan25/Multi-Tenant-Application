@@ -27,6 +27,7 @@ public class CriteriaBuilderWrapper<T> {
     private final CriteriaQuery<T> criteriaQuery;
     private final Root<T> root;
     private Predicate finalPredicate;
+    private Predicate orPredicate;
 
     private final Map<String, Join<T, ?>> joins = new HashMap<>();
 
@@ -45,6 +46,7 @@ public class CriteriaBuilderWrapper<T> {
         this.criteriaQuery = criteriaBuilder.createQuery(entityClass);
         this.root = criteriaQuery.from(entityClass);
         this.finalPredicate = criteriaBuilder.conjunction();
+        this.orPredicate = criteriaBuilder.disjunction();
     }
 
     /**
@@ -55,11 +57,21 @@ public class CriteriaBuilderWrapper<T> {
     public Query buildFinalQuery() {
         addUserGroupFilter();
         applyDefaultOrderById();
-        criteriaQuery.where(finalPredicate);
+        criteriaQuery.where(buildPredicate());
         Query query = session.createQuery(criteriaQuery);
         applyPaginationFilters(query);
         addHibernateFilters(query);
         return query;
+    }
+
+    private Predicate buildPredicate() {
+        if (finalPredicate.getExpressions().size() >1 && orPredicate.getExpressions().size() > 1) {
+            return criteriaBuilder.and(finalPredicate, orPredicate);
+        } else if(finalPredicate.getExpressions().size() < 2 && orPredicate.getExpressions().size() > 1) {
+            return orPredicate;
+        } else {
+            return finalPredicate;
+        }
     }
 
     /**
@@ -384,6 +396,6 @@ public class CriteriaBuilderWrapper<T> {
      * @param predicate The predicate to add.
      */
     private void addOrPredicate(Predicate predicate) {
-        finalPredicate = criteriaBuilder.or(finalPredicate, predicate);
+        orPredicate = criteriaBuilder.or(orPredicate, predicate);
     }
 }
