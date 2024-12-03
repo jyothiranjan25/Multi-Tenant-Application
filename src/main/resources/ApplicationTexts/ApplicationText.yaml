@@ -16,7 +16,6 @@ APP_USER_ROLE:
     APP_USER_ROLE_NOT_FOUND: "AppUserRole not found"
     ROLE_ALREADY_EXISTS: "AppUserRole already exists"
     APP_USER_IS_MANDATORY: "AppUser is mandatory"
-    ROLE_IS_MANDATORY: "Role is mandatory"
     USER_GROUP_IS_MANDATORY: "User group is mandatory"
 
 MODULES:
@@ -27,6 +26,7 @@ MODULES:
   MODULE_PARENT_REQUIRED_CHILD: "Parent resource should have child resource"
   MODULE_CHILD_REQUIRED_PARENT: "Child resource should have parent resource"
   MODULE_NAME_DUPLICATE: "Module name %1$s already exists"
+  MODULE_IS_MANDATORY: "Module is mandatory"
 
 RESOURCES:
     ID_MANDATORY: "Resource ID is mandatory"
@@ -40,6 +40,12 @@ RESOURCES:
     RESOURCES_NAME_EXISTS: "Resource name %1$s already exists"
     RESOURCES_HAS_CHILDREN: "Resource has child records"
     RESOURCES_HAS_PARENT: "Resource has parent record"
+
+ROLES:
+    ROLE_IS_MANDATORY: "Role is mandatory"
+
+ROLE_MODULE:
+  ROLE_MODULE_DUPLICATE: "Role module already exists"
 
 CONNECTOR:
   ID_NOT_FOUND: "Connector ID %1$s not found"
