@@ -28,7 +28,7 @@ public class ModulesListener implements ApplicationContextAware {
     @PrePersist
     public void prePersist(Modules modules) {
         if (modules.getModuleName() == null || modules.getModuleName().isEmpty()) {
-            throw new CommonException("Modules name is mandatory");
+            throw new CommonException(ModulesMessages.MODULE_NAME_MANDATORY);
         }
         checkForDuplicateGroupName(modules);
     }
@@ -45,7 +45,7 @@ public class ModulesListener implements ApplicationContextAware {
 
     private void conditionsChecks(ModulesDTO modulesDTO, Modules modules, Set<Resources> resources) {
         if (modulesDTO.getModuleUrl() == null && resources.isEmpty()) {
-            throw new CommonException("Module URL is required");
+            throw new CommonException(ModulesMessages.MODULE_URL_REQUIRED);
         }
         if (modulesDTO.getModuleUrl() != null && !resources.isEmpty()) {
             modules.setModuleUrl(null);
@@ -71,7 +71,7 @@ public class ModulesListener implements ApplicationContextAware {
             boolean hasChilds = resources.stream().anyMatch(resource ->
                     Objects.equals(resource.getParentResource() != null ? resource.getParentResource().getId() : null, parentId));
             if (!hasChilds) {
-                throw new CommonException("Parent resource should have child resource");
+                throw new CommonException(ModulesMessages.MODULE_PARENT_REQUIRED_CHILD);
             }
         }
 
@@ -80,22 +80,18 @@ public class ModulesListener implements ApplicationContextAware {
             boolean hasParent = resources.stream().anyMatch(resource ->
                     Objects.equals(resource.getId(), childId));
             if (!hasParent) {
-                throw new CommonException("Child resource should have parent resource");
+                throw new CommonException(ModulesMessages.MODULE_CHILD_REQUIRED_PARENT);
             }
         }
     }
 
     private void checkForDuplicateGroupName(Modules modules) {
-        try {
-            ModulesDTO filter = new ModulesDTO();
-            filter.setModuleName(modules.getModuleName());
-            List<ModulesDTO> duplicates = applicationContext.getBean(ModulesService.class).get(filter);
-            duplicates.removeIf(x -> x.getId().equals(modules.getId()));
-            if (!duplicates.isEmpty()) {
-                throw new CommonException("Model name already exists");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        ModulesDTO filter = new ModulesDTO();
+        filter.setModuleName(modules.getModuleName());
+        List<ModulesDTO> duplicates = applicationContext.getBean(ModulesService.class).get(filter);
+        duplicates.removeIf(x -> x.getId().equals(modules.getId()));
+        if (!duplicates.isEmpty()) {
+            throw new CommonException(ModulesMessages.MODULE_NAME_DUPLICATE, modules.getModuleName());
         }
     }
 }

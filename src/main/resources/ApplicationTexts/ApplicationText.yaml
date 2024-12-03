@@ -19,6 +19,15 @@ APP_USER_ROLE:
     ROLE_IS_MANDATORY: "Role is mandatory"
     USER_GROUP_IS_MANDATORY: "User group is mandatory"
 
+MODULES:
+  ID_NOT_NULL: "Module ID must not be null"
+  MODULE_NOT_FOUND: "Module not found"
+  MODULE_NAME_MANDATORY: "Module name is mandatory"
+  MODULE_URL_REQUIRED: "Module URL is required"
+  MODULE_PARENT_REQUIRED_CHILD: "Parent resource should have child resource"
+  MODULE_CHILD_REQUIRED_PARENT: "Child resource should have parent resource"
+  MODULE_NAME_DUPLICATE: "Module name %1$s already exists"
+
 CONNECTOR:
   ID_NOT_FOUND: "Connector ID %1$s not found"
   DUPLICATE_CONNECTOR: "Duplicate connector"
