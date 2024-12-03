@@ -37,19 +37,19 @@ public class AppUserListener implements ApplicationContextAware {
     @PreRemove
     public void preRemove(AppUser appUser) {
         if (appUser.getId() == null) {
-            throw new CommonException(AppUserMessages.ID_NOT_NULL);
+            throw new CommonException(AppUserMessages.ID_MANDATORY);
         }
     }
 
     public void conditionCheck(AppUser appUser) {
         if (appUser.getUserName() == null) {
-            throw new CommonException(AppUserMessages.USER_NAME_NOT_NULL);
+            throw new CommonException(AppUserMessages.USER_NAME_MANDATORY);
         }
         if (appUser.getPassword() == null || appUser.getPassword().isEmpty()) {
-            throw new CommonException(AppUserMessages.PASSWORD_NOT_NULL);
+            throw new CommonException(AppUserMessages.PASSWORD_MANDATORY);
         }
         if (appUser.getEmail() == null) {
-            throw new CommonException(AppUserMessages.EMAIL_NOT_NULL);
+            throw new CommonException(AppUserMessages.EMAIL_MANDATORY);
         }
         if (appUser.getIsActive() == null) {
             appUser.setIsActive(true);

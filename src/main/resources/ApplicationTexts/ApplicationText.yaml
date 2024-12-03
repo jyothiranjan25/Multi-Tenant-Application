@@ -4,10 +4,10 @@ Common_Messages:
   DATA_DELETED_SUCCESSFULLY: "Data deleted successfully"
 
 APP_USER:
-    ID_NOT_NULL: "AppUser ID must not be null"
-    USER_NAME_NOT_NULL: "AppUser name must not be null"
-    PASSWORD_NOT_NULL: "AppUser password must not be null"
-    EMAIL_NOT_NULL: "AppUser email must not be null"
+    ID_MANDATORY: "AppUser ID is mandatory"
+    USER_NAME_MANDATORY: "AppUser name is mandatory"
+    PASSWORD_MANDATORY: "AppUser password is mandatory"
+    EMAIL_MANDATORY: "AppUser email is mandatory"
     USER_NAME_DUPLICATE: "AppUser name %1$s already exists"
     EMAIL_DUPLICATE: "AppUser email %1$s already exists"
     USER_NOT_FOUND: "AppUser not found"
@@ -20,13 +20,26 @@ APP_USER_ROLE:
     USER_GROUP_IS_MANDATORY: "User group is mandatory"
 
 MODULES:
-  ID_NOT_NULL: "Module ID must not be null"
+  ID_MANDATORY: "Module ID is mandatory"
   MODULE_NOT_FOUND: "Module not found"
   MODULE_NAME_MANDATORY: "Module name is mandatory"
   MODULE_URL_REQUIRED: "Module URL is required"
   MODULE_PARENT_REQUIRED_CHILD: "Parent resource should have child resource"
   MODULE_CHILD_REQUIRED_PARENT: "Child resource should have parent resource"
   MODULE_NAME_DUPLICATE: "Module name %1$s already exists"
+
+RESOURCES:
+    ID_MANDATORY: "Resource ID is mandatory"
+    RESOURCE_NOT_FOUND: "Resource not found"
+    RESOURCE_NAME_MANDATORY: "Resource name is mandatory"
+    RESOURCE_URL_REQUIRED: "Resource URL is required"
+    RESOURCE_NAME_DUPLICATE: "Resource name %1$s already exists"
+    RESOURCE_PARENT_ID_REQUIRED: "Resource parent is required"
+    RESOURCES_URL_REQUIRED: "Resource URL is required"
+    RESOURCES_URL_INVALID: "Resource URL is invalid"
+    RESOURCES_NAME_EXISTS: "Resource name %1$s already exists"
+    RESOURCES_HAS_CHILDREN: "Resource has child records"
+    RESOURCES_HAS_PARENT: "Resource has parent record"
 
 CONNECTOR:
   ID_NOT_FOUND: "Connector ID %1$s not found"
