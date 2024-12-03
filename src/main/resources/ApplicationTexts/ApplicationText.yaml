@@ -12,6 +12,13 @@ APP_USER:
     EMAIL_DUPLICATE: "AppUser email %1$s already exists"
     USER_NOT_FOUND: "AppUser not found"
 
+APP_USER_ROLE:
+    APP_USER_ROLE_NOT_FOUND: "AppUserRole not found"
+    ROLE_ALREADY_EXISTS: "AppUserRole already exists"
+    APP_USER_IS_MANDATORY: "AppUser is mandatory"
+    ROLE_IS_MANDATORY: "Role is mandatory"
+    USER_GROUP_IS_MANDATORY: "User group is mandatory"
+
 CONNECTOR:
   ID_NOT_FOUND: "Connector ID %1$s not found"
   DUPLICATE_CONNECTOR: "Duplicate connector"
