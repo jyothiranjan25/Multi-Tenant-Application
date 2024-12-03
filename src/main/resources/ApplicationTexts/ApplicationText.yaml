@@ -1,5 +1,6 @@
 Common_Messages:
   APPLICATION_ERROR: "Something went wrong"
+  USER_GROUP_NOT_FOUND: "User group not found for user"
 
 CONNECTOR:
   ID_NOT_FOUND: "ID %1$s not found"

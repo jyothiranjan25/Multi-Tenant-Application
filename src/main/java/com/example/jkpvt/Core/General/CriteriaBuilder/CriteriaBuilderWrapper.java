@@ -2,6 +2,7 @@ package com.example.jkpvt.Core.General.CriteriaBuilder;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
@@ -327,7 +328,7 @@ public class CriteriaBuilderWrapper<T> {
                 ILike("userGroup", userGroups.getFirst() + "%");
             }
         }else{
-            throw new CommonException("User group is not found for the user");
+            throw new CommonException(CommonMessages.USER_GROUP_NOT_FOUND);
         }
     }
 
