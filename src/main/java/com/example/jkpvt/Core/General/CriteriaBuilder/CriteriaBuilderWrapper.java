@@ -167,7 +167,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param isAnd True for AND operator, false for OR operator.
      */
     public void ILike(String key, String value, boolean isAnd) {
-        addPredicate(criteriaBuilder.ilike(getExpression(key).as(String.class), value), isAnd);
+        addPredicate(criteriaBuilder.ilike(criteriaBuilder.toString(getExpression(key).as(Character.class)), value), isAnd);
     }
 
     /**
@@ -302,7 +302,7 @@ public class CriteriaBuilderWrapper<T> {
          * PUT: Hibernate will put the data in the cache.
          * REFRESH: Hibernate will hit the database and refresh the cache.
          */
-        query.setHint("org.hibernate.cacheMode", "IGNORE");
+        query.setHint("org.hibernate.cacheMode", "NORMAL");
         query.setHint("org.hibernate.readOnly", true);
     }
 
