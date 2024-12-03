@@ -37,19 +37,19 @@ public class AppUserListener implements ApplicationContextAware {
     @PreRemove
     public void preRemove(AppUser appUser) {
         if (appUser.getId() == null) {
-            throw new CommonException("AppUser Id is null");
+            throw new CommonException(AppUserMessages.ID_NOT_NULL);
         }
     }
 
     public void conditionCheck(AppUser appUser) {
         if (appUser.getUserName() == null) {
-            throw new CommonException("UserName cannot be null");
+            throw new CommonException(AppUserMessages.USER_NAME_NOT_NULL);
         }
         if (appUser.getPassword() == null || appUser.getPassword().isEmpty()) {
-            throw new CommonException("Password cannot be null");
+            throw new CommonException(AppUserMessages.PASSWORD_NOT_NULL);
         }
         if (appUser.getEmail() == null) {
-            throw new CommonException("Email cannot be null");
+            throw new CommonException(AppUserMessages.EMAIL_NOT_NULL);
         }
         if (appUser.getIsActive() == null) {
             appUser.setIsActive(true);
@@ -63,7 +63,7 @@ public class AppUserListener implements ApplicationContextAware {
             List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
             duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
             if (!duplicates.isEmpty()) {
-                throw new CommonException("Duplicate UserName '" + appUser.getUserName() + "' found");
+                throw new CommonException(AppUserMessages.USER_NAME_DUPLICATE, appUser.getUserName());
             }
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
@@ -77,7 +77,7 @@ public class AppUserListener implements ApplicationContextAware {
             List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
             duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
             if (!duplicates.isEmpty()) {
-                throw new CommonException("Duplicate Email '" + appUser.getEmail() + "' found");
+                throw new CommonException(AppUserMessages.EMAIL_DUPLICATE, appUser.getEmail());
             }
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
