@@ -4,6 +4,7 @@ import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupDTO;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
 import lombok.Getter;
@@ -317,9 +318,9 @@ public class CriteriaBuilderWrapper<T> {
         Field field = getField("userGroup");
         if(field == null) return;
 
-        String userGroup = SessionStorageUtil.getUserGroup();
+        UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
         if(userGroup != null){
-            List<String> userGroups = getUserGroups(userGroup);
+            List<String> userGroups = getUserGroups(userGroup.getQualifiedName());
 
             // Create predicates for each user group and combine with OR
             if (userGroups.size() > 1) {

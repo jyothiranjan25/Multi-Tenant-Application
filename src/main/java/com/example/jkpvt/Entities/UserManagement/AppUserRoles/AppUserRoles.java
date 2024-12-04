@@ -2,6 +2,7 @@ package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUser;
 import com.example.jkpvt.Entities.UserManagement.Roles.Roles;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroup;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -44,6 +45,9 @@ public class AppUserRoles {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Roles roles;
 
-    @Column(name = "user_group")
-    private String userGroup;
+    @ManyToOne
+    @Fetch(FetchMode.SELECT)
+    @JoinColumn(name = "user_group_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_user_group_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserGroup userGroup;
 }

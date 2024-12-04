@@ -5,6 +5,7 @@ import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserService;
 import com.example.jkpvt.Entities.UserManagement.Roles.RolesService;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +22,7 @@ public class AppUserRolesService {
     private final AppUserRolesMapper mapper;
     private final AppUserService appUserService;
     private final RolesService rolesService;
+    private final UserGroupService userGroupService;
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRolesDTO> get(AppUserRolesDTO appUserRolesDTO) {
@@ -33,6 +35,7 @@ public class AppUserRolesService {
         AppUserRoles appUserRoles = mapper.map(appUserRolesDTO);
         appUserRoles.setRoles(rolesService.getById(appUserRolesDTO.getRolesId()));
         appUserRoles.setAppUser(appUserService.getById(appUserRolesDTO.getAppUserId()));
+        appUserRoles.setUserGroup(userGroupService.getById(appUserRolesDTO.getUserGroupId()));
         appUserRoles = repository.save(appUserRoles);
         return mapper.map(appUserRoles);
     }

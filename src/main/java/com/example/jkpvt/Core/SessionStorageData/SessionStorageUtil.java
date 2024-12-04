@@ -2,6 +2,7 @@ package com.example.jkpvt.Core.SessionStorageData;
 
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRolesDTO;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupDTO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -54,12 +55,12 @@ public class SessionStorageUtil {
         session.setAttribute(USER_EMAIL_SESSION_KEY, data);
     }
 
-    public static String getUserGroup() {
+    public static UserGroupDTO getUserGroup() {
         HttpSession session = getCurrentSession();
-        return (String) session.getAttribute(USER_GROUP_SESSION_KEY);
+        return (UserGroupDTO) session.getAttribute(USER_GROUP_SESSION_KEY);
     }
 
-    public static void setUserGroup(String data) {
+    public static void setUserGroup(UserGroupDTO data) {
         HttpSession session = getCurrentSession();
         session.setAttribute(USER_GROUP_SESSION_KEY, data);
     }
