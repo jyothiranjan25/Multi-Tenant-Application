@@ -2,6 +2,7 @@ package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CriteriaBuilder.CriteriaBuilderWrapper;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
             addPredicate(cbw, dto);
             return cbw.getResultList();
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 
