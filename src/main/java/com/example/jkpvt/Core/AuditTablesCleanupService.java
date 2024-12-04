@@ -43,11 +43,12 @@ public class AuditTablesCleanupService {
                 jdbcTemplate.update(deleteAuditSql, thresholdEpochMillis);
             }
 
+            if(!auditTables.isEmpty()) {
             // Delete from REVINFO table
             String deleteRevInfoSql = "DELETE FROM REVINFO WHERE revtstmp < ?";
             System.out.println("Executing SQL: " + deleteRevInfoSql + " with thresholdEpochMillis: " + thresholdEpochMillis);
             jdbcTemplate.update(deleteRevInfoSql, thresholdEpochMillis);
-
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,13 +1,13 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
-import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsDTO;
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsService;
+import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
+import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserDTO;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetailsDTO;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetailsService;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -35,12 +35,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             // Save login details in the database
             saveUserLoginDetails(request, authentication);
 
-            HttpSession session = request.getSession(false);
-            if (session == null) {
-                session = request.getSession();
-            }
-            session.setAttribute("userName", authentication.getName());
-            AppUserDTO appUserDTO = (AppUserDTO) session.getAttribute("appUser");
+            AppUserDTO appUserDTO = SessionStorageUtil.getAppUser();
 
             String redirectUrl;
             if (appUserDTO.getAppUserRoles().size() > 1) {

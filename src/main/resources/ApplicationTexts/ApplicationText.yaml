@@ -1,0 +1,62 @@
+Common_Messages:
+  APPLICATION_ERROR: "Something went wrong"
+  USER_GROUP_NOT_FOUND: "User group not found for user"
+  DATA_DELETE_SUCCESS: "Data deleted successfully"
+
+USER_GROUP:
+  ID_MANDATORY: "User group ID is mandatory"
+  USER_GROUP_NOT_FOUND: "User group not found"
+  USER_GROUP_NAME_MANDATORY: "User group name is mandatory"
+  USER_GROUP_NAME_DUPLICATE: "User group name %1$s already exists"
+  USER_GROUP_HAS_CHILDREN: "User group has child records"
+
+RESOURCES:
+  ID_MANDATORY: "Resource ID is mandatory"
+  RESOURCE_NOT_FOUND: "Resource not found"
+  RESOURCE_NAME_MANDATORY: "Resource name is mandatory"
+  RESOURCE_URL_REQUIRED: "Resource URL is required"
+  RESOURCE_NAME_DUPLICATE: "Resource name %1$s already exists"
+  RESOURCE_PARENT_ID_REQUIRED: "Resource parent is required"
+  RESOURCES_URL_REQUIRED: "Resource URL is required"
+  RESOURCES_URL_INVALID: "Resource URL is invalid"
+  RESOURCES_NAME_EXISTS: "Resource name %1$s already exists"
+  RESOURCES_HAS_CHILDREN: "Resource has child records"
+  RESOURCES_HAS_PARENT: "Resource has parent record"
+
+MODULES:
+  ID_MANDATORY: "Module ID is mandatory"
+  MODULE_NOT_FOUND: "Module not found"
+  MODULE_NAME_MANDATORY: "Module name is mandatory"
+  MODULE_URL_REQUIRED: "Module URL is required"
+  MODULE_PARENT_REQUIRED_CHILD: "Parent resource should have child resource"
+  MODULE_CHILD_REQUIRED_PARENT: "Child resource should have parent resource"
+  MODULE_NAME_DUPLICATE: "Module name %1$s already exists"
+  MODULE_IS_MANDATORY: "Module is mandatory"
+
+ROLES:
+  ROLE_IS_MANDATORY: "Role is mandatory"
+  ROLE_NOT_FOUND: "Role not found"
+  ROLE_NAME_MANDATORY: "Role name is mandatory"
+  ROLE_NAME_DUPLICATE: "Role name %1$s already exists"
+
+ROLE_MODULE:
+  ROLE_MODULE_DUPLICATE: "Role module already exists"
+
+APP_USER:
+    ID_MANDATORY: "AppUser ID is mandatory"
+    USER_NAME_MANDATORY: "AppUser name is mandatory"
+    PASSWORD_MANDATORY: "AppUser password is mandatory"
+    EMAIL_MANDATORY: "AppUser email is mandatory"
+    USER_NAME_DUPLICATE: "AppUser name %1$s already exists"
+    EMAIL_DUPLICATE: "AppUser email %1$s already exists"
+    USER_NOT_FOUND: "User not found"
+
+APP_USER_ROLE:
+    APP_USER_ROLE_NOT_FOUND: "AppUserRole not found"
+    ROLE_ALREADY_EXISTS: "AppUserRole already exists"
+    APP_USER_IS_MANDATORY: "AppUser is mandatory"
+    USER_GROUP_IS_MANDATORY: "User group is mandatory"
+
+CONNECTOR:
+  ID_NOT_FOUND: "Connector ID %1$s not found"
+  DUPLICATE_CONNECTOR: "Duplicate connector"
