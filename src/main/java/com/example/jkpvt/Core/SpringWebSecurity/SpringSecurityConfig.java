@@ -1,6 +1,6 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginService;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

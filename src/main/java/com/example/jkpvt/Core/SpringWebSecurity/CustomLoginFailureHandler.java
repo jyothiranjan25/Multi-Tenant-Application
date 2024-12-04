@@ -1,7 +1,6 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.google.gson.Gson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     private final Gson gson;
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         response.setContentType("application/json");
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:cache="http://www.springframework.org/schema/cache"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd">
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- Enable autowire -->
     <context:annotation-config/>
@@ -16,9 +16,9 @@
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
 
-    <!-- Enable caching -->
-    <cache:annotation-driven/>
-    <!-- /Enable caching -->
+    <!-- Enable scheduling -->
+    <task:annotation-driven/>
+    <!-- /Enable scheduling -->
 
     <!-- Resource handler for serving static content -->
     <mvc:resources mapping="/static/**" location="/myApp/build/static/"/>
@@ -38,9 +38,9 @@
         </property>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="format_sql">false</prop>
+                <prop key="format_sql">true</prop>
                 <prop key="hibernate.transaction.jta.platform">
                     org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform
                 </prop>
@@ -49,16 +49,22 @@
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="org.hibernate.jdbc.batch_size">20</prop>
+                <prop key="org.hibernate.log_slow_query">true</prop>
                 <prop key="hibernate.cache.region.factory_class">
                     org.hibernate.cache.jcache.internal.JCacheRegionFactory
                 </prop>
                 <prop key="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</prop>
-                <prop key="hibernate.javax.cache.uri">classpath:XMLConfiguration/ehCache.xml</prop>
                 <prop key="hibernate.javax.cache.missing_cache_strategy">create</prop>
 
                 <!-- Envers configuration -->
+                <prop key="org.hibernate.envers.Audited">false</prop>
+                <prop key="hibernate.integration.envers.enabled">false</prop>
                 <prop key="org.hibernate.envers.audit_table_suffix">_AUD</prop>
                 <prop key="org.hibernate.envers.store_data_at_delete">true</prop>
+
+                <!-- Enable lazy loading without transaction -->
+                <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
             </props>
         </property>
     </bean>
@@ -76,22 +82,18 @@
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- CacheManager bean definition -->
-    <bean id="cacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
-        <constructor-arg ref="jCacheManager"/>
+    <!-- Define a TaskScheduler bean -->
+    <bean id="taskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+        <property name="poolSize" value="10"/>
     </bean>
 
-    <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
-        <property name="cacheManagerUri" value="classpath:XMLConfiguration/ehCache.xml"/>
+    <!-- Bean for resolving placeholders in @Value -->
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="properties">
+            <util:properties>
+                <prop key="initialize.initialData.enabled">false</prop>
+                <prop key="initialize.initialData.path">classpath:/Database/InitialData.sql</prop>
+            </util:properties>
+        </property>
     </bean>
-
-    <!-- Register the GsonHttpMessageConverter -->
-    <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
-                <property name="gson" ref="gson"/>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
-
 </beans>
