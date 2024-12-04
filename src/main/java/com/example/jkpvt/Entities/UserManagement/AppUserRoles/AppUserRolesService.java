@@ -41,7 +41,7 @@ public class AppUserRolesService {
     public String delete(AppUserRolesDTO appUserRolesDTO) {
         if (repository.existsById(appUserRolesDTO.getId())) {
             repository.deleteById(appUserRolesDTO.getId());
-            return Messages.getMessage(CommonMessages.DATA_DELETED_SUCCESSFULLY).toString();
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
         } else {
             throw new CommonException(AppUserRolesMessages.APP_USER_ROLE_NOT_FOUND);
         }

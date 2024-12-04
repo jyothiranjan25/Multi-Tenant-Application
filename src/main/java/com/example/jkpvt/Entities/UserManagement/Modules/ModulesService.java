@@ -59,7 +59,7 @@ public class ModulesService {
         // Delete the module itself
         modulesRepository.delete(module);
 
-        return Messages.getMessage(CommonMessages.DATA_DELETED_SUCCESSFULLY).toString();
+        return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
     }
 
     private Set<Resources> setResources(ModulesDTO modulesDTO) {

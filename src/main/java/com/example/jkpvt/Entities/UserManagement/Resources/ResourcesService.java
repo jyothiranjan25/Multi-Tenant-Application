@@ -62,7 +62,7 @@ public class ResourcesService {
         // Delete the resource itself
         repository.delete(resource);
 
-        return Messages.getMessage(CommonMessages.DATA_DELETED_SUCCESSFULLY).toString();
+        return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
     }
 
     @Transactional(readOnly = true)
