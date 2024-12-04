@@ -57,7 +57,6 @@ public class AppUserListener implements ApplicationContextAware {
     }
 
     public void checkForDuplicateUserName(AppUser appUser) {
-        try {
             AppUserDTO filter = new AppUserDTO();
             filter.setUserName(appUser.getUserName());
             List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
@@ -65,13 +64,9 @@ public class AppUserListener implements ApplicationContextAware {
             if (!duplicates.isEmpty()) {
                 throw new CommonException(AppUserMessages.USER_NAME_DUPLICATE, appUser.getUserName());
             }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
     }
 
     public void checkForDuplicateEmail(AppUser appUser) {
-        try {
             AppUserDTO filter = new AppUserDTO();
             filter.setEmail(appUser.getEmail());
             List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
@@ -79,8 +74,5 @@ public class AppUserListener implements ApplicationContextAware {
             if (!duplicates.isEmpty()) {
                 throw new CommonException(AppUserMessages.EMAIL_DUPLICATE, appUser.getEmail());
             }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
     }
 }

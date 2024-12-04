@@ -105,7 +105,7 @@ public class SearchFilterService {
                                                 cbw.Equal(entityField.getName(), value);
                                         }
                                     } catch (Exception e) {
-                                        throw new CommonException(e.getMessage());
+                                        throw new CommonException(CommonMessages.APPLICATION_ERROR);
                                     }
                                 });
                     }

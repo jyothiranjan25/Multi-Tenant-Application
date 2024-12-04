@@ -49,14 +49,12 @@ public class AppUserService {
 
     @Transactional
     public String deleteAppUser(AppUserDTO appUserDTO) {
-
         if (repository.existsById(appUserDTO.getId())) {
             repository.deleteById(appUserDTO.getId());
             return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
         } else {
             throw new CommonException(AppUserMessages.USER_NAME_NOT_FOUND);
         }
-
     }
 
     @Transactional(readOnly = true)
