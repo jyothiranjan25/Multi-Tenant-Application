@@ -49,7 +49,7 @@ APP_USER:
     EMAIL_MANDATORY: "AppUser email is mandatory"
     USER_NAME_DUPLICATE: "AppUser name %1$s already exists"
     EMAIL_DUPLICATE: "AppUser email %1$s already exists"
-    USER_NOT_FOUND: "AppUser not found"
+    USER_NOT_FOUND: "User not found"
 
 APP_USER_ROLE:
     APP_USER_ROLE_NOT_FOUND: "AppUserRole not found"

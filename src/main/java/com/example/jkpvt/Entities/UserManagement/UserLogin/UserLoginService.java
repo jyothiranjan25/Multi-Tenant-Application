@@ -1,7 +1,7 @@
 package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
+import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.ExceptionHandling.RoleNotFoundExemption;
-import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserDTO;
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserMessages;
@@ -34,11 +34,11 @@ public class UserLoginService implements UserDetailsService, ApplicationContextA
         appUserDTO.setUserName(username);
         List<AppUserDTO> appUserDTOList = applicationContext.getBean(AppUserService.class).get(appUserDTO);
         if (appUserDTOList.isEmpty()) {
-            throw new UsernameNotFoundException(Messages.getMessage(AppUserMessages.USER_NAME_NOT_FOUND).toString());
+            throw new CommonException(AppUserMessages.USER_NOT_FOUND);
         }
 
         if (appUserDTOList.getFirst().getAppUserRoles().isEmpty()) {
-            throw new RoleNotFoundExemption(Messages.getMessage(RolesMessages.ROLE_NOT_FOUND));
+            throw new CommonException(RolesMessages.ROLE_NOT_FOUND);
         }
         // Store the first AppUserDTO in the session
         SessionStorageUtil.setAppUser(appUserDTOList.getFirst());

@@ -53,14 +53,14 @@ public class AppUserService {
             repository.deleteById(appUserDTO.getId());
             return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
         } else {
-            throw new CommonException(AppUserMessages.USER_NAME_NOT_FOUND);
+            throw new CommonException(AppUserMessages.USER_NOT_FOUND);
         }
     }
 
     @Transactional(readOnly = true)
     public AppUser getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new CommonException(AppUserMessages.USER_NAME_NOT_FOUND));
+                .orElseThrow(() -> new CommonException(AppUserMessages.USER_NOT_FOUND));
     }
 
     private void updateAppUserData(AppUserDTO appUserDTO, AppUser appUser) {
