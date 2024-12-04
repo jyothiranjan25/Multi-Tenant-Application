@@ -12,7 +12,7 @@ public class BaseEntityListener {
         UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
         String modifiedBy = SessionStorageUtil.getUserName();
 
-        entity.setUserGroup(userGroup.getQualifiedName());
+        entity.setModifiedUserGroup(userGroup.getQualifiedName());
         entity.setModifiedBy(modifiedBy);
     }
 

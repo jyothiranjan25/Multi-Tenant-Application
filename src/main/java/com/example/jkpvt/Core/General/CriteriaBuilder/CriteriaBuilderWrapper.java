@@ -315,7 +315,7 @@ public class CriteriaBuilderWrapper<T> {
      * If the user group is not found, an exception is thrown.
      */
     private void addUserGroupFilter() {
-        Field field = getField("userGroup");
+        Field field = getField("modifiedUserGroup");
         if(field == null) return;
 
         UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
@@ -324,9 +324,9 @@ public class CriteriaBuilderWrapper<T> {
 
             // Create predicates for each user group and combine with OR
             if (userGroups.size() > 1) {
-                In("userGroup", userGroups);
+                In("modifiedUserGroup", userGroups);
             } else {
-                ILike("userGroup", userGroups.getFirst() + "%");
+                ILike("modifiedUserGroup", userGroups.getFirst() + "%");
             }
         }else{
             throw new CommonException(CommonMessages.USER_GROUP_NOT_FOUND);

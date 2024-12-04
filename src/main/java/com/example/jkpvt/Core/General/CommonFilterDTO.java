@@ -9,9 +9,9 @@ import java.util.List;
 @Setter
 public abstract class CommonFilterDTO<T> {
     private Long id;
-//    private String userGroup;
-//    private String modifiedBy;
-//    private String modifiedDate;
+    private transient String modifiedGroup;
+    private transient String modifiedBy;
+    private transient String modifiedDate;
     private String searchTerm;
     private Integer pageOffset;
     private Integer pageSize;

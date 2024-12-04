@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @EntityListeners(BaseEntityListener.class)
 public class BaseAbstractModel {
 
-    @Column(name = "user_group")
-    private String userGroup;
+    @Column(name = "modified_group")
+    private String modifiedUserGroup;
 
     @Column(name = "modified_by")
     private String modifiedBy;
