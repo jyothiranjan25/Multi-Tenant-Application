@@ -24,7 +24,7 @@ public class UserGroupListener implements ApplicationContextAware {
     @PrePersist
     public void prePersist(UserGroup userGroup) {
         if (userGroup.getGroupName() == null || userGroup.getGroupName().isEmpty()) {
-            throw new CommonException("name is mandatory");
+            throw new CommonException(UserGroupMessages.USER_GROUP_NAME_MANDATORY);
         }
         checkForDuplicateGroupName(userGroup);
     }
@@ -32,7 +32,7 @@ public class UserGroupListener implements ApplicationContextAware {
     @PreUpdate
     public void preUpdate(UserGroup userGroup) {
         if (userGroup.getId() == null) {
-            throw new CommonException("ID is mandatory");
+            throw new CommonException(UserGroupMessages.ID_MANDATORY);
         }
         checkForDuplicateGroupName(userGroup);
     }
@@ -40,35 +40,28 @@ public class UserGroupListener implements ApplicationContextAware {
     @PreRemove
     public void preRemove(UserGroup userGroup) {
         if (userGroup.getId() == null) {
-            throw new CommonException("ID is mandatory");
+            throw new CommonException(UserGroupMessages.ID_MANDATORY);
         }
         checkForLinkedData(userGroup);
     }
 
     private void checkForDuplicateGroupName(UserGroup userGroup) {
-        try {
-            UserGroupDTO filter = new UserGroupDTO();
-            filter.setGroupName(userGroup.getGroupName());
-            List<UserGroupDTO> duplicates = applicationContext.getBean(UserGroupService.class).get(filter);
-            duplicates.removeIf(x -> x.getId().equals(userGroup.getId()));
-            if (!duplicates.isEmpty()) {
-                throw new CommonException("Group name already exists");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        UserGroupDTO filter = new UserGroupDTO();
+        filter.setGroupName(userGroup.getGroupName());
+        List<UserGroupDTO> duplicates = applicationContext.getBean(UserGroupService.class).get(filter);
+        duplicates.removeIf(x -> x.getId().equals(userGroup.getId()));
+        if (!duplicates.isEmpty()) {
+            throw new CommonException(UserGroupMessages.USER_GROUP_NAME_DUPLICATE, userGroup.getGroupName());
         }
+
     }
 
     private void checkForLinkedData(UserGroup userGroup) {
-        try {
-            UserGroupDTO filter = new UserGroupDTO();
-            filter.setParentId(userGroup.getId());
-            List<UserGroupDTO> children = applicationContext.getBean(UserGroupService.class).get(filter);
-            if (!children.isEmpty()) {
-                throw new CommonException("Group has child records");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        UserGroupDTO filter = new UserGroupDTO();
+        filter.setParentId(userGroup.getId());
+        List<UserGroupDTO> children = applicationContext.getBean(UserGroupService.class).get(filter);
+        if (!children.isEmpty()) {
+            throw new CommonException(UserGroupMessages.USER_GROUP_HAS_CHILDREN);
         }
     }
 }

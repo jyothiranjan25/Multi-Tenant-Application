@@ -50,6 +50,14 @@ ROLES:
 ROLE_MODULE:
   ROLE_MODULE_DUPLICATE: "Role module already exists"
 
+USER_GROUP:
+  ID_MANDATORY: "User group ID is mandatory"
+  USER_GROUP_NOT_FOUND: "User group not found"
+  USER_GROUP_NAME_MANDATORY: "User group name is mandatory"
+  USER_GROUP_NAME_DUPLICATE: "User group name %1$s already exists"
+  USER_GROUP_HAS_CHILDREN: "User group has child records"
+
+
 CONNECTOR:
   ID_NOT_FOUND: "Connector ID %1$s not found"
   DUPLICATE_CONNECTOR: "Duplicate connector"
