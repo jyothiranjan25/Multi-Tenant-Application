@@ -1,6 +1,5 @@
 package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
-import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRolesDTO;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +24,9 @@ public class UserLoginDetailsService {
 
     @Transactional
     public UserLoginDetailsDTO create(UserLoginDetailsDTO userLoginDetailsDTO) {
-        try {
-            UserLoginDetails userLoginDetails = mapper.map(userLoginDetailsDTO);
-            userLoginDetails = repository.save(userLoginDetails);
-            return mapper.map(userLoginDetails);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        UserLoginDetails userLoginDetails = mapper.map(userLoginDetailsDTO);
+        userLoginDetails = repository.save(userLoginDetails);
+        return mapper.map(userLoginDetails);
     }
 
     public void storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {

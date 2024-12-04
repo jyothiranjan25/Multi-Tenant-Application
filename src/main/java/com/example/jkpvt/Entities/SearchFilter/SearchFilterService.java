@@ -1,18 +1,16 @@
 package com.example.jkpvt.Entities.SearchFilter;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.General.CommonFilterDTO;
+import com.example.jkpvt.Core.General.CriteriaBuilder.CriteriaBuilderWrapper;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
-import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,66 +22,52 @@ public class SearchFilterService {
     @Transactional(readOnly = true)
     public <T, U> List<T> search(Class<T> entityClass, String searchTerm, U dto) {
         try(Session session = entityManager.unwrap(Session.class)) {
+            CommonFilterDTO commonFilterDTO = (CommonFilterDTO) dto;
             // Get the criteria builder
-            HibernateCriteriaBuilder cb = (HibernateCriteriaBuilder) entityManager.getCriteriaBuilder();
-            CriteriaQuery<T> query = cb.createQuery(entityClass);
-            Root<T> root = query.from(entityClass);
-
-            // Create a list of predicates
-            List<Predicate> predicates = new ArrayList<>();
+            CriteriaBuilderWrapper<T> cbw = new CriteriaBuilderWrapper<>(entityClass, session, commonFilterDTO);
 
             // Get all fields from the entity and DTO
             Field[] entityFields = entityClass.getDeclaredFields();
-            Field[] dtoFields = dto.getClass().getDeclaredFields();
+            Field[] dtoFieldswithoutid = dto.getClass().getDeclaredFields();
+
+            // add id field to dtoFields
+            Field[] dtoFields = Arrays.copyOf(dtoFieldswithoutid, dtoFieldswithoutid.length + 1);
+            dtoFields[dtoFieldswithoutid.length] = dto.getClass().getSuperclass().getDeclaredField("id");
 
             // If search term is provided, build predicates for each string-like field
             if (searchTerm != null && !searchTerm.isEmpty()) {
-                predicates.add(buildSearchTermPredicate(cb, root, searchTerm, entityFields));
+                buildSearchTermPredicate(cbw, searchTerm, entityFields);
             }
 
             // Build predicates for each field in the DTO
-            predicates.addAll(buildDtoPredicate(cb, root, entityFields, dtoFields, dto));
+            buildDtoPredicate(cbw, entityFields, dtoFields, dto);
 
-            // Add all predicates to the query
-            query.where(predicates.toArray(new Predicate[0]));
-            query.orderBy(cb.asc(root.get("id")));
-            return entityManager.createQuery(query).getResultList();
+            // Get the result list
+            return cbw.getResultList();
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 
-    private <T> Predicate addStringTermPredicates(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
-        // Build predicates for each string-like field
-        Predicate orPredicate = cb.disjunction();
+    private void addStringTermPredicates(CriteriaBuilderWrapper cbw, String searchTerm, Field[] entityFields) {
         for (var field : entityFields) {
-            if (field.getType().equals(String.class)) {
-                orPredicate = cb.or(orPredicate, cb.ilike(root.get(field.getName()), "%" + searchTerm + "%"));
-            } else if (Number.class.isAssignableFrom(field.getType()) || field.getType().equals(Boolean.class) || field.getType().isEnum()) {
-                orPredicate = cb.or(orPredicate, cb.ilike(cb.toString(root.get(field.getName())), "%" + searchTerm + "%"));
+            if (field.getType().equals(String.class) || Number.class.isAssignableFrom(field.getType()) || field.getType().equals(Boolean.class) || field.getType().isEnum()) {
+                cbw.ILike(field.getName(), "%" + searchTerm + "%",false);
             }
         }
-        return orPredicate;
     }
 
-    private <T> Predicate buildSearchTermPredicate(HibernateCriteriaBuilder cb, Root<T> root, String searchTerm, Field[] entityFields) {
-        List<Predicate> predicates = new ArrayList<>();
+    private void buildSearchTermPredicate(CriteriaBuilderWrapper cbw, String searchTerm, Field[] entityFields) {
         Arrays.stream(entityFields)
                 .filter(field -> field.getType().equals(String.class) || Number.class.isAssignableFrom(field.getType())
                         || field.getType().equals(Boolean.class) || field.getType().isEnum())
                 .forEach(field -> {
-                    if (field.getType().equals(String.class)) {
-                        predicates.add(cb.ilike(root.get(field.getName()), "%" + searchTerm + "%"));
-                    } else {
-                        predicates.add(cb.ilike(cb.toString(root.get(field.getName())), "%" + searchTerm + "%"));
-                    }
+                    cbw.ILike(field.getName(), "%" + searchTerm + "%",false);
                 });
-        return cb.or(predicates.toArray(new Predicate[0]));
     }
 
-    private <T,U> List<Predicate> addDtoPredicates(HibernateCriteriaBuilder cb, Root<T> root, Field[] entityFields,Field[] dtoFields,U dto) {
+    private <U> void addDtoPredicates(CriteriaBuilderWrapper cbw, Field[] entityFields,Field[] dtoFields,U dto) {
         try {
-            List<Predicate> predicates = new ArrayList<>();
             for (Field dtoField : dtoFields) {
                 dtoField.setAccessible(true);
                 for (Field entityField : entityFields) {
@@ -91,22 +75,20 @@ public class SearchFilterService {
                         Object value = dtoField.get(dto);
                         if (value != null && !value.toString().isEmpty()) {
                             if(entityField.getType().equals(String.class))
-                                predicates.add(cb.ilike(root.get(entityField.getName()), value.toString()));
+                                cbw.ILike(entityField.getName(), value.toString());
                             else
-                                predicates.add(cb.equal(root.get(entityField.getName()), value));
+                                cbw.Equal(entityField.getName(), value);
                         }
                     }
                 }
             }
-            return predicates;
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 
-    private <T,U> List<Predicate> buildDtoPredicate(HibernateCriteriaBuilder cb, Root<T> root, Field[] entityFields,Field[] dtoFields,U dto) {
+    private <U> void buildDtoPredicate(CriteriaBuilderWrapper cbw, Field[] entityFields,Field[] dtoFields,U dto) {
         try {
-            List<Predicate> predicates = new ArrayList<>();
             Arrays.stream(dtoFields).forEach(
                     dtoField ->{
                         dtoField.setAccessible(true);
@@ -118,19 +100,18 @@ public class SearchFilterService {
                                         Object value = dtoField.get(dto);
                                         if (value != null && !value.toString().isEmpty()) {
                                             if (entityField.getType().equals(String.class))
-                                                predicates.add(cb.ilike(root.get(entityField.getName()), value.toString()));
+                                                cbw.ILike(entityField.getName(), value.toString());
                                             else
-                                                predicates.add(cb.equal(root.get(entityField.getName()), value));
+                                                cbw.Equal(entityField.getName(), value);
                                         }
                                     } catch (Exception e) {
-                                        throw new CommonException(e.getMessage());
+                                        throw new CommonException(CommonMessages.APPLICATION_ERROR);
                                     }
                                 });
                     }
             );
-            return predicates;
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 }

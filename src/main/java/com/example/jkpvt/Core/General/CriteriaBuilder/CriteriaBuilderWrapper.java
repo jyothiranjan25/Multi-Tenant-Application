@@ -2,7 +2,9 @@ package com.example.jkpvt.Core.General.CriteriaBuilder;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupDTO;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
 import lombok.Getter;
@@ -27,6 +29,7 @@ public class CriteriaBuilderWrapper<T> {
     private final CriteriaQuery<T> criteriaQuery;
     private final Root<T> root;
     private Predicate finalPredicate;
+    private Predicate orPredicate;
 
     private final Map<String, Join<T, ?>> joins = new HashMap<>();
 
@@ -45,6 +48,7 @@ public class CriteriaBuilderWrapper<T> {
         this.criteriaQuery = criteriaBuilder.createQuery(entityClass);
         this.root = criteriaQuery.from(entityClass);
         this.finalPredicate = criteriaBuilder.conjunction();
+        this.orPredicate = criteriaBuilder.disjunction();
     }
 
     /**
@@ -55,11 +59,21 @@ public class CriteriaBuilderWrapper<T> {
     public Query buildFinalQuery() {
         addUserGroupFilter();
         applyDefaultOrderById();
-        criteriaQuery.where(finalPredicate);
+        criteriaQuery.where(buildPredicate());
         Query query = session.createQuery(criteriaQuery);
         applyPaginationFilters(query);
         addHibernateFilters(query);
         return query;
+    }
+
+    private Predicate buildPredicate() {
+        if (finalPredicate.getExpressions().size() >1 && orPredicate.getExpressions().size() > 1) {
+            return criteriaBuilder.and(finalPredicate, orPredicate);
+        } else if(finalPredicate.getExpressions().size() < 2 && orPredicate.getExpressions().size() > 1) {
+            return orPredicate;
+        } else {
+            return finalPredicate;
+        }
     }
 
     /**
@@ -155,7 +169,7 @@ public class CriteriaBuilderWrapper<T> {
      * @param isAnd True for AND operator, false for OR operator.
      */
     public void ILike(String key, String value, boolean isAnd) {
-        addPredicate(criteriaBuilder.ilike(getExpression(key).as(String.class), value), isAnd);
+        addPredicate(criteriaBuilder.ilike(criteriaBuilder.toString(getExpression(key).as(Character.class)), value), isAnd);
     }
 
     /**
@@ -290,7 +304,7 @@ public class CriteriaBuilderWrapper<T> {
          * PUT: Hibernate will put the data in the cache.
          * REFRESH: Hibernate will hit the database and refresh the cache.
          */
-        query.setHint("org.hibernate.cacheMode", "IGNORE");
+        query.setHint("org.hibernate.cacheMode", "NORMAL");
         query.setHint("org.hibernate.readOnly", true);
     }
 
@@ -301,21 +315,21 @@ public class CriteriaBuilderWrapper<T> {
      * If the user group is not found, an exception is thrown.
      */
     private void addUserGroupFilter() {
-        Field field = getField("userGroup");
+        Field field = getField("modifiedUserGroup");
         if(field == null) return;
 
-        String userGroup = SessionStorageUtil.getUserGroup();
+        UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
         if(userGroup != null){
-            List<String> userGroups = getUserGroups(userGroup);
+            List<String> userGroups = getUserGroups(userGroup.getQualifiedName());
 
             // Create predicates for each user group and combine with OR
             if (userGroups.size() > 1) {
-                In("userGroup", userGroups);
+                In("modifiedUserGroup", userGroups);
             } else {
-                ILike("userGroup", userGroups.getFirst() + "%");
+                ILike("modifiedUserGroup", userGroups.getFirst() + "%");
             }
         }else{
-            throw new CommonException("User group is not found for the user");
+            throw new CommonException(CommonMessages.USER_GROUP_NOT_FOUND);
         }
     }
 
@@ -384,6 +398,6 @@ public class CriteriaBuilderWrapper<T> {
      * @param predicate The predicate to add.
      */
     private void addOrPredicate(Predicate predicate) {
-        finalPredicate = criteriaBuilder.or(finalPredicate, predicate);
+        orPredicate = criteriaBuilder.or(orPredicate, predicate);
     }
 }

@@ -23,7 +23,7 @@ public class RolesListener implements ApplicationContextAware {
     @PrePersist
     public void prePersist(Roles roles) {
         if (roles.getRoleName() == null || roles.getRoleName().isEmpty()) {
-            throw new CommonException("Role name is mandatory");
+            throw new CommonException(RolesMessages.ROLE_NAME_MANDATORY);
         }
         checkForDuplicateRoleName(roles);
     }
@@ -31,7 +31,7 @@ public class RolesListener implements ApplicationContextAware {
     @PreUpdate
     public void preUpdate(Roles roles) {
         if (roles.getId() == null) {
-            throw new CommonException("Role ID is mandatory");
+            throw new CommonException(RolesMessages.ID_MANDATORY);
         }
         checkForDuplicateRoleName(roles);
     }
@@ -39,21 +39,17 @@ public class RolesListener implements ApplicationContextAware {
     @PreRemove
     public void preRemove(Roles roles) {
         if (roles.getId() == null) {
-            throw new CommonException("Role ID is mandatory");
+            throw new CommonException(RolesMessages.ID_MANDATORY);
         }
     }
 
     private void checkForDuplicateRoleName(Roles roles) {
-        try {
-            RolesDTO filter = new RolesDTO();
-            filter.setRoleName(roles.getRoleName().toLowerCase());
-            List<RolesDTO> rolesList = applicationContext.getBean(RolesService.class).get(filter);
-            rolesList.removeIf(x -> x.getId().equals(roles.getId()));
-            if (!rolesList.isEmpty()) {
-                throw new CommonException("Role name already exists");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        RolesDTO filter = new RolesDTO();
+        filter.setRoleName(roles.getRoleName().toLowerCase());
+        List<RolesDTO> rolesList = applicationContext.getBean(RolesService.class).get(filter);
+        rolesList.removeIf(x -> x.getId().equals(roles.getId()));
+        if (!rolesList.isEmpty()) {
+            throw new CommonException(RolesMessages.ROLE_NAME_DUPLICATE, roles.getRoleName());
         }
     }
 }

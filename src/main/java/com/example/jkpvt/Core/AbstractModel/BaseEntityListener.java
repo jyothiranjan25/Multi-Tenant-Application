@@ -1,6 +1,7 @@
 package com.example.jkpvt.Core.AbstractModel;
 
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupDTO;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
@@ -8,10 +9,10 @@ public class BaseEntityListener {
 
     @PrePersist
     public void prePersist(BaseAbstractModel entity) {
-        String userGroup = SessionStorageUtil.getUserGroup();
+        UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
         String modifiedBy = SessionStorageUtil.getUserName();
 
-        entity.setUserGroup(userGroup);
+        entity.setModifiedUserGroup(userGroup.getQualifiedName());
         entity.setModifiedBy(modifiedBy);
     }
 

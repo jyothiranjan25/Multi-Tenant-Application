@@ -37,14 +37,14 @@ public class ResourcesListener implements ApplicationContextAware {
     @PreRemove
     public void preRemove(Resources resources) {
         if (resources.getId() == null) {
-            throw new CommonException("Resource ID is mandatory");
+            throw new CommonException(ResourcesMessages.ID_MANDATORY);
         }
         checkForLinkedData(resources);
     }
 
     public void conditionsChecks(Resources resources) {
         if (resources.getResourceName() == null || resources.getResourceName().isEmpty()) {
-            throw new CommonException("Resource name is mandatory");
+            throw new CommonException(ResourcesMessages.RESOURCE_NAME_MANDATORY);
         }
         if (resources.getShowInMenu() == null) {
             resources.setShowInMenu(true);
@@ -56,55 +56,43 @@ public class ResourcesListener implements ApplicationContextAware {
             if (resources.getResourceUrl() == null || resources.getResourceUrl().equals("#")) {
                 resources.setResourceUrl("#");
             } else {
-                throw new CommonException("Parent ID is required");
+                throw new CommonException(ResourcesMessages.RESOURCE_PARENT_ID_REQUIRED);
             }
         } else {
             if (resources.getResourceUrl() == null || resources.getResourceUrl().isEmpty()) {
-                throw new CommonException("URL is required");
+                throw new CommonException(ResourcesMessages.RESOURCES_URL_REQUIRED);
             }
             if ("#".equals(resources.getResourceUrl())) {
-                throw new CommonException("URL is not valid");
+                throw new CommonException(ResourcesMessages.RESOURCES_URL_INVALID);
             }
         }
     }
 
     public void checkDuplicateData(Resources resources) {
-        try {
-            ResourcesDTO filter = new ResourcesDTO();
-            filter.setResourceName(resources.getResourceName());
-            List<ResourcesDTO> resourcesList = applicationContext.getBean(ResourcesService.class).get(filter);
-            resourcesList.removeIf(x -> x.getId().equals(resources.getId()));
-            if (!resourcesList.isEmpty()) {
-                throw new CommonException("Resource name already exists");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        ResourcesDTO filter = new ResourcesDTO();
+        filter.setResourceName(resources.getResourceName());
+        List<ResourcesDTO> resourcesList = applicationContext.getBean(ResourcesService.class).get(filter);
+        resourcesList.removeIf(x -> x.getId().equals(resources.getId()));
+        if (!resourcesList.isEmpty()) {
+            throw new CommonException(ResourcesMessages.RESOURCES_NAME_EXISTS, resources.getResourceName());
         }
     }
 
     public void checkForLinkedData(Resources resources) {
-        try {
-            ResourcesDTO filter = new ResourcesDTO();
-            filter.setParentId(resources.getId());
-            List<ResourcesDTO> children = applicationContext.getBean(ResourcesService.class).get(filter);
-            if (!children.isEmpty()) {
-                throw new CommonException("Resource has child records");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        ResourcesDTO filter = new ResourcesDTO();
+        filter.setParentId(resources.getId());
+        List<ResourcesDTO> children = applicationContext.getBean(ResourcesService.class).get(filter);
+        if (!children.isEmpty()) {
+            throw new CommonException(ResourcesMessages.RESOURCES_HAS_CHILDREN);
         }
     }
 
     public void checkForParentData(Resources resources) {
-        try {
-            if (resources.getParentResource() != null) {
-                Resources data = applicationContext.getBean(ResourcesService.class).getById(resources.getParentResource().getId());
-                if (data.getParentResource() != null) {
-                    throw new CommonException("Resource has Parent record");
-                }
+        if (resources.getParentResource() != null) {
+            Resources data = applicationContext.getBean(ResourcesService.class).getById(resources.getParentResource().getId());
+            if (data.getParentResource() != null) {
+                throw new CommonException(ResourcesMessages.RESOURCES_HAS_PARENT);
             }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
         }
     }
 }

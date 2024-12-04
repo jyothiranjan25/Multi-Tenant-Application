@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.Resources;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.UserManagement.Modules.Modules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,84 +27,48 @@ public class ResourcesService {
 
     @Transactional
     public ResourcesDTO create(ResourcesDTO resourcesDTO) {
-        try {
-            Resources resources = mapper.map(resourcesDTO);
+        Resources resources = mapper.map(resourcesDTO);
 
-            if (resourcesDTO.getParentId() != null) {
-                Resources parent = getById(resourcesDTO.getParentId());
-                resources.setParentResource(parent);
-            }
-
-            rearrangeOrderCreate(resourcesDTO, resources);
-            resources = repository.save(resources);
-            return mapper.map(resources);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (resourcesDTO.getParentId() != null) {
+            Resources parent = getById(resourcesDTO.getParentId());
+            resources.setParentResource(parent);
         }
+
+        rearrangeOrderCreate(resourcesDTO, resources);
+        resources = repository.save(resources);
+        return mapper.map(resources);
     }
 
     @Transactional
     public ResourcesDTO update(ResourcesDTO resourcesDTO) {
-        try {
-            Resources resources = getById(resourcesDTO.getId());
-
-            if (resourcesDTO.getResourceName() != null) {
-                resources.setResourceName(resourcesDTO.getResourceName());
-            }
-
-            if (resourcesDTO.getResourceFullName() != null) {
-                resources.setResourceFullName(resourcesDTO.getResourceFullName());
-            }
-
-            if (resourcesDTO.getResourceDescription() != null) {
-                resources.setResourceDescription(resourcesDTO.getResourceDescription());
-            }
-
-            if (resourcesDTO.getResourceUrl() != null) {
-                resources.setResourceUrl(resourcesDTO.getResourceUrl());
-            }
-
-            if (resourcesDTO.getShowInMenu() != null) {
-                resources.setShowInMenu(resourcesDTO.getShowInMenu());
-            }
-
-            if (resourcesDTO.getResourceOrder() != null) {
-                rearrangeOrderUpdate(resourcesDTO, resources);
-            }
-
-            resources = repository.save(resources);
-            return mapper.map(resources);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        Resources resources = getById(resourcesDTO.getId());
+        updateResourcesData(resources, resourcesDTO);
+        resources = repository.save(resources);
+        return mapper.map(resources);
     }
 
     @Transactional
     public String delete(ResourcesDTO resourcesDTO) {
-        try {
-            Resources resource = getById(resourcesDTO.getId());
+        Resources resource = getById(resourcesDTO.getId());
 
-            // Clear relationships in the join table
-            for (Modules module : new HashSet<>(resource.getModules())) {
-                module.getResources().remove(resource);
-            }
-
-            resource.getModules().clear();
-            repository.save(resource); // Save the resource to persist the relationship removal
-
-            // Delete the resource itself
-            repository.delete(resource);
-
-            return "Resource deleted successfully";
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        // Clear relationships in the join table
+        for (Modules module : new HashSet<>(resource.getModules())) {
+            module.getResources().remove(resource);
         }
+
+        resource.getModules().clear();
+        repository.save(resource); // Save the resource to persist the relationship removal
+
+        // Delete the resource itself
+        repository.delete(resource);
+
+        return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
     }
 
     @Transactional(readOnly = true)
     public Resources getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new CommonException("Resources with id: " + id + " not found"));
+                .orElseThrow(() -> new CommonException(ResourcesMessages.RESOURCE_NOT_FOUND));
     }
 
     @Transactional
@@ -110,12 +76,38 @@ public class ResourcesService {
         return repository.findByIdIn(ids);
     }
 
+    private void updateResourcesData(Resources resources, ResourcesDTO resourcesDTO) {
+        if (resourcesDTO.getResourceName() != null) {
+            resources.setResourceName(resourcesDTO.getResourceName());
+        }
+
+        if (resourcesDTO.getResourceFullName() != null) {
+            resources.setResourceFullName(resourcesDTO.getResourceFullName());
+        }
+
+        if (resourcesDTO.getResourceDescription() != null) {
+            resources.setResourceDescription(resourcesDTO.getResourceDescription());
+        }
+
+        if (resourcesDTO.getResourceUrl() != null) {
+            resources.setResourceUrl(resourcesDTO.getResourceUrl());
+        }
+
+        if (resourcesDTO.getShowInMenu() != null) {
+            resources.setShowInMenu(resourcesDTO.getShowInMenu());
+        }
+
+        if (resourcesDTO.getResourceOrder() != null) {
+            rearrangeOrderUpdate(resourcesDTO, resources);
+        }
+    }
+
     private void updateAll(List<Resources> resources) {
         try {
             resources = repository.saveAll(resources);
             mapper.map(resources);
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 

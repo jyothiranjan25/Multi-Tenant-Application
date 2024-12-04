@@ -1,8 +1,11 @@
 package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserService;
 import com.example.jkpvt.Entities.UserManagement.Roles.RolesService;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +22,7 @@ public class AppUserRolesService {
     private final AppUserRolesMapper mapper;
     private final AppUserService appUserService;
     private final RolesService rolesService;
+    private final UserGroupService userGroupService;
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRolesDTO> get(AppUserRolesDTO appUserRolesDTO) {
@@ -28,34 +32,26 @@ public class AppUserRolesService {
 
     @Transactional
     public AppUserRolesDTO create(AppUserRolesDTO appUserRolesDTO) {
-        try {
-            AppUserRoles appUserRoles = mapper.map(appUserRolesDTO);
-            appUserRoles.setRoles(rolesService.getById(appUserRolesDTO.getRolesId()));
-            appUserRoles.setAppUser(appUserService.getById(appUserRolesDTO.getAppUserId()));
-            appUserRoles = repository.save(appUserRoles);
-            return mapper.map(appUserRoles);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        AppUserRoles appUserRoles = mapper.map(appUserRolesDTO);
+        appUserRoles.setRoles(rolesService.getById(appUserRolesDTO.getRolesId()));
+        appUserRoles.setAppUser(appUserService.getById(appUserRolesDTO.getAppUserId()));
+        appUserRoles.setUserGroup(userGroupService.getById(appUserRolesDTO.getUserGroupId()));
+        appUserRoles = repository.save(appUserRoles);
+        return mapper.map(appUserRoles);
     }
 
     @Transactional
     public String delete(AppUserRolesDTO appUserRolesDTO) {
-        try {
-            if (repository.existsById(appUserRolesDTO.getId())) {
-                repository.deleteById(appUserRolesDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (repository.existsById(appUserRolesDTO.getId())) {
+            repository.deleteById(appUserRolesDTO.getId());
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
+        } else {
+            throw new CommonException(AppUserRolesMessages.APP_USER_ROLE_NOT_FOUND);
         }
     }
 
     @Transactional(readOnly = true)
     public AppUserRoles getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new CommonException("Data not found"));
+        return repository.findById(id).orElseThrow(() -> new CommonException(AppUserRolesMessages.APP_USER_ROLE_NOT_FOUND));
     }
-
 }

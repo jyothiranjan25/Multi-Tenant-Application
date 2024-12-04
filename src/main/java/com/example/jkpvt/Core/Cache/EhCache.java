@@ -23,12 +23,14 @@ public class EhCache {
         javax.cache.CacheManager cacheManager = cachingProvider.getCacheManager();
 
         org.ehcache.config.CacheConfiguration<String, String> cacheConfig = CacheConfigurationBuilder
-                .newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(100)
-                        .offheap(10, MemoryUnit.MB))
+                .newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(100000)
+                        .offheap(50, MemoryUnit.MB))
+                .withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofSeconds(10)))
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(60)))
                 .build();
 
         CacheManagerBuilder.newCacheManagerBuilder()
+                .with(CacheManagerBuilder.persistence(System.getProperty("java.io.tmpdir")))
                 .withCache("defaultCache", cacheConfig)
                 .withCache("default-update-timestamps-region", cacheConfig)
                 .withCache("queryCache", cacheConfig)

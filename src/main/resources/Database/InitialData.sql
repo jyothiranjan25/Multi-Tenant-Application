@@ -44,6 +44,6 @@ VALUES (1,'admin@example.com', '$2a$10$BwBuA2OsxYOD/uv48OVJcenwQa.01jrB6SEV58LR.
     ON CONFLICT (username) DO NOTHING;
 
 -- App User Role Data
-INSERT INTO app_user_roles (id,app_user_id, role_id,user_group)
-VALUES (1,1, 1,'JKPT')
+INSERT INTO app_user_roles (id,app_user_id, role_id,user_group_id)
+VALUES (1,1, 1,1)
     ON CONFLICT (app_user_id, role_id,user_group) DO NOTHING;

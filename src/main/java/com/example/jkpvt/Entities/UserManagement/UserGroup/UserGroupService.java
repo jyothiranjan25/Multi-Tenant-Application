@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.UserGroup;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -46,56 +48,43 @@ public class UserGroupService {
 
     @Transactional
     public UserGroupDTO create(UserGroupDTO userGroupDTO) {
-        try {
-            UserGroup userGroup = mapper.map(userGroupDTO);
-            if (userGroupDTO.getParentId() != null) {
-                UserGroup parentGroup = repository.findById(userGroupDTO.getParentId())
-                        .orElseThrow(() -> new CommonException("Parent not found"));
-                userGroup.setParentGroup(parentGroup);
-                userGroup.setQualifiedName(parentGroup.getQualifiedName() + "." + userGroup.getGroupName().toUpperCase());
-            } else {
-                userGroup.setQualifiedName(userGroup.getGroupName().toUpperCase());
-            }
-            userGroup = repository.save(userGroup);
-            return mapper.map(userGroup);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        UserGroup userGroup = mapper.map(userGroupDTO);
+        if (userGroupDTO.getParentId() != null) {
+            UserGroup parentGroup = getById(userGroupDTO.getParentId());
+            userGroup.setParentGroup(parentGroup);
+            userGroup.setQualifiedName(parentGroup.getQualifiedName() + "." + userGroup.getGroupName().toUpperCase());
+        } else {
+            userGroup.setQualifiedName(userGroup.getGroupName().toUpperCase());
         }
+        userGroup = repository.save(userGroup);
+        return mapper.map(userGroup);
     }
 
     @Transactional
     public UserGroupDTO update(UserGroupDTO userGroupDTO) {
-        try {
-            UserGroup userGroup = getById(userGroupDTO.getId());
+        UserGroup userGroup = getById(userGroupDTO.getId());
 
-            if (userGroupDTO.getGroupDescription() != null) {
-                userGroup.setGroupDescription(userGroupDTO.getGroupDescription());
-            }
-
-            userGroup = repository.save(userGroup);
-            return mapper.map(userGroup);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (userGroupDTO.getGroupDescription() != null) {
+            userGroup.setGroupDescription(userGroupDTO.getGroupDescription());
         }
+
+        userGroup = repository.save(userGroup);
+        return mapper.map(userGroup);
     }
 
     @Transactional
     public String delete(UserGroupDTO userGroupDTO) {
-        try {
-            if (repository.existsById(userGroupDTO.getId())) {
-                repository.deleteById(userGroupDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (repository.existsById(userGroupDTO.getId())) {
+            repository.deleteById(userGroupDTO.getId());
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
+        } else {
+            throw new CommonException(UserGroupMessages.USER_GROUP_NOT_FOUND);
         }
     }
 
     @Transactional(readOnly = true)
     public UserGroup getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new CommonException("Group not found"));
+        return repository.findById(id).orElseThrow(() -> new CommonException(UserGroupMessages.USER_GROUP_NOT_FOUND));
     }
 
     private Set<UserGroupDTO> getChildGroups(UserGroup userGroup) {

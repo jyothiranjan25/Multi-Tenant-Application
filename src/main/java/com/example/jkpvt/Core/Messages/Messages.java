@@ -7,7 +7,7 @@ import java.util.IllegalFormatException;
 
 @Getter
 @Setter
-public class Messages {
+public class  Messages {
     private String code;
     private Object[] args;
     private boolean returnCodeAsValue = false;

@@ -4,7 +4,8 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- Enable autowire -->
     <context:annotation-config/>
@@ -14,6 +15,10 @@
     <!-- Enable JPA repositories -->
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
+
+    <!-- Enable scheduling -->
+    <task:annotation-driven/>
+    <!-- /Enable scheduling -->
 
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
@@ -71,6 +76,11 @@
 
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Define a TaskScheduler bean -->
+    <bean id="taskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+        <property name="poolSize" value="10"/>
+    </bean>
 
     <!-- Bean for resolving placeholders in @Value -->
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">

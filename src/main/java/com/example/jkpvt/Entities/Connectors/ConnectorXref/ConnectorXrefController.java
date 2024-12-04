@@ -37,4 +37,9 @@ public class ConnectorXrefController {
     private String delete(@RequestBody ConnectorXrefDTO connectorDTO) {
         return service.delete(connectorDTO);
     }
+
+    @RequestMapping(value = "/getConnectorXrefStatus", method = RequestMethod.GET)
+    private ConnectorXrefStatusEnum[] getConnectorXrefStatus() {
+        return ConnectorXrefStatusEnum.get();
+    }
 }

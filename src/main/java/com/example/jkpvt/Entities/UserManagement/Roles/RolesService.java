@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.Roles;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.UserManagement.Modules.Modules;
 import com.example.jkpvt.Entities.UserManagement.Modules.ModulesService;
 import com.example.jkpvt.Entities.UserManagement.Resources.Resources;
@@ -34,58 +36,48 @@ public class RolesService {
 
     @Transactional
     public RolesDTO create(RolesDTO rolesDTO) {
-        try {
-            Roles roles = mapper.map(rolesDTO);
-            roles = repository.save(roles);
-            RolesDTO rolesDTO1 = mapper.map(roles);
-            roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
-            return rolesDTO1;
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        Roles roles = mapper.map(rolesDTO);
+        roles = repository.save(roles);
+        RolesDTO rolesDTO1 = mapper.map(roles);
+        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
+        return rolesDTO1;
     }
 
 
     @Transactional
     public RolesDTO update(RolesDTO rolesDTO) {
-        try {
-            Roles roles = getById(rolesDTO.getId());
-
-            // Update the Roles entity with the new values
-            if (rolesDTO.getRoleName() != null) {
-                roles.setRoleName(rolesDTO.getRoleName());
-            }
-            if (rolesDTO.getRoleDescription() != null) {
-                roles.setRoleDescription(rolesDTO.getRoleDescription());
-            }
-            if (rolesDTO.getRoleIcon() != null) {
-                roles.setRoleIcon(rolesDTO.getRoleIcon());
-            }
-            roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
-            roles = repository.save(roles);
-            return mapper.map(roles);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        Roles roles = getById(rolesDTO.getId());
+        updateRoleData(roles, rolesDTO);
+        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
+        roles = repository.save(roles);
+        return mapper.map(roles);
     }
 
     @Transactional
     public String delete(RolesDTO rolesDTO) {
-        try {
-            if (repository.existsById(rolesDTO.getId())) {
-                repository.deleteById(rolesDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (repository.existsById(rolesDTO.getId())) {
+            repository.deleteById(rolesDTO.getId());
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
+        } else {
+            throw new CommonException(RolesMessages.ROLE_NOT_FOUND);
         }
     }
 
     @Transactional(readOnly = true)
     public Roles getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new CommonException("Role with id: " + id + " not found"));
+        return repository.findById(id).orElseThrow(() -> new CommonException(RolesMessages.ROLE_NOT_FOUND));
+    }
+
+    private void updateRoleData(Roles roles, RolesDTO rolesDTO) {
+        if (rolesDTO.getRoleName() != null) {
+            roles.setRoleName(rolesDTO.getRoleName());
+        }
+        if (rolesDTO.getRoleDescription() != null) {
+            roles.setRoleDescription(rolesDTO.getRoleDescription());
+        }
+        if (rolesDTO.getRoleIcon() != null) {
+            roles.setRoleIcon(rolesDTO.getRoleIcon());
+        }
     }
 
     private RoleModuleDTO setRoleModuleDTO(RolesDTO rolesDTO,Roles roles) {
@@ -108,7 +100,7 @@ public class RolesService {
     }
 
     private List<Modules> getModulesByRole(Roles role) {
-       Map<Long, Modules> moduleMap = new HashMap<>();
+        Map<Long, Modules> moduleMap = new HashMap<>();
 
         if(!role.getRoleModuleResources().isEmpty()) {
             // group resources by module

@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.AppUser;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,64 +28,56 @@ public class AppUserService {
 
     @Transactional
     public AppUserDTO createAppUser(AppUserDTO appUserDTO) {
-        try {
-            if (appUserDTO.getPassword() != null) {
-                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-            } else {
-                appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getUserName()));
-            }
-            AppUser appUser = mapper.map(appUserDTO);
-            repository.save(appUser);
-            return mapper.map(appUser);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+
+        if (appUserDTO.getPassword() != null) {
+            appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+        } else {
+            appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getUserName()));
         }
+        AppUser appUser = mapper.map(appUserDTO);
+        repository.save(appUser);
+        return mapper.map(appUser);
     }
 
     @Transactional
     public AppUserDTO updateAppUser(AppUserDTO appUserDTO) {
-        try {
-            AppUser appUser = getById(appUserDTO.getId());
-
-            if (appUserDTO.getUserName() != null) {
-                appUser.setUserName(appUserDTO.getUserName());
-            }
-            if (appUserDTO.getEmail() != null) {
-                appUser.setEmail(appUserDTO.getEmail());
-            }
-            if (appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()) {
-                appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-            }
-            if (appUserDTO.getIsAdmin() != null) {
-                appUser.setIsAdmin(appUserDTO.getIsAdmin());
-            }
-            if (appUserDTO.getIsActive() != null) {
-                appUser.setIsActive(appUserDTO.getIsActive());
-            }
-            appUser = repository.save(appUser);
-            return mapper.map(appUser);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        AppUser appUser = getById(appUserDTO.getId());
+        updateAppUserData(appUserDTO, appUser);
+        appUser = repository.save(appUser);
+        return mapper.map(appUser);
     }
 
     @Transactional
     public String deleteAppUser(AppUserDTO appUserDTO) {
-        try {
-            if (repository.existsById(appUserDTO.getId())) {
-                repository.deleteById(appUserDTO.getId());
-                return "Data deleted successfully";
-            } else {
-                throw new CommonException("Data not found");
-            }
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        if (repository.existsById(appUserDTO.getId())) {
+            repository.deleteById(appUserDTO.getId());
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
+        } else {
+            throw new CommonException(AppUserMessages.USER_NAME_NOT_FOUND);
         }
     }
 
     @Transactional(readOnly = true)
     public AppUser getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new CommonException("User with id: " + id + " not found"));
+                .orElseThrow(() -> new CommonException(AppUserMessages.USER_NAME_NOT_FOUND));
+    }
+
+    private void updateAppUserData(AppUserDTO appUserDTO, AppUser appUser) {
+        if (appUserDTO.getUserName() != null) {
+            appUser.setUserName(appUserDTO.getUserName());
+        }
+        if (appUserDTO.getEmail() != null) {
+            appUser.setEmail(appUserDTO.getEmail());
+        }
+        if (appUserDTO.getPassword() != null && !appUserDTO.getPassword().isEmpty()) {
+            appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+        }
+        if (appUserDTO.getIsAdmin() != null) {
+            appUser.setIsAdmin(appUserDTO.getIsAdmin());
+        }
+        if (appUserDTO.getIsActive() != null) {
+            appUser.setIsActive(appUserDTO.getIsActive());
+        }
     }
 }

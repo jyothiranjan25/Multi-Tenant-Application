@@ -26,13 +26,13 @@ public class AppUserRolesListener implements ApplicationContextAware {
     @PrePersist
     public void prePersist(AppUserRoles appUserRoles) {
         if (appUserRoles.getAppUser() == null) {
-            throw new CommonException("AppUser is mandatory");
+            throw new CommonException(AppUserRolesMessages.APP_USER_IS_MANDATORY);
         }
         if (appUserRoles.getRoles() == null) {
-            throw new CommonException("Roles is mandatory");
+            throw new CommonException(AppUserRolesMessages.ROLE_IS_MANDATORY);
         }
-        if (appUserRoles.getUserGroup() == null || appUserRoles.getUserGroup().isEmpty()) {
-            throw new CommonException("UserGroup is mandatory");
+        if (appUserRoles.getUserGroup() == null) {
+            throw new CommonException(AppUserRolesMessages.USER_GROUP_IS_MANDATORY);
         }
         checkConditions(appUserRoles);
         checkDuplicate(appUserRoles);
@@ -47,10 +47,9 @@ public class AppUserRolesListener implements ApplicationContextAware {
         AppUserRolesDTO appUserRolesDTO = new AppUserRolesDTO();
         appUserRolesDTO.setAppUserId(appUserRoles.getAppUser().getId());
         appUserRolesDTO.setRolesId(appUserRoles.getRoles().getId());
-        appUserRolesDTO.setUserGroup(appUserRoles.getUserGroup());
         List<AppUserRolesDTO> appUserRole = applicationContext.getBean(AppUserRolesService.class).get(appUserRolesDTO);
         if (!appUserRole.isEmpty()) {
-            throw new CommonException("Role already exists");
+            throw new CommonException(AppUserRolesMessages.ROLE_ALREADY_EXISTS);
         }
     }
 }

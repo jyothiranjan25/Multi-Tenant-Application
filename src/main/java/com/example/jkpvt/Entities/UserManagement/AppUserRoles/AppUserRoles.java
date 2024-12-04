@@ -2,6 +2,7 @@ package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUser;
 import com.example.jkpvt.Entities.UserManagement.Roles.Roles;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroup;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -19,7 +20,7 @@ import org.hibernate.envers.Audited;
         @Index(name = "idx_app_user_roles_app_user_id", columnList = "app_user_id"),
         @Index(name = "idx_app_user_roles_role_id", columnList = "role_id"),
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uk_app_user_roles_app_user_id_role_id_user_group", columnNames = {"app_user_id", "role_id","user_group"})
+        @UniqueConstraint(name = "uk_app_user_roles_app_user_id_role_id_user_group_id", columnNames = {"app_user_id", "role_id","user_group_id"})
 })
 @EntityListeners(AppUserRolesListener.class)
 @Cacheable
@@ -44,6 +45,9 @@ public class AppUserRoles {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Roles roles;
 
-    @Column(name = "user_group")
-    private String userGroup;
+    @ManyToOne
+    @Fetch(FetchMode.SELECT)
+    @JoinColumn(name = "user_group_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_user_group_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserGroup userGroup;
 }

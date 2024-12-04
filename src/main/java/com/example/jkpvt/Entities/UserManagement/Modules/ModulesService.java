@@ -1,6 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.Modules;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.UserManagement.Resources.Resources;
 import com.example.jkpvt.Entities.UserManagement.Resources.ResourcesService;
 import com.example.jkpvt.Entities.UserManagement.RoleModule.RoleModule;
@@ -29,67 +31,35 @@ public class ModulesService {
 
     @Transactional
     public ModulesDTO create(ModulesDTO modulesDTO) {
-        try {
-            Modules modules = mapper.map(modulesDTO);
-
-            if (modulesDTO.getResourceIds() != null) {
-                Set<Resources> resources = setResources(modulesDTO);
-                modules.setResources(resources);
-            }
-
-            modulesRepository.save(modules);
-            return mapper.map(modules);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        Modules modules = mapper.map(modulesDTO);
+        setResources(modules, modulesDTO);
+        modulesRepository.save(modules);
+        return mapper.map(modules);
     }
 
     @Transactional
     public ModulesDTO update(ModulesDTO modulesDTO) {
-        try {
-            Modules modules = getById(modulesDTO.getId());
-
-            if (modulesDTO.getModuleName() != null) {
-                modules.setModuleName(modulesDTO.getModuleName());
-            }
-            if (modulesDTO.getModuleDescription() != null) {
-                modules.setModuleDescription(modulesDTO.getModuleDescription());
-            }
-            if (modulesDTO.getModuleUrl() != null) {
-                modules.setModuleUrl(modulesDTO.getModuleUrl());
-            }
-
-            if (modulesDTO.getResourceIds() != null) {
-                Set<Resources> resources = setResources(modulesDTO);
-                modules.setResources(resources);
-            }
-
-            modulesRepository.save(modules);
-            return mapper.map(modules);
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
-        }
+        Modules modules = getById(modulesDTO.getId());
+        updateModules(modules, modulesDTO);
+        modulesRepository.save(modules);
+        return mapper.map(modules);
     }
 
     @Transactional
     public String delete(ModulesDTO modulesDTO) {
-        try {
-            Modules module = getById(modulesDTO.getId());
+        Modules module = getById(modulesDTO.getId());
 
-            // Clear relationships in the join table
-            for (Resources resource : new HashSet<>(module.getResources())) {
-                resource.getModules().remove(module);
-            }
-            module.getResources().clear();
-            modulesRepository.save(module); // Save the module to persist the relationship removal
-
-            // Delete the module itself
-            modulesRepository.delete(module);
-
-            return "Module deleted successfully";
-        } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+        // Clear relationships in the join table
+        for (Resources resource : new HashSet<>(module.getResources())) {
+            resource.getModules().remove(module);
         }
+        module.getResources().clear();
+        modulesRepository.save(module); // Save the module to persist the relationship removal
+
+        // Delete the module itself
+        modulesRepository.delete(module);
+
+        return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
     }
 
     private Set<Resources> setResources(ModulesDTO modulesDTO) {
@@ -103,7 +73,27 @@ public class ModulesService {
     @Transactional(readOnly = true)
     public Modules getById(Long id) {
         return modulesRepository.findById(id)
-                .orElseThrow(() -> new CommonException("Module id not found"));
+                .orElseThrow(() -> new CommonException(ModulesMessages.MODULE_NOT_FOUND));
+    }
+
+    private void updateModules(Modules modules, ModulesDTO modulesDTO) {
+        if (modulesDTO.getModuleName() != null) {
+            modules.setModuleName(modulesDTO.getModuleName());
+        }
+        if (modulesDTO.getModuleDescription() != null) {
+            modules.setModuleDescription(modulesDTO.getModuleDescription());
+        }
+        if (modulesDTO.getModuleUrl() != null) {
+            modules.setModuleUrl(modulesDTO.getModuleUrl());
+        }
+        setResources(modules, modulesDTO);
+    }
+
+    private void setResources(Modules modules, ModulesDTO modulesDTO) {
+        if (modulesDTO.getResourceIds() != null) {
+            Set<Resources> resources = setResources(modulesDTO);
+            modules.setResources(resources);
+        }
     }
 
     public List<ModulesDTO> MapToModelDto(List<Modules> modules) {

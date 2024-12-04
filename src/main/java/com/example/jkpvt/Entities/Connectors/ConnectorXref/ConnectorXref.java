@@ -40,7 +40,7 @@ public class ConnectorXref extends BaseAbstractModel {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private ConnectorXrefEnum status;
+    private ConnectorXrefStatusEnum status;
 
     @ManyToOne
     @Fetch(FetchMode.SELECT)

@@ -1,7 +1,6 @@
 package com.example.jkpvt.Entities.Connectors.Connector;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
-import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Entities.SearchFilter.SearchFilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,32 +32,24 @@ public class ConnectorService {
 
     @Transactional
     public ConnectorDTO create(ConnectorDTO connectorDTO) {
-        try {
-            Connector connector = mapper.map(connectorDTO);
-            connector = repository.save(connector);
-            return mapper.map(connector);
-        } catch (Exception e){
-            throw new CommonException(e.getMessage());
-        }
+        Connector connector = mapper.map(connectorDTO);
+        connector = repository.save(connector);
+        return mapper.map(connector);
     }
 
     @Transactional
     public ConnectorDTO update(ConnectorDTO connectorDTO) {
-        try {
-            Connector connector = getById(connectorDTO.getId());
-            updateConnectorData(connector,connectorDTO);
-            connector = repository.save(connector);
-            return mapper.map(connector);
-        } catch (Exception e){
-            throw new CommonException(e.getMessage());
-        }
+        Connector connector = getById(connectorDTO.getId());
+        updateConnectorData(connector,connectorDTO);
+        connector = repository.save(connector);
+        return mapper.map(connector);
     }
 
     @Transactional
     public Connector getById(Long id) {
         return repository.findById(id).orElseThrow(() -> {
             Object[] args = new Object[]{id};
-            return new CommonException(Messages.getMessage(ConnectorMessages.ID_NOT_FOUND, args));
+            return new CommonException(ConnectorMessages.ID_NOT_FOUND, args);
         });
     }
 

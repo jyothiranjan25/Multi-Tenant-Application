@@ -1,6 +1,7 @@
 package com.example.jkpvt.Entities.UserManagement.RoleModule;
 
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import com.example.jkpvt.Entities.UserManagement.Modules.Modules;
 import com.example.jkpvt.Entities.UserManagement.Modules.ModulesDTO;
 import com.example.jkpvt.Entities.UserManagement.Modules.ModulesService;
@@ -45,7 +46,7 @@ public class RoleModuleService {
             }
 
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
 
         return mapper.map(roleModules);

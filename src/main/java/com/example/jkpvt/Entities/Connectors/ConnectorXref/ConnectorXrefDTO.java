@@ -13,7 +13,7 @@ import java.util.List;
 public class ConnectorXrefDTO extends CommonFilterDTO<ConnectorXrefDTO> {
     private String Name;
     private String description;
-    private ConnectorXrefEnum status;
+    private ConnectorXrefStatusEnum status;
     private Long connectorId;
     private ConnectorDTO connector;
     private List<ConnectorConfigurationDTO> connectorConfigurations;
