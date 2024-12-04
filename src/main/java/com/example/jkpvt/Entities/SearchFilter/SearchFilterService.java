@@ -3,6 +3,7 @@ package com.example.jkpvt.Entities.SearchFilter;
 import com.example.jkpvt.Core.ExceptionHandling.CommonException;
 import com.example.jkpvt.Core.General.CommonFilterDTO;
 import com.example.jkpvt.Core.General.CriteriaBuilder.CriteriaBuilderWrapper;
+import com.example.jkpvt.Core.Messages.CommonMessages;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Session;
@@ -44,7 +45,7 @@ public class SearchFilterService {
             // Get the result list
             return cbw.getResultList();
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 
@@ -82,7 +83,7 @@ public class SearchFilterService {
                 }
             }
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 
@@ -110,7 +111,7 @@ public class SearchFilterService {
                     }
             );
         } catch (Exception e) {
-            throw new CommonException(e.getMessage());
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
         }
     }
 }

@@ -24,7 +24,7 @@ public class AuditTablesCleanupService {
     }
 
     // run every second
-    @Scheduled(cron = "0 26 1 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void cleanupAuditData() {
         try {
             List<String> auditTables = getAllAuditTables();

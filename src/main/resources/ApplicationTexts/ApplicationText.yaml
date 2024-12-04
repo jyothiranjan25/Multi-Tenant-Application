@@ -43,6 +43,9 @@ RESOURCES:
 
 ROLES:
     ROLE_IS_MANDATORY: "Role is mandatory"
+    ROLE_NOT_FOUND: "Role not found"
+    ROLE_NAME_MANDATORY: "Role name is mandatory"
+    ROLE_NAME_DUPLICATE: "Role name %1$s already exists"
 
 ROLE_MODULE:
   ROLE_MODULE_DUPLICATE: "Role module already exists"
