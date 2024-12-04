@@ -76,7 +76,7 @@ public class UserGroupService {
     public String delete(UserGroupDTO userGroupDTO) {
         if (repository.existsById(userGroupDTO.getId())) {
             repository.deleteById(userGroupDTO.getId());
-            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
         } else {
             throw new CommonException(UserGroupMessages.USER_GROUP_NOT_FOUND);
         }

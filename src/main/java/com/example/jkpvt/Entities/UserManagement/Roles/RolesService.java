@@ -57,7 +57,7 @@ public class RolesService {
     public String delete(RolesDTO rolesDTO) {
         if (repository.existsById(rolesDTO.getId())) {
             repository.deleteById(rolesDTO.getId());
-            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).toString();
+            return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();
         } else {
             throw new CommonException(RolesMessages.ROLE_NOT_FOUND);
         }

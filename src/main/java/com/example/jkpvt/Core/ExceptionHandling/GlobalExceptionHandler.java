@@ -11,6 +11,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
         e.printStackTrace();
+        Map<String, String> response = Map.of("message", "Something went wrong");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(CommonException.class)
+    public ResponseEntity<Object> handleCommonException(CommonException e) {
+        e.printStackTrace();
         Map<String, String> response = Map.of("message", e.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
