@@ -1,6 +1,7 @@
 package com.example.jkpvt.Entities.UserManagement.UserGroup;
 
 
+import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRoles;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -53,8 +54,13 @@ public class UserGroup {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserGroup parentGroup;
 
-    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UserGroup> childGroups;
+
+    @OneToMany(mappedBy = "userGroup", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<AppUserRoles> appUserRoles;
 }
