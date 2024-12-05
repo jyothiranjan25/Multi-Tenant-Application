@@ -64,7 +64,7 @@ const SwitchRoles = (props) => {
                         {data?.roles?.role_name}
                       </Typography>
                       <Typography gutterBottom variant="h6" component="div">
-                        {data?.user_group}
+                        {data?.user_group?.group_name}
                       </Typography>
                       {/*<Typography*/}
                       {/*  variant="body2"*/}
