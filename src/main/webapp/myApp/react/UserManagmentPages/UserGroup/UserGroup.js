@@ -97,7 +97,7 @@ const UserGroup = (props) => {
   };
 
   return (
-    <AppLayout>
+    <AppLayout headerTitle={'User Group'}>
       <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
         <Grid
           container

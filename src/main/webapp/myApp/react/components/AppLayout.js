@@ -1,29 +1,59 @@
 import * as React from 'react';
 import Header from './Header';
 import Layout from './Layout';
-import { Card } from '@mui/material';
-import Paper from '@mui/material/Paper';
+import { Box, Paper, Typography, Button } from '@mui/material';
 
 const AppLayout = ({
   props,
   children,
   showSideMenu = true,
   showSearch = true,
+  headerTitle,
+  Button,
 }) => {
   return (
     <Layout {...props} showSideMenu={showSideMenu}>
       <Header showSearch={showSearch} />
-      <Card variant="outlined" sx={{ width: '100%' }}>
-        <Paper
+      <Box
+        sx={{
+          width: '100%',
+          border: '1px solid var(--template-palette-divider)',
+          borderRadius: 'var(--template-shape-borderRadius)',
+        }}
+      >
+        {headerTitle || Button ? (
+          <Box
+            sx={{
+              width: '100%',
+              borderBottom: '1px solid var(--template-palette-divider)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '10px',
+            }}
+          >
+            <Typography variant="h4">{headerTitle}</Typography>
+            {Button}
+          </Box>
+        ) : null}
+        <Box
           sx={{
-            minHeight: 'calc(100vh - 128px)',
             width: '100%',
-            background: 'none',
+            padding: '16px',
           }}
         >
-          {children}
-        </Paper>
-      </Card>
+          <Paper
+            sx={{
+              background: 'none',
+              minHeight:
+                headerTitle || Button
+                  ? 'calc(100vh - 197px)' // Header present
+                  : 'calc(100vh - 140px)', // No header
+            }}
+          >
+            {children}
+          </Paper>
+        </Box>
+      </Box>
     </Layout>
   );
 };

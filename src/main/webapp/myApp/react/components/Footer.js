@@ -8,10 +8,9 @@ export default function Copyright(props) {
     <Box
       component="footer"
       sx={{
-        position: 'fixed',
+        position: 'sticky',
         bottom: 0,
-        width: '100%',
-        py: 2,
+        paddingBottom: '16px',
         textAlign: 'center',
       }}
     >

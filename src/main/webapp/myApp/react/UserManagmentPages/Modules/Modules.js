@@ -101,43 +101,36 @@ const Modules = (props) => {
   ];
 
   return (
-    <AppLayout>
+    <AppLayout
+      headerTitle={'Modules'}
+      Button={
+        <Button
+          onClick={handleClickOpen}
+          color="inherit"
+          aria-label="Add"
+          size="small"
+          variant="outlined"
+        >
+          <AddIcon />
+          Add
+        </Button>
+      }
+    >
       <>
-        <CardHeader
-          action={
-            <Tooltip title="Add">
-              <Button
-                onClick={handleClickOpen}
-                color="inherit"
-                aria-label="Add"
-                size="small"
-                variant="outlined"
-              >
-                <AddIcon />
-                Add
-              </Button>
-            </Tooltip>
-          }
-          title="Modules"
-          titleTypographyProps={{ variant: 'h2' }}
-          sx={{ padding: '10px' }}
-        />
-        <CardContent>
-          <Box
-            sx={{
-              height: 590,
-              width: '100%',
-              '& .actions': {
-                color: 'text.secondary',
-              },
-              '& .textPrimary': {
-                color: 'text.primary',
-              },
-            }}
-          >
-            <AgGrid rowData={modules} columnDefs={columns} />
-          </Box>
-        </CardContent>
+        <Box
+          sx={{
+            height: 600,
+            width: '100%',
+            '& .actions': {
+              color: 'text.secondary',
+            },
+            '& .textPrimary': {
+              color: 'text.primary',
+            },
+          }}
+        >
+          <AgGrid rowData={modules} columnDefs={columns} />
+        </Box>
       </>
       <ModalDialog
         isEdit={isEdit}
