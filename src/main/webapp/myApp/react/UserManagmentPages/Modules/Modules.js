@@ -121,12 +121,6 @@ const Modules = (props) => {
           sx={{
             height: 600,
             width: '100%',
-            '& .actions': {
-              color: 'text.secondary',
-            },
-            '& .textPrimary': {
-              color: 'text.primary',
-            },
           }}
         >
           <AgGrid rowData={modules} columnDefs={columns} />
