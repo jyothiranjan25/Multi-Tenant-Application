@@ -14,6 +14,17 @@ const AgGrid = (props) => {
   const colorScheme = theme.colorScheme === 'dark';
   const darkTheme = colorScheme ? 'ag-theme-quartz-dark' : 'ag-theme-quartz';
 
+  const styles = {
+    width: '100%',
+    height: '100%',
+    ...(darkTheme === 'ag-theme-quartz-dark' && {
+      '--ag-border-color': 'var(--template-palette-TableCell-border)',
+      '--ag-header-background-color': 'none',
+      '--ag-background-color': 'none',
+      backgroundColor: 'transparent',
+    }),
+  };
+
   // Default Column Definition
   const defaultColDef = useMemo(() => {
     return {
@@ -32,17 +43,7 @@ const AgGrid = (props) => {
   const paginationPageSizeSelector = [10, 20, 50];
 
   return (
-    <div
-      className={'grid ' + darkTheme}
-      style={{
-        width: '100%',
-        height: '100%',
-        '--ag-border-color': 'var(--template-palette-TableCell-border)',
-        '--ag-header-background-color': 'none',
-        '--ag-background-color': 'none',
-        backgroundColor: 'transparent',
-      }}
-    >
+    <div className={'grid ' + darkTheme} style={styles}>
       <AgGridReact
         {...props}
         defaultColDef={defaultColDef}
