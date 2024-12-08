@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom/client';
 import useSwitchRoles from './useSwitchRoles';
 
 const SwitchRoles = (props) => {
-  const { appUserRoles, setAppUserRoles, saveAppUserRole } = useSwitchRoles();
+  const { appUserRoles, saveAppUserRole } = useSwitchRoles();
 
   const handleCardClick = async (role) => {
     await saveAppUserRole(role);
