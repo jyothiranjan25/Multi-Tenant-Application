@@ -19,12 +19,11 @@ const SwitchRoles = (props) => {
   };
 
   return (
-    <AppLayout showSearch={false} showSideMenu={false}>
-      <CardHeader
-        title="Switch Roles"
-        titleTypographyProps={{ variant: 'h2' }}
-        sx={{ padding: '10px' }}
-      />
+    <AppLayout
+      showSearch={false}
+      showSideMenu={false}
+      headerTitle={'Switch Roles'}
+    >
       <CardContent>
         <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
           <Grid
