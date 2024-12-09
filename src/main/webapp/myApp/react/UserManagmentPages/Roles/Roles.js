@@ -85,38 +85,31 @@ const Roles = () => {
   ];
 
   return (
-    <AppLayout>
-      <CardHeader
-        action={
-          <Tooltip title="Add">
-            <Button
-              onClick={openAddModal}
-              color="inherit"
-              aria-label="Add"
-              size="small"
-              variant="outlined"
-            >
-              <AddIcon />
-              Add
-            </Button>
-          </Tooltip>
-        }
-        title="Roles"
-        titleTypographyProps={{ variant: 'h2' }}
-        sx={{ padding: '10px' }}
-      />
-      <CardContent>
-        <Box
-          sx={{
-            height: 590,
-            width: '100%',
-            '& .actions': { color: 'text.secondary' },
-            '& .textPrimary': { color: 'text.primary' },
-          }}
+    <AppLayout
+      headerTitle={'Roles'}
+      Button={
+        <Button
+          onClick={openAddModal}
+          color="inherit"
+          aria-label="Add"
+          size="small"
+          variant="outlined"
         >
-          <AgGrid rows={roles} columns={columns} />
-        </Box>
-      </CardContent>
+          <AddIcon />
+          Add
+        </Button>
+      }
+    >
+      <Box
+        sx={{
+          height: 590,
+          width: '100%',
+          '& .actions': { color: 'text.secondary' },
+          '& .textPrimary': { color: 'text.primary' },
+        }}
+      >
+        <AgGrid rows={roles} columns={columns} />
+      </Box>
       {openModal && (
         <RoleModuleStepper
           isEdit={isEdit}

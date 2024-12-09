@@ -22,7 +22,6 @@
 
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
-    <import resource="classpath:XMLConfiguration/thymeLeafConfiguration.xml"/>
 
     <!-- EntityManagerFactory bean definition -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -82,15 +81,6 @@
     <bean id="taskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
         <property name="poolSize" value="10"/>
     </bean>
-
-    <!-- Register the GsonHttpMessageConverter -->
-    <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
-                <property name="gson" ref="gson"/>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
 
     <!-- Bean for resolving placeholders in @Value -->
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">

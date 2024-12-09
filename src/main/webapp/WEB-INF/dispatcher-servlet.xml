@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd ">
+
+    <!-- React App static Files Configuration -->
+    <mvc:resources mapping="/static/**" location="/myApp/static/" />
+    <mvc:resources mapping="/public/**" location="/myApp/public/"/>
+
+    <!-- MVC view resolver -->
+    <mvc:view-controller path="/" view-name="login"/>
+    <mvc:view-controller path="/login" view-name="login"/>
+    <mvc:view-controller path="/dashboard" view-name="Dashboard"/>
+    <mvc:view-controller path="/switchRoles" view-name="SwitchRoles"/>
+    <mvc:view-controller path="/selectResources" view-name="SwitchResources"/>
+
+    <!-- User Management -->
+    <mvc:view-controller path="/userGroup" view-name="UserGroup"/>
+    <mvc:view-controller path="/resources" view-name="Resources"/>
+    <mvc:view-controller path="/modules" view-name="Modules"/>
+    <mvc:view-controller path="/roles" view-name="Roles"/>
+    <!-- End User Management -->
+</beans>

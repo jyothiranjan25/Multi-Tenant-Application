@@ -23,8 +23,15 @@ import Button from '@mui/material/Button';
 
 const Modules = (props) => {
   const { getModules } = useGetAPIs();
-  const { deleteModules } = useModules();
-  const [modules, setModules] = React.useState([]);
+  const {
+    modules,
+    onchangePage,
+    pageSize,
+    pageOffset,
+    totalCount,
+    getModulesData,
+    deleteModules,
+  } = useModules();
   const [isEdit, setIsEdit] = React.useState(false);
   const [editData, setEditData] = React.useState({});
   const [resTreeData, setResTreeData] = React.useState([]);
@@ -70,7 +77,7 @@ const Modules = (props) => {
   };
 
   const handleModulesUpdate = () => {
-    getModules().then((data) => setModules(data.map((item) => item.data)));
+    getModulesData();
   };
 
   const columns = [
@@ -101,43 +108,39 @@ const Modules = (props) => {
   ];
 
   return (
-    <AppLayout>
+    <AppLayout
+      headerTitle={'Modules'}
+      Button={
+        <Button
+          onClick={handleClickOpen}
+          color="inherit"
+          aria-label="Add"
+          size="small"
+          variant="outlined"
+        >
+          <AddIcon />
+          Add
+        </Button>
+      }
+    >
       <>
-        <CardHeader
-          action={
-            <Tooltip title="Add">
-              <Button
-                onClick={handleClickOpen}
-                color="inherit"
-                aria-label="Add"
-                size="small"
-                variant="outlined"
-              >
-                <AddIcon />
-                Add
-              </Button>
-            </Tooltip>
-          }
-          title="Modules"
-          titleTypographyProps={{ variant: 'h2' }}
-          sx={{ padding: '10px' }}
-        />
-        <CardContent>
-          <Box
-            sx={{
-              height: 590,
-              width: '100%',
-              '& .actions': {
-                color: 'text.secondary',
-              },
-              '& .textPrimary': {
-                color: 'text.primary',
-              },
+        <Box
+          sx={{
+            height: 570,
+            width: '100%',
+          }}
+        >
+          <AgGrid
+            rowData={modules}
+            columnDefs={columns}
+            totalCount={totalCount}
+            pageOffset={pageOffset}
+            PageSize={pageSize}
+            onChange={() => {
+              onchangePage();
             }}
-          >
-            <AgGrid rowData={modules} columnDefs={columns} />
-          </Box>
-        </CardContent>
+          />
+        </Box>
       </>
       <ModalDialog
         isEdit={isEdit}

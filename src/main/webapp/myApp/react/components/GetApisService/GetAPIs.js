@@ -9,9 +9,10 @@ const useGetAPIs = () => {
     try {
       const response = await fetch('api/userGroup/get?' + querystring);
       const result = await response.json();
+      const data = result.data;
       if (response.ok) {
         return result
-          ? result.map((item) => ({
+          ? data.map((item) => ({
               id: item.id,
               name: item.group_name,
               data: item,
@@ -33,8 +34,9 @@ const useGetAPIs = () => {
     try {
       const response = await fetch('api/resources/get?' + querystring);
       const result = await response.json();
+      const data = result.data;
       if (response.ok) {
-        return result.map((item) => ({
+        return data.map((item) => ({
           id: item.id,
           name: item.resource_name,
           data: item,
@@ -55,12 +57,9 @@ const useGetAPIs = () => {
     try {
       const response = await fetch('api/modules/get?' + querystring);
       const result = await response.json();
+      const data = result.data;
       if (response.ok) {
-        return result.map((item) => ({
-          id: item.id,
-          name: item.resource_name,
-          data: item,
-        }));
+        return result;
       } else {
         toast.error(result.message);
       }
@@ -76,8 +75,9 @@ const useGetAPIs = () => {
     try {
       const response = await fetch('api/roles/get?' + querystring);
       const result = await response.json();
+      const data = result.data;
       if (response.ok) {
-        return result.map((item) => ({
+        return data.map((item) => ({
           id: item.id,
           name: item.role_name,
           data: item,
@@ -97,8 +97,9 @@ const useGetAPIs = () => {
     try {
       const response = await fetch('api/appUserRoles/get?' + querystring);
       const result = await response.json();
+      const data = result.data;
       if (response.ok) {
-        return result.map((item) => ({
+        return data.map((item) => ({
           id: item.id,
           name: item.roles.role_name,
           data: item,
