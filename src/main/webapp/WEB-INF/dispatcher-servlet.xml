@@ -3,28 +3,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-
     <mvc:annotation-driven/>
-
-    <!-- Thymeleaf Template Engine -->
-    <bean id="thymeleafTemplateEngine" class="org.thymeleaf.spring6.SpringTemplateEngine">
-        <property name="templateResolver" ref="thymeleafTemplateResolver"/>
-    </bean>
-
-    <!-- Thymeleaf View Resolver -->
-    <bean class="org.thymeleaf.spring6.view.ThymeleafViewResolver">
-        <property name="templateEngine" ref="thymeleafTemplateEngine"/>
-        <property name="characterEncoding" value="UTF-8"/>
-    </bean>
-
-    <!-- Thymeleaf Template Resolver -->
-    <bean id="thymeleafTemplateResolver" class="org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/myApp/static/" />
-        <property name="suffix" value=".html" />
-        <property name="templateMode" value="HTML" />
-        <property name="characterEncoding" value="UTF-8" />
-    </bean>
-
     <!-- React App static Files Configuration -->
     <mvc:resources mapping="/static/**" location="/myApp/static/" />
     <mvc:resources mapping="/public/**" location="/myApp/public/"/>
@@ -42,7 +21,4 @@
     <mvc:view-controller path="/modules" view-name="Modules"/>
     <mvc:view-controller path="/roles" view-name="Roles"/>
     <!-- End User Management -->
-
-    <!-- Other bean definitions -->
-    <bean class="com.example.jkpvt.Core.Json.GsonConfig"/>
 </beans>

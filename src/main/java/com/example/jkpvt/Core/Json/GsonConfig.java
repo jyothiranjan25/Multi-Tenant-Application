@@ -10,6 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import java.util.Map;
 import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
 @Configuration
-@EnableWebMvc
 public class GsonConfig implements WebMvcConfigurer {
 
     @Bean
