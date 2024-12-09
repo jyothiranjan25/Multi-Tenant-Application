@@ -23,8 +23,15 @@ import Button from '@mui/material/Button';
 
 const Modules = (props) => {
   const { getModules } = useGetAPIs();
-  const { deleteModules } = useModules();
-  const [modules, setModules] = React.useState([]);
+  const {
+    modules,
+    onchangePage,
+    pageSize,
+    pageOffset,
+    totalCount,
+    getModulesData,
+    deleteModules,
+  } = useModules();
   const [isEdit, setIsEdit] = React.useState(false);
   const [editData, setEditData] = React.useState({});
   const [resTreeData, setResTreeData] = React.useState([]);
@@ -70,7 +77,7 @@ const Modules = (props) => {
   };
 
   const handleModulesUpdate = () => {
-    getModules().then((data) => setModules(data.map((item) => item.data)));
+    getModulesData();
   };
 
   const columns = [
@@ -119,11 +126,20 @@ const Modules = (props) => {
       <>
         <Box
           sx={{
-            height: 600,
+            height: 570,
             width: '100%',
           }}
         >
-          <AgGrid rowData={modules} columnDefs={columns} />
+          <AgGrid
+            rowData={modules}
+            columnDefs={columns}
+            totalCount={totalCount}
+            pageOffset={pageOffset}
+            PageSize={pageSize}
+            onChange={() => {
+              onchangePage();
+            }}
+          />
         </Box>
       </>
       <ModalDialog

@@ -1,7 +1,32 @@
 import { toast } from 'react-toastify';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
+import * as React from 'react';
 
 const useModules = () => {
+  const [modules, setModules] = React.useState([]);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageOffset, setPageOffset] = React.useState(0);
+  const [totalCount, setTotalCount] = React.useState(0);
+  const { getModules } = useGetAPIs();
+
+  const getModulesData = async (params) => {
+    const filterData = {
+      ...params,
+      page_size: pageSize,
+      page_offset: pageOffset,
+    };
+    getModules(filterData).then((data) => {
+      setTotalCount(data.total_count);
+      setPageSize(data?.page_size);
+      setPageOffset(data?.page_offset);
+      setModules(data.data);
+    });
+  };
+
+  const onchangePage = async (data) => {
+    getModulesData(data);
+  };
+
   const createModules = async (data) => {
     try {
       const response = await fetch('api/modules/create', {
@@ -60,6 +85,12 @@ const useModules = () => {
   };
 
   return {
+    modules,
+    setModules,
+    totalCount,
+    pageSize,
+    pageOffset,
+    getModulesData,
     createModules,
     updateModules,
     deleteModules,
