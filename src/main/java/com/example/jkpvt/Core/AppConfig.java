@@ -4,6 +4,7 @@ import com.example.jkpvt.Core.Json.GsonConfig;
 import com.example.jkpvt.Core.Json.QueryParamsArgumentResolver;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +18,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableWebMvc
 @EnableCaching
 @EnableWebSecurity
 @EnableScheduling
 @RequiredArgsConstructor
+//@PropertySource("classpath:application.properties")
 public class AppConfig implements WebMvcConfigurer {
 
     private final GsonConfig gsonConfig;
