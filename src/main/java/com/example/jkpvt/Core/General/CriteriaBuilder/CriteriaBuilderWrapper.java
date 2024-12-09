@@ -61,7 +61,6 @@ public class CriteriaBuilderWrapper<T> {
         applyDefaultOrderById();
         criteriaQuery.where(buildPredicate());
         Query query = session.createQuery(criteriaQuery);
-        applyPaginationFilters(query);
         addHibernateFilters(query);
         return query;
     }
@@ -82,8 +81,10 @@ public class CriteriaBuilderWrapper<T> {
      * @return A list of entities matching the query.
      */
     public List<T> getResultList() {
-        List<T> result = buildFinalQuery().getResultList();
-        filter.setTotalCount(result.size());
+        Query query = buildFinalQuery();
+        applyPaginationFilters(query);
+        List<T> result = query.getResultList();
+        filter.setTotalCount(buildFinalQuery().getResultList().size());
         return result;
     }
 
