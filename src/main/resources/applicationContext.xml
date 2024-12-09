@@ -82,6 +82,15 @@
         <property name="poolSize" value="10"/>
     </bean>
 
+    <!-- Register the GsonHttpMessageConverter -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+                <property name="gson" ref="gson"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
     <!-- Bean for resolving placeholders in @Value -->
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
         <property name="properties">
