@@ -25,16 +25,16 @@ public class AppUserController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     private AppUserDTO create(@RequestBody AppUserDTO appUserDTO) {
-        return appUserService.createAppUser(appUserDTO);
+        return appUserService.create(appUserDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
     private AppUserDTO update(@RequestBody AppUserDTO appUserDTO) {
-        return appUserService.updateAppUser(appUserDTO);
+        return appUserService.update(appUserDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     private String delete(@RequestBody AppUserDTO appUserDTO) {
-        return appUserService.deleteAppUser(appUserDTO);
+        return appUserService.delete(appUserDTO);
     }
 }

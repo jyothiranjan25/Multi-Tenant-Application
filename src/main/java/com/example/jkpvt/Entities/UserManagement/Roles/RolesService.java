@@ -49,7 +49,7 @@ public class RolesService {
         Roles roles = getById(rolesDTO.getId());
         updateRoleData(roles, rolesDTO);
         roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO, roles));
-        roles = repository.save(roles);
+        roles = repository.saveAndFlush(roles);
         return mapper.map(roles);
     }
 
