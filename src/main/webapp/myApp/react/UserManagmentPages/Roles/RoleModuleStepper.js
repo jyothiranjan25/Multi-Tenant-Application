@@ -53,6 +53,8 @@ function RoleModuleStepper({
       remove_modules: removedRowsRef.current.map((item) => item.id),
     };
 
+    delete data.modules_resources;
+
     if (isEdit) {
       data.id = formData.id;
       updateRoles(data).then(() => {
