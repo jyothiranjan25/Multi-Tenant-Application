@@ -52,10 +52,8 @@ public class UserGroup {
     private UserGroup parentGroup;
 
     @OneToMany(mappedBy = "parentGroup", cascade = CascadeType.ALL)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<UserGroup> childGroups;
 
     @OneToMany(mappedBy = "userGroup", cascade = CascadeType.ALL)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AppUserRoles> appUserRoles;
 }
