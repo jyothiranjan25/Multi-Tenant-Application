@@ -46,6 +46,5 @@ public class Connector {
     private String icon;
 
     @OneToMany(mappedBy = "connector", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ConnectorXref> connectorXrefs;
 }

@@ -50,6 +50,5 @@ public class AppUser {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AppUserRoles> appUserRoles;
 }

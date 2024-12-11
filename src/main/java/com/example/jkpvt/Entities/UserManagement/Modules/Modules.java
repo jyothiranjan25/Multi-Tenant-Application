@@ -59,14 +59,11 @@ public class Modules {
             foreignKey = @ForeignKey(name = "fk_module_resources_module_id"),
             inverseForeignKey = @ForeignKey(name = "fk_module_resources_resource_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resources> resources = new HashSet<>();
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModule> roleModule = new HashSet<>();
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<RoleModuleResources> roleModuleResources = new HashSet<>();
 }
