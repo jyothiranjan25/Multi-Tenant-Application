@@ -22,7 +22,7 @@ public class UserGroupDAOImpl implements UserGroupDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserGroup> get(UserGroupDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<UserGroup> cbw = new CriteriaBuilderWrapper<>(UserGroup.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,19 +32,19 @@ public class UserGroupDAOImpl implements UserGroupDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<UserGroup> cbw, UserGroupDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
-        if(dto.getGroupName() != null)
+        if (dto.getGroupName() != null)
             cbw.ILike("groupName", dto.getGroupName());
 
-        if(dto.getGroupDescription() != null)
+        if (dto.getGroupDescription() != null)
             cbw.ILike("groupDescription", dto.getGroupDescription());
 
-        if(dto.getQualifiedName() != null)
+        if (dto.getQualifiedName() != null)
             cbw.ILike("qualifiedName", dto.getQualifiedName());
 
-        if(dto.getParentId() != null){
+        if (dto.getParentId() != null) {
             cbw.join("parentGroup");
             cbw.Equal("parentGroup.id", dto.getParentId());
         }

@@ -13,14 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public class ConnectorDAOImpl implements ConnectorDAO{
+public class ConnectorDAOImpl implements ConnectorDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     public List<Connector> get(ConnectorDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<Connector> cbw = new CriteriaBuilderWrapper<>(Connector.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -30,13 +30,13 @@ public class ConnectorDAOImpl implements ConnectorDAO{
     }
 
     private void addPredicate(CriteriaBuilderWrapper<Connector> cbw, ConnectorDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
-        if(dto.getConnectorName() != null)
+        if (dto.getConnectorName() != null)
             cbw.ILike("connectorName", dto.getConnectorName());
-        if(dto.getDescription() != null)
+        if (dto.getDescription() != null)
             cbw.ILike("description", dto.getDescription());
-        if(dto.getType() != null)
+        if (dto.getType() != null)
             cbw.ILike("type", dto.getType().toString());
     }
 }

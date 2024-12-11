@@ -1,20 +1,18 @@
 package com.example.jkpvt.Entities.Connectors.ConnectorConfiguration;
 
-import com.example.jkpvt.Entities.Connectors.ConnectorXref.ConnectorXref;
 import com.example.jkpvt.Core.AbstractModel.BaseAbstractModel;
+import com.example.jkpvt.Entities.Connectors.ConnectorXref.ConnectorXref;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "connector_configuration",indexes = {
+@Table(name = "connector_configuration", indexes = {
         @Index(name = "idx_connector_configuration_key", columnList = "key"),
         @Index(name = "idx_connector_configuration_value", columnList = "value"),
 })
@@ -29,7 +27,6 @@ public class ConnectorConfiguration extends BaseAbstractModel {
     private Long id;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "connector_xref_id", foreignKey = @ForeignKey(name = "fk_connector_configuration_connector_xref_id"))
     private ConnectorXref connectorXref;
 

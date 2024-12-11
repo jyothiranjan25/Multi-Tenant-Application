@@ -19,7 +19,7 @@ public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
     private EntityManager entityManager;
 
     public List<ConnectorXref> get(ConnectorXrefDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<ConnectorXref> cbw = new CriteriaBuilderWrapper<>(ConnectorXref.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -29,13 +29,13 @@ public class ConnectorXrefDAOImpl implements ConnectorXrefDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<ConnectorXref> cbw, ConnectorXrefDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
-        if(dto.getName() != null)
+        if (dto.getName() != null)
             cbw.ILike("name", dto.getName());
-        if(dto.getDescription() != null)
+        if (dto.getDescription() != null)
             cbw.ILike("description", dto.getDescription());
-        if(dto.getStatus() != null)
+        if (dto.getStatus() != null)
             cbw.Equal("status", dto.getStatus());
     }
 }

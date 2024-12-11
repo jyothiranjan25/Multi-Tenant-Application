@@ -35,15 +35,15 @@ public class ConnectorXrefService {
 
     @Transactional
     public ConnectorXrefDTO update(ConnectorXrefDTO connectorDTO) {
-        try{
+        try {
             ConnectorXref connector = getById(connectorDTO.getId());
-            if(connectorDTO.getName() != null) {
+            if (connectorDTO.getName() != null) {
                 connector.setName(connectorDTO.getName());
             }
-            if(connectorDTO.getDescription() != null) {
+            if (connectorDTO.getDescription() != null) {
                 connector.setDescription(connectorDTO.getDescription());
             }
-            if(connectorDTO.getStatus() != null) {
+            if (connectorDTO.getStatus() != null) {
                 connector.setStatus(connectorDTO.getStatus());
             }
             connector = repository.save(connector);

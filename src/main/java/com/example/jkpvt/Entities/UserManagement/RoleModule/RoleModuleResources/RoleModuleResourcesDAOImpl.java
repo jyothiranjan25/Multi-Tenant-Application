@@ -22,7 +22,7 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RoleModuleResources> get(RoleModuleResourcesDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<RoleModuleResources> cbw = new CriteriaBuilderWrapper<>(RoleModuleResources.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,7 +32,7 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<RoleModuleResources> cbw, RoleModuleResourcesDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
 
@@ -46,7 +46,7 @@ public class RoleModuleResourcesDAOImpl implements RoleModuleResourcesDAO {
             cbw.Equal("module.id", dto.getModuleId());
         }
 
-        if(dto.getResourceId() != null){
+        if (dto.getResourceId() != null) {
             cbw.join("resource");
             cbw.Equal("resource.id", dto.getResourceId());
         }

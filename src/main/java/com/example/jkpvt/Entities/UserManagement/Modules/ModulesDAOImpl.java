@@ -22,7 +22,7 @@ public class ModulesDAOImpl implements ModulesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Modules> get(ModulesDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<Modules> cbw = new CriteriaBuilderWrapper<>(Modules.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,16 +32,16 @@ public class ModulesDAOImpl implements ModulesDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<Modules> cbw, ModulesDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
-        if(dto.getModuleName() != null)
+        if (dto.getModuleName() != null)
             cbw.ILike("moduleName", dto.getModuleName());
 
-        if(dto.getModuleDescription() != null)
+        if (dto.getModuleDescription() != null)
             cbw.ILike("moduleDescription", dto.getModuleDescription());
 
-        if(dto.getModuleUrl() != null)
+        if (dto.getModuleUrl() != null)
             cbw.ILike("moduleUrl", dto.getModuleUrl());
     }
 }

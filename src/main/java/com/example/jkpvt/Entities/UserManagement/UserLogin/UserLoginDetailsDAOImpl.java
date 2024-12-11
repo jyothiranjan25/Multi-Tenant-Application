@@ -21,7 +21,7 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<UserLoginDetails> get(UserLoginDetailsDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<UserLoginDetails> cbw = new CriteriaBuilderWrapper<>(UserLoginDetails.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -31,10 +31,10 @@ public class UserLoginDetailsDAOImpl implements UserLoginDetailsDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<UserLoginDetails> cbw, UserLoginDetailsDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
-        if(dto.getUsername() != null)
+        if (dto.getUsername() != null)
             cbw.ILike("username", dto.getUsername());
     }
 }

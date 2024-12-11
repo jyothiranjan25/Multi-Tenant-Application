@@ -22,7 +22,7 @@ public class AppUserDAOImpl implements AppUserDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUser> get(AppUserDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<AppUser> cbw = new CriteriaBuilderWrapper<>(AppUser.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,15 +32,15 @@ public class AppUserDAOImpl implements AppUserDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<AppUser> cbw, AppUserDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
-        if(dto.getUserName() != null)
+        if (dto.getUserName() != null)
             cbw.ILike("userName", dto.getUserName());
-        if(dto.getEmail() != null)
+        if (dto.getEmail() != null)
             cbw.ILike("email", dto.getEmail());
-        if(dto.getIsAdmin() != null)
+        if (dto.getIsAdmin() != null)
             cbw.Equal("isAdmin", dto.getIsAdmin());
-        if(dto.getIsActive() != null)
+        if (dto.getIsActive() != null)
             cbw.Equal("isActive", dto.getIsActive());
     }
 }

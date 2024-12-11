@@ -40,7 +40,7 @@ public class ConnectorService {
     @Transactional
     public ConnectorDTO update(ConnectorDTO connectorDTO) {
         Connector connector = getById(connectorDTO.getId());
-        updateConnectorData(connector,connectorDTO);
+        updateConnectorData(connector, connectorDTO);
         connector = repository.save(connector);
         return mapper.map(connector);
     }

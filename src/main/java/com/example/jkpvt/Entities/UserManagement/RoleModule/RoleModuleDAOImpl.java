@@ -22,7 +22,7 @@ public class RoleModuleDAOImpl implements RoleModuleDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RoleModule> get(RoleModuleDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<RoleModule> cbw = new CriteriaBuilderWrapper<>(RoleModule.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,15 +32,15 @@ public class RoleModuleDAOImpl implements RoleModuleDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<RoleModule> cbw, RoleModuleDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
-        if(dto.getRoleId() != null){
+        if (dto.getRoleId() != null) {
             cbw.join("role");
             cbw.Equal("role.id", dto.getRoleId());
         }
 
-        if(dto.getModuleId() != null){
+        if (dto.getModuleId() != null) {
             cbw.join("module");
             cbw.Equal("module.id", dto.getModuleId());
         }
