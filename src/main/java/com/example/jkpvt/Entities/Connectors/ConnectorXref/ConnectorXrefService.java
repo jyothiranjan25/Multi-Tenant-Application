@@ -46,7 +46,7 @@ public class ConnectorXrefService {
             if (connectorDTO.getStatus() != null) {
                 connector.setStatus(connectorDTO.getStatus());
             }
-            connector = repository.save(connector);
+            connector = repository.saveAndFlush(connector);
             return mapper.map(connector);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());

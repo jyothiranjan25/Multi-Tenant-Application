@@ -41,7 +41,7 @@ public class ModulesService {
     public ModulesDTO update(ModulesDTO modulesDTO) {
         Modules modules = getById(modulesDTO.getId());
         updateModules(modules, modulesDTO);
-        modulesRepository.save(modules);
+        modulesRepository.saveAndFlush(modules);
         return mapper.map(modules);
     }
 

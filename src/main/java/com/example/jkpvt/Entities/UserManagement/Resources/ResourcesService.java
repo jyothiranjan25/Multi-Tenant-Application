@@ -43,7 +43,7 @@ public class ResourcesService {
     public ResourcesDTO update(ResourcesDTO resourcesDTO) {
         Resources resources = getById(resourcesDTO.getId());
         updateResourcesData(resources, resourcesDTO);
-        resources = repository.save(resources);
+        resources = repository.saveAndFlush(resources);
         return mapper.map(resources);
     }
 

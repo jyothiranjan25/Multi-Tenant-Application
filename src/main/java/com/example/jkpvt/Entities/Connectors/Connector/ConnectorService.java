@@ -41,7 +41,7 @@ public class ConnectorService {
     public ConnectorDTO update(ConnectorDTO connectorDTO) {
         Connector connector = getById(connectorDTO.getId());
         updateConnectorData(connector, connectorDTO);
-        connector = repository.save(connector);
+        connector = repository.saveAndFlush(connector);
         return mapper.map(connector);
     }
 

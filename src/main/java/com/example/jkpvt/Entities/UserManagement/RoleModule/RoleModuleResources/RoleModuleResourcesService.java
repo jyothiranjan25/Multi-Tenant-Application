@@ -51,7 +51,7 @@ public class RoleModuleResourcesService {
                 .orElseGet(() -> mapper.map(dto));
 
         roleModuleResource.setIsVisible(dto.getIsVisible());
-        return mapper.map(repository.save(roleModuleResource));
+        return mapper.map(repository.saveAndFlush(roleModuleResource));
     }
 
 
