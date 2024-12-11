@@ -1,15 +1,16 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Box, CardHeader, CardContent, Tooltip, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import AppLayout from '../../components/AppLayout';
 import useRoles from './useRoles';
 import GetAPIs from '../../components/GetApisService/GetAPIs';
-import AgGrid from '../../components/UiComponents/MUIDataTable';
+import AgGrid from '../../components/UiComponents/AgGridReact';
 import RoleModuleStepper from './RoleModuleStepper';
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ActionCellRenderer from '../../components/UiComponents/ActionCell';
 
 // Roles Component
 const Roles = () => {
@@ -35,15 +36,21 @@ const Roles = () => {
   };
 
   const openEditModal = (params) => {
-    setIsEdit(true);
-    setFormData(params);
-    setOpenModal(true);
+    return () => {
+      setIsEdit(true);
+      setFormData(params);
+      setOpenModal(true);
+    };
   };
 
   const openViewModal = (params) => {};
 
   const handleDeleteClick = (params) => {
-    deleteRoles(params).then(handleModulesUpdate);
+    return () => {
+      deleteRoles(params).then(() => {
+        handleModulesUpdate();
+      });
+    };
   };
 
   const closeModals = () => {
@@ -61,26 +68,15 @@ const Roles = () => {
     },
     {
       field: 'actions',
-      type: 'actions',
       headerName: 'Actions',
+      filter: false,
       flex: 0.5,
-      cellClassName: 'actions',
-      getActions: (params) => {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={() => openEditModal(params.row)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => handleDeleteClick(params.row)}
-            color="inherit"
-          />,
-        ];
-      },
+      cellRenderer: (params) => (
+        <ActionCellRenderer
+          onEditClick={openEditModal(params.data)}
+          onDeleteClick={handleDeleteClick(params.data)}
+        />
+      ),
     },
   ];
 
@@ -102,13 +98,16 @@ const Roles = () => {
     >
       <Box
         sx={{
-          height: 590,
+          height: 570,
           width: '100%',
-          '& .actions': { color: 'text.secondary' },
-          '& .textPrimary': { color: 'text.primary' },
         }}
       >
-        <AgGrid rows={roles} columns={columns} />
+        <AgGrid
+          rowData={roles}
+          columnDefs={columns}
+          pagination={false}
+          pageSize={10}
+        />
       </Box>
       {openModal && (
         <RoleModuleStepper

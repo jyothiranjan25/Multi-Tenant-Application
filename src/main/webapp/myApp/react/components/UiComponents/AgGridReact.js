@@ -4,6 +4,7 @@ import { AgGridReact } from '@ag-grid-community/react';
 import '@ag-grid-community/styles/ag-grid.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
 import React, { useCallback, useMemo, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useColorScheme } from '@mui/material/styles';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import TablePagination from '@mui/material/TablePagination';
@@ -18,7 +19,7 @@ const AgGrid = ({
   setPageSize,
   pageOffset,
   setPageOffset,
-  totalRecords = 0,
+  totalRecords,
   ...props
 }) => {
   const { AgGridStyles, PaginationStyles, darkTheme } = getAgGridStyles();
@@ -38,7 +39,7 @@ const AgGrid = ({
   }, []);
 
   // allows the user to select the page size from a predefined list of page sizes
-  const paginationPageSizeSelector = [1, 10, 20, 50];
+  const paginationPageSizeSelector = [10, 20, 50, 500];
 
   const onBtnExport = useCallback(() => {
     gridRef.current.api.exportDataAsCsv();
@@ -163,4 +164,12 @@ const getAgGridStyles = () => {
   return { AgGridStyles, PaginationStyles, darkTheme };
 };
 
+AgGrid.propTypes = {
+  pagination: PropTypes.bool,
+  pageSize: PropTypes.number.isRequired,
+  setPageSize: PropTypes.func,
+  pageOffset: PropTypes.number,
+  setPageOffset: PropTypes.func,
+  totalRecords: PropTypes.number,
+};
 export default AgGrid;
