@@ -206,19 +206,21 @@ const Resources = (props) => {
                       onChange={handleInputChange}
                     />
                   </FormGrid>
-                  <FormGrid size={{ xs: 12 }}>
-                    <FormLabel>URL</FormLabel>
-                    <OutlinedInput
-                      id="url"
-                      name="resource_url"
-                      type="text"
-                      placeholder="URL"
-                      autoComplete="off"
-                      size="small"
-                      value={formData.resource_url || ''}
-                      onChange={handleInputChange}
-                    />
-                  </FormGrid>
+                  {isAddingChild ? (
+                    <FormGrid size={{ xs: 12 }}>
+                      <FormLabel>URL</FormLabel>
+                      <OutlinedInput
+                        id="url"
+                        name="resource_url"
+                        type="text"
+                        placeholder="URL"
+                        autoComplete="off"
+                        size="small"
+                        value={formData.resource_url || ''}
+                        onChange={handleInputChange}
+                      />
+                    </FormGrid>
+                  ) : null}
                   <FormGrid size={{ xs: 6 }}>
                     <FormLabel>Order</FormLabel>
                     <OutlinedInput
