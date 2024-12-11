@@ -29,8 +29,10 @@ const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
   };
 
   const PaginationStyles = {
-    border: '1px solid var(--template-palette-TableCell-border)',
-    borderTop: 'none',
+    border:
+      darkTheme === 'ag-theme-quartz-dark'
+        ? '1px solid var(--template-palette-TableCell-border)'
+        : 'var(--ag-borders) var(--ag-border-color)',
   };
 
   // Grid Reference
