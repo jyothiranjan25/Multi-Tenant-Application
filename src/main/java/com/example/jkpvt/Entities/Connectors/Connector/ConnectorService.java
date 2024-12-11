@@ -18,13 +18,13 @@ public class ConnectorService {
     private final ConnectorRepository repository;
     private final SearchFilterService searchFilterService;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ConnectorDTO> search(ConnectorDTO connectorDTO) {
         List<Connector> connector = searchFilterService.search(Connector.class, connectorDTO.getSearchTerm(), connectorDTO);
         return mapper.map(connector);
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ConnectorDTO> get(ConnectorDTO connectorDTO) {
         List<Connector> connector = connectorDAO.get(connectorDTO);
         return mapper.map(connector);
