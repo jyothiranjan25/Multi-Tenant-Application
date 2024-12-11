@@ -7,10 +7,12 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { useColorScheme } from '@mui/material/styles';
 import { CsvExportModule } from '@ag-grid-community/csv-export';
 import TablePagination from '@mui/material/TablePagination';
+import { Button } from '@mui/material';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, CsvExportModule]);
 
-const AgGrid = ({ ...props }) => {
+const AgGrid = ({ pagination, ...props }) => {
   const { AgGridStyles, PaginationStyles, darkTheme } = getAgGridStyles();
 
   // Grid Reference
@@ -28,27 +30,14 @@ const AgGrid = ({ ...props }) => {
   }, []);
 
   // sets 10 rows per page (default is 100)
-  const paginationPageSize = 10;
+  const [paginationPageSize, setPaginationPageSize] = React.useState(10);
 
   // allows the user to select the page size from a predefined list of page sizes
-  const paginationPageSizeSelector = [10, 20, 50];
+  const paginationPageSizeSelector = [1, 10, 20, 50];
 
   const onBtnExport = useCallback(() => {
-    console.log('Exporting...');
     gridRef.current.api.exportDataAsCsv();
   }, []);
-
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return (
     <>
@@ -56,7 +45,7 @@ const AgGrid = ({ ...props }) => {
         <AgGridReact
           ref={gridRef}
           defaultColDef={defaultColDef}
-          pagination={false}
+          pagination={!pagination}
           paginationPageSize={paginationPageSize}
           paginationPageSizeSelector={paginationPageSizeSelector}
           // Pass Modules to this individual grid
@@ -64,19 +53,67 @@ const AgGrid = ({ ...props }) => {
           rowModelType={'clientSide'}
           {...props}
         />
-        <div style={PaginationStyles}>
-          <TablePagination
-            component="div"
-            count={100}
-            onPageChange={handleChangePage}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            showFirstButton={true}
-            showLastButton={true}
-          />
-        </div>
+        {pagination && (
+          <div style={PaginationStyles}>
+            <AgGridPagination
+              rowsPerPageOptions={paginationPageSizeSelector}
+              rowsPerPage={paginationPageSize}
+              setRowsPerPage={setPaginationPageSize}
+            />
+            <ActionComponents onBtnExport={onBtnExport} />
+          </div>
+        )}
       </div>
+    </>
+  );
+};
+
+const AgGridPagination = ({ rowsPerPage, setRowsPerPage, ...props }) => {
+  const [page, setPage] = React.useState(2);
+
+  const handleChangePage = (event, newPage) => {
+    console.log('newPage', newPage, 'rowsPerPage', rowsPerPage);
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  return (
+    <>
+      <TablePagination
+        {...props}
+        component="div"
+        count={100}
+        onPageChange={handleChangePage}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
+      />
+    </>
+  );
+};
+
+const ActionComponents = ({ onBtnExport }) => {
+  return (
+    <>
+      <Button
+        color="inherit"
+        size="small"
+        variant="outlined"
+        onClick={onBtnExport}
+        sx={{
+          minWidth: '0',
+          width: '36px',
+          height: '36px',
+          marginRight: '10px',
+        }}
+      >
+        <FileDownloadOutlinedIcon />
+      </Button>
     </>
   );
 };
@@ -102,6 +139,9 @@ const getAgGridStyles = () => {
 
   // Pagination Styles
   const PaginationStyles = {
+    display: 'flex',
+    justifyContent: 'end',
+    alignItems: 'center',
     border:
       darkTheme === 'ag-theme-quartz-dark'
         ? '1px solid var(--template-palette-TableCell-border)'
