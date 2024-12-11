@@ -22,16 +22,24 @@ import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
 
 const Modules = (props) => {
-  const { modules, getModulesData, deleteModules } = useModules();
+  const { getModulesData, deleteModules } = useModules();
+  const [modules, setModules] = React.useState([]);
   const [isEdit, setIsEdit] = React.useState(false);
   const [editData, setEditData] = React.useState({});
   const [resTreeData, setResTreeData] = React.useState([]);
   const [openStepperModal, setOpenStepperModal] = React.useState(false);
   const [openResViewModal, setOpenResViewModal] = React.useState(false);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageOffset, setPageOffset] = React.useState(0);
+  const [totalRecords, setTotalRecords] = React.useState(0);
 
   React.useEffect(() => {
-    handleModulesUpdate();
-  }, []);
+    const data = {
+      page_offset: pageOffset,
+      page_size: pageSize,
+    };
+    handleModulesUpdate(data);
+  }, [pageSize, pageOffset]);
 
   const handleClickOpen = () => {
     setIsEdit(false);
@@ -67,8 +75,11 @@ const Modules = (props) => {
     setOpenResViewModal(false);
   };
 
-  const handleModulesUpdate = () => {
-    getModulesData();
+  const handleModulesUpdate = (filterData) => {
+    getModulesData(filterData).then((data) => {
+      setModules(data.data);
+      setTotalRecords(data.total_count);
+    });
   };
 
   const columns = [
@@ -125,9 +136,11 @@ const Modules = (props) => {
             rowData={modules}
             columnDefs={columns}
             pagination={true}
-            pageSize={10}
-            pageOffset={0}
-            totalCount={0}
+            totalRecords={totalRecords}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            pageOffset={pageOffset}
+            setPageOffset={setPageOffset}
           />
         </Box>
       </>

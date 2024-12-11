@@ -1,15 +1,11 @@
 import { toast } from 'react-toastify';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
-import * as React from 'react';
 
 const useModules = () => {
-  const [modules, setModules] = React.useState([]);
   const { getModules } = useGetAPIs();
 
   const getModulesData = async (params) => {
-    getModules().then((data) => {
-      setModules(data.data);
-    });
+    return await getModules(params);
   };
 
   const createModules = async (data) => {
@@ -70,8 +66,6 @@ const useModules = () => {
   };
 
   return {
-    modules,
-    setModules,
     getModulesData,
     createModules,
     updateModules,

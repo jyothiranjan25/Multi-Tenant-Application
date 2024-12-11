@@ -12,7 +12,15 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, CsvExportModule]);
 
-const AgGrid = ({ pagination, totalCount = 0, ...props }) => {
+const AgGrid = ({
+  pagination,
+  pageSize,
+  setPageSize,
+  pageOffset,
+  setPageOffset,
+  totalRecords = 0,
+  ...props
+}) => {
   const { AgGridStyles, PaginationStyles, darkTheme } = getAgGridStyles();
 
   // Grid Reference
@@ -29,10 +37,6 @@ const AgGrid = ({ pagination, totalCount = 0, ...props }) => {
     };
   }, []);
 
-  // set the page number
-  const [page, setPage] = React.useState(0);
-  // sets 10 rows per page (default is 100)
-  const [paginationPageSize, setPaginationPageSize] = React.useState(10);
   // allows the user to select the page size from a predefined list of page sizes
   const paginationPageSizeSelector = [1, 10, 20, 50];
 
@@ -47,7 +51,7 @@ const AgGrid = ({ pagination, totalCount = 0, ...props }) => {
           ref={gridRef}
           defaultColDef={defaultColDef}
           pagination={!pagination}
-          paginationPageSize={paginationPageSize}
+          paginationPageSize={pageSize}
           paginationPageSizeSelector={paginationPageSizeSelector}
           // Pass Modules to this individual grid
           modules={[ClientSideRowModelModule, CsvExportModule]}
@@ -58,11 +62,11 @@ const AgGrid = ({ pagination, totalCount = 0, ...props }) => {
           <div style={PaginationStyles}>
             <AgGridPagination
               rowsPerPageOptions={paginationPageSizeSelector}
-              rowsPerPage={paginationPageSize}
-              setRowsPerPage={setPaginationPageSize}
-              page={page}
-              setPage={setPage}
-              totalCount={totalCount}
+              rowsPerPage={pageSize}
+              setRowsPerPage={setPageSize}
+              page={pageOffset}
+              setPage={setPageOffset}
+              totalCount={totalRecords}
             />
             <ActionComponents onBtnExport={onBtnExport} />
           </div>
