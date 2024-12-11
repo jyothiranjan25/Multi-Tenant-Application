@@ -13,7 +13,8 @@ public enum ResourcesMessages implements MessagesCodes {
     RESOURCES_HAS_CHILDREN("RESOURCES.RESOURCES_HAS_CHILDREN"),
     RESOURCES_HAS_PARENT("RESOURCES.RESOURCES_HAS_PARENT"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     ResourcesMessages(String message) {
         this.message = message;

@@ -7,7 +7,8 @@ public enum RoleModuleMessages implements MessagesCodes {
     MODULE_IS_MANDATORY("MODULES.MODULE_IS_MANDATORY"),
     ROLE_MODULE_DUPLICATE("ROLE_MODULE.ROLE_MODULE_DUPLICATE"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     RoleModuleMessages(String message) {
         this.message = message;

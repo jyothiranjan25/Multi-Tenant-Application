@@ -57,22 +57,22 @@ public class AppUserListener implements ApplicationContextAware {
     }
 
     public void checkForDuplicateUserName(AppUser appUser) {
-            AppUserDTO filter = new AppUserDTO();
-            filter.setUserName(appUser.getUserName());
-            List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
-            duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
-            if (!duplicates.isEmpty()) {
-                throw new CommonException(AppUserMessages.USER_NAME_DUPLICATE, appUser.getUserName());
-            }
+        AppUserDTO filter = new AppUserDTO();
+        filter.setUserName(appUser.getUserName());
+        List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
+        duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
+        if (!duplicates.isEmpty()) {
+            throw new CommonException(AppUserMessages.USER_NAME_DUPLICATE, appUser.getUserName());
+        }
     }
 
     public void checkForDuplicateEmail(AppUser appUser) {
-            AppUserDTO filter = new AppUserDTO();
-            filter.setEmail(appUser.getEmail());
-            List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
-            duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
-            if (!duplicates.isEmpty()) {
-                throw new CommonException(AppUserMessages.EMAIL_DUPLICATE, appUser.getEmail());
-            }
+        AppUserDTO filter = new AppUserDTO();
+        filter.setEmail(appUser.getEmail());
+        List<AppUserDTO> duplicates = applicationContext.getBean(AppUserService.class).get(filter);
+        duplicates.removeIf(x -> x.getId().equals(appUser.getId()));
+        if (!duplicates.isEmpty()) {
+            throw new CommonException(AppUserMessages.EMAIL_DUPLICATE, appUser.getEmail());
+        }
     }
 }
