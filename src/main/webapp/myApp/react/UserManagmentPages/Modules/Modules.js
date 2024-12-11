@@ -121,7 +121,14 @@ const Modules = (props) => {
             width: '100%',
           }}
         >
-          <AgGrid rowData={modules} columnDefs={columns} pagination={true} />
+          <AgGrid
+            rowData={modules}
+            columnDefs={columns}
+            pagination={true}
+            pageSize={10}
+            pageOffset={0}
+            totalCount={0}
+          />
         </Box>
       </>
       <ModalDialog

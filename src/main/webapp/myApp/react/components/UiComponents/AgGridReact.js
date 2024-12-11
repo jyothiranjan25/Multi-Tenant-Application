@@ -12,7 +12,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, CsvExportModule]);
 
-const AgGrid = ({ pagination, ...props }) => {
+const AgGrid = ({ pagination, totalCount = 0, ...props }) => {
   const { AgGridStyles, PaginationStyles, darkTheme } = getAgGridStyles();
 
   // Grid Reference
@@ -29,9 +29,10 @@ const AgGrid = ({ pagination, ...props }) => {
     };
   }, []);
 
+  // set the page number
+  const [page, setPage] = React.useState(0);
   // sets 10 rows per page (default is 100)
   const [paginationPageSize, setPaginationPageSize] = React.useState(10);
-
   // allows the user to select the page size from a predefined list of page sizes
   const paginationPageSizeSelector = [1, 10, 20, 50];
 
@@ -59,6 +60,9 @@ const AgGrid = ({ pagination, ...props }) => {
               rowsPerPageOptions={paginationPageSizeSelector}
               rowsPerPage={paginationPageSize}
               setRowsPerPage={setPaginationPageSize}
+              page={page}
+              setPage={setPage}
+              totalCount={totalCount}
             />
             <ActionComponents onBtnExport={onBtnExport} />
           </div>
@@ -68,11 +72,15 @@ const AgGrid = ({ pagination, ...props }) => {
   );
 };
 
-const AgGridPagination = ({ rowsPerPage, setRowsPerPage, ...props }) => {
-  const [page, setPage] = React.useState(0);
-
+const AgGridPagination = ({
+  rowsPerPage,
+  setRowsPerPage,
+  page,
+  setPage,
+  totalCount,
+  ...props
+}) => {
   const handleChangePage = (event, newPage) => {
-    console.log('newPage', newPage, 'rowsPerPage', rowsPerPage);
     setPage(newPage);
   };
 
@@ -85,7 +93,7 @@ const AgGridPagination = ({ rowsPerPage, setRowsPerPage, ...props }) => {
       <TablePagination
         {...props}
         component="div"
-        count={100}
+        count={totalCount}
         onPageChange={handleChangePage}
         page={page}
         rowsPerPage={rowsPerPage}
