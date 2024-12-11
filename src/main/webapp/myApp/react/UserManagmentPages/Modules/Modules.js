@@ -25,10 +25,10 @@ const Modules = (props) => {
   const { getModules } = useGetAPIs();
   const {
     modules,
-    onchangePage,
     pageSize,
     pageOffset,
     totalCount,
+    onchangePage,
     getModulesData,
     deleteModules,
   } = useModules();
@@ -78,6 +78,10 @@ const Modules = (props) => {
 
   const handleModulesUpdate = () => {
     getModulesData();
+  };
+
+  const onchangePageHandler = (event, newPage) => {
+    onchangePage({ page_offset: newPage });
   };
 
   const columns = [
@@ -136,9 +140,7 @@ const Modules = (props) => {
             totalCount={totalCount}
             pageOffset={pageOffset}
             PageSize={pageSize}
-            onChange={() => {
-              onchangePage();
-            }}
+            onChange={onchangePageHandler}
           />
         </Box>
       </>

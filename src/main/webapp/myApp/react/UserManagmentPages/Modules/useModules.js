@@ -4,7 +4,7 @@ import * as React from 'react';
 
 const useModules = () => {
   const [modules, setModules] = React.useState([]);
-  const [pageSize, setPageSize] = React.useState(10);
+  const [pageSize, setPageSize] = React.useState(1);
   const [pageOffset, setPageOffset] = React.useState(0);
   const [totalCount, setTotalCount] = React.useState(0);
   const { getModules } = useGetAPIs();
@@ -90,6 +90,7 @@ const useModules = () => {
     totalCount,
     pageSize,
     pageOffset,
+    onchangePage,
     getModulesData,
     createModules,
     updateModules,
