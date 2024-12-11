@@ -18,7 +18,7 @@ public class ConnectorDAOImpl implements ConnectorDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Connector> get(ConnectorDTO dto) {
         try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<Connector> cbw = new CriteriaBuilderWrapper<>(Connector.class, session, dto);

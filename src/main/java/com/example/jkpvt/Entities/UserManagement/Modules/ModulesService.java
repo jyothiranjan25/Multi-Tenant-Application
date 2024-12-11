@@ -70,7 +70,7 @@ public class ModulesService {
         return new HashSet<>(resources);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public Modules getById(Long id) {
         return modulesRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ModulesMessages.MODULE_NOT_FOUND));

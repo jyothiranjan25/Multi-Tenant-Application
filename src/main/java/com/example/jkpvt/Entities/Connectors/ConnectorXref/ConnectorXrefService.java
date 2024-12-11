@@ -16,7 +16,7 @@ public class ConnectorXrefService {
     private final ConnectorXrefMapper mapper;
     private final ConnectorXrefRepository repository;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ConnectorXrefDTO> get(ConnectorXrefDTO connectorDTO) {
         List<ConnectorXref> connector = connectorDAO.get(connectorDTO);
         return mapper.map(connector);

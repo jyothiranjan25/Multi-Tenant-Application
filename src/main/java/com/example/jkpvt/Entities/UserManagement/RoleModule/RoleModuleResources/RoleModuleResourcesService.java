@@ -18,7 +18,7 @@ public class RoleModuleResourcesService {
     private final RoleModuleResourcesDAO dao;
     private final RoleModuleResourcesMapper mapper;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RoleModuleResourcesDTO> get(RoleModuleResourcesDTO dto) {
         return mapper.map(dao.get(dto));
     }
