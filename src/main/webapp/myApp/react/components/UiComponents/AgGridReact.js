@@ -10,30 +10,8 @@ import TablePagination from '@mui/material/TablePagination';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, CsvExportModule]);
 
-const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
-  // Color Scheme
-  const theme = useColorScheme();
-  const colorScheme = theme.colorScheme === 'dark';
-  const darkTheme = colorScheme ? 'ag-theme-quartz-dark' : 'ag-theme-quartz';
-
-  const AgGridStyles = {
-    width: '100%',
-    height: '100%',
-    ...(darkTheme === 'ag-theme-quartz-dark' && {
-      '--ag-border-color': 'var(--template-palette-TableCell-border)',
-    }),
-    '--ag-header-background-color': 'none',
-    '--ag-background-color': 'none',
-    '--ag-wrapper-border-radius': 'none',
-    backgroundColor: 'transparent',
-  };
-
-  const PaginationStyles = {
-    border:
-      darkTheme === 'ag-theme-quartz-dark'
-        ? '1px solid var(--template-palette-TableCell-border)'
-        : 'var(--ag-borders) var(--ag-border-color)',
-  };
+const AgGrid = ({ ...props }) => {
+  const { AgGridStyles, PaginationStyles, darkTheme } = getAgGridStyles();
 
   // Grid Reference
   const gridRef = useRef();
@@ -60,21 +38,12 @@ const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
     gridRef.current.api.exportDataAsCsv();
   }, []);
 
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(2);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [total, setTotal] = React.useState(0);
 
-  React.useEffect(() => {
-    if (pageOffset !== undefined) setPage(pageOffset);
-  }, [pageOffset]);
-
-  React.useEffect(() => {
-    if (PageSize !== undefined) setRowsPerPage(PageSize);
-  }, [PageSize]);
-
-  React.useEffect(() => {
-    if (totalCount !== undefined) setTotal(totalCount);
-  }, [totalCount]);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -87,9 +56,9 @@ const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
         <AgGridReact
           ref={gridRef}
           defaultColDef={defaultColDef}
-          // pagination={true}
-          // paginationPageSize={paginationPageSize}
-          // paginationPageSizeSelector={paginationPageSizeSelector}
+          pagination={false}
+          paginationPageSize={paginationPageSize}
+          paginationPageSizeSelector={paginationPageSizeSelector}
           // Pass Modules to this individual grid
           modules={[ClientSideRowModelModule, CsvExportModule]}
           rowModelType={'clientSide'}
@@ -98,8 +67,8 @@ const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
         <div style={PaginationStyles}>
           <TablePagination
             component="div"
-            count={total}
-            onPageChange={onChange}
+            count={100}
+            onPageChange={handleChangePage}
             page={page}
             rowsPerPage={rowsPerPage}
             onRowsPerPageChange={handleChangeRowsPerPage}
@@ -110,6 +79,36 @@ const AgGrid = ({ totalCount, pageOffset, PageSize, onChange, ...props }) => {
       </div>
     </>
   );
+};
+
+const getAgGridStyles = () => {
+  // Color Scheme
+  const theme = useColorScheme();
+  const colorScheme = theme.colorScheme === 'dark';
+  const darkTheme = colorScheme ? 'ag-theme-quartz-dark' : 'ag-theme-quartz';
+
+  // AgGrid Styles
+  const AgGridStyles = {
+    width: '100%',
+    height: '100%',
+    ...(darkTheme === 'ag-theme-quartz-dark' && {
+      '--ag-border-color': 'var(--template-palette-TableCell-border)',
+    }),
+    '--ag-header-background-color': 'none',
+    '--ag-background-color': 'none',
+    '--ag-wrapper-border-radius': 'none',
+    backgroundColor: 'transparent',
+  };
+
+  // Pagination Styles
+  const PaginationStyles = {
+    border:
+      darkTheme === 'ag-theme-quartz-dark'
+        ? '1px solid var(--template-palette-TableCell-border)'
+        : 'var(--ag-borders) var(--ag-border-color)',
+  };
+
+  return { AgGridStyles, PaginationStyles, darkTheme };
 };
 
 export default AgGrid;

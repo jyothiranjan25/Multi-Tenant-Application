@@ -22,16 +22,7 @@ import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
 
 const Modules = (props) => {
-  const { getModules } = useGetAPIs();
-  const {
-    modules,
-    pageSize,
-    pageOffset,
-    totalCount,
-    onchangePage,
-    getModulesData,
-    deleteModules,
-  } = useModules();
+  const { modules, getModulesData, deleteModules } = useModules();
   const [isEdit, setIsEdit] = React.useState(false);
   const [editData, setEditData] = React.useState({});
   const [resTreeData, setResTreeData] = React.useState([]);
@@ -78,10 +69,6 @@ const Modules = (props) => {
 
   const handleModulesUpdate = () => {
     getModulesData();
-  };
-
-  const onchangePageHandler = (event, newPage) => {
-    onchangePage({ page_offset: newPage });
   };
 
   const columns = [
@@ -134,14 +121,7 @@ const Modules = (props) => {
             width: '100%',
           }}
         >
-          <AgGrid
-            rowData={modules}
-            columnDefs={columns}
-            totalCount={totalCount}
-            pageOffset={pageOffset}
-            PageSize={pageSize}
-            onChange={onchangePageHandler}
-          />
+          <AgGrid rowData={modules} columnDefs={columns} />
         </Box>
       </>
       <ModalDialog
