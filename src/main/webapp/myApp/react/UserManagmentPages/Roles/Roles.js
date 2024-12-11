@@ -21,14 +21,32 @@ const Roles = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [formData, setFormData] = React.useState({});
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageOffset, setPageOffset] = React.useState(0);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+
+  const paginationFilter = {
+    page_offset: pageOffset,
+    page_size: pageSize,
+  };
 
   React.useEffect(() => {
-    handleModulesUpdate();
-  }, []);
+    handleModulesUpdate(paginationFilter);
+  }, [pageSize, pageOffset]);
 
-  const handleModulesUpdate = React.useCallback(() => {
-    getRoles().then((data) => setRoles(data.data));
-  }, [getRoles]);
+  const handleModulesUpdate = React.useCallback(
+    (data) => {
+      const filterData = {
+        ...paginationFilter,
+        ...data,
+      };
+      getRoles(filterData).then((data) => {
+        setRoles(data.data);
+        setTotalRecords(data.total_count);
+      });
+    },
+    [getRoles]
+  );
 
   const openAddModal = () => {
     setOpenModal(true);
@@ -48,7 +66,7 @@ const Roles = () => {
   const handleDeleteClick = (params) => {
     return () => {
       deleteRoles(params).then(() => {
-        handleModulesUpdate();
+        handleModulesUpdate(paginationFilter);
       });
     };
   };
@@ -105,8 +123,12 @@ const Roles = () => {
         <AgGrid
           rowData={roles}
           columnDefs={columns}
-          pagination={false}
-          pageSize={10}
+          pagination={true}
+          totalRecords={totalRecords}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          pageOffset={pageOffset}
+          setPageOffset={setPageOffset}
         />
       </Box>
       {openModal && (

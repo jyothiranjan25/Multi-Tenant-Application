@@ -33,12 +33,13 @@ const Modules = (props) => {
   const [pageOffset, setPageOffset] = React.useState(0);
   const [totalRecords, setTotalRecords] = React.useState(0);
 
+  const paginationFilter = {
+    page_offset: pageOffset,
+    page_size: pageSize,
+  };
+
   React.useEffect(() => {
-    const data = {
-      page_offset: pageOffset,
-      page_size: pageSize,
-    };
-    handleModulesUpdate(data);
+    handleModulesUpdate(paginationFilter);
   }, [pageSize, pageOffset]);
 
   const handleClickOpen = () => {
@@ -75,7 +76,11 @@ const Modules = (props) => {
     setOpenResViewModal(false);
   };
 
-  const handleModulesUpdate = (filterData) => {
+  const handleModulesUpdate = (data) => {
+    const filterData = {
+      ...data,
+      ...paginationFilter,
+    };
     getModulesData(filterData).then((data) => {
       setModules(data.data);
       setTotalRecords(data.total_count);
