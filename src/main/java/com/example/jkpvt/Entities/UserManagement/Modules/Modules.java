@@ -64,7 +64,6 @@ public class Modules {
             inverseForeignKey = @ForeignKey(name = "fk_module_resources_resource_id")
     )
     @Fetch(FetchMode.SUBSELECT)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resources> resources = new HashSet<>();
 
