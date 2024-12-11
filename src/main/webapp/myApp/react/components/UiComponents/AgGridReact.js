@@ -69,7 +69,7 @@ const AgGrid = ({ pagination, ...props }) => {
 };
 
 const AgGridPagination = ({ rowsPerPage, setRowsPerPage, ...props }) => {
-  const [page, setPage] = React.useState(2);
+  const [page, setPage] = React.useState(0);
 
   const handleChangePage = (event, newPage) => {
     console.log('newPage', newPage, 'rowsPerPage', rowsPerPage);
