@@ -26,7 +26,7 @@ const Roles = () => {
   }, []);
 
   const handleModulesUpdate = React.useCallback(() => {
-    getRoles().then((data) => setRoles(data.map((item) => item.data)));
+    getRoles().then((data) => setRoles(data.data));
   }, [getRoles]);
 
   const openAddModal = () => {

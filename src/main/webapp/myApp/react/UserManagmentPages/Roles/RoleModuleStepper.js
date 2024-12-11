@@ -26,7 +26,7 @@ function RoleModuleStepper({
 
   React.useEffect(() => {
     getModules().then((data) => {
-      setModules(data.map((item) => item.data));
+      setModules(data.data);
     });
   }, []);
 

@@ -23,7 +23,7 @@ export default function MenuContent() {
 
   useEffect(() => {
     getRoles({ id: appUserRoleData?.roles?.id }).then((data) => {
-      setRoleModulesData(data.map((item) => item.data)[0]);
+      setRoleModulesData(data.data[0]);
     });
   }, []);
 

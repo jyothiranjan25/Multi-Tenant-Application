@@ -11,13 +11,7 @@ const useGetAPIs = () => {
       const result = await response.json();
       const data = result.data;
       if (response.ok) {
-        return result
-          ? data.map((item) => ({
-              id: item.id,
-              name: item.group_name,
-              data: item,
-            }))
-          : [];
+        return result;
       } else {
         toast.error(result.message);
       }
@@ -36,11 +30,7 @@ const useGetAPIs = () => {
       const result = await response.json();
       const data = result.data;
       if (response.ok) {
-        return data.map((item) => ({
-          id: item.id,
-          name: item.resource_name,
-          data: item,
-        }));
+        return result;
       } else {
         toast.error(result.message);
       }
@@ -77,11 +67,7 @@ const useGetAPIs = () => {
       const result = await response.json();
       const data = result.data;
       if (response.ok) {
-        return data.map((item) => ({
-          id: item.id,
-          name: item.role_name,
-          data: item,
-        }));
+        return result;
       } else {
         toast.error(result.message);
       }
@@ -99,11 +85,7 @@ const useGetAPIs = () => {
       const result = await response.json();
       const data = result.data;
       if (response.ok) {
-        return data.map((item) => ({
-          id: item.id,
-          name: item.roles.role_name,
-          data: item,
-        }));
+        return result;
       }
     } catch (error) {
       console.log(error);

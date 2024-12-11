@@ -48,7 +48,7 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
       show_in_menu: true,
     };
     getResources(filterParams).then((data) => {
-      setResources(data.map((item) => item.data));
+      setResources(data.data);
     });
 
     if (isEdit) {
