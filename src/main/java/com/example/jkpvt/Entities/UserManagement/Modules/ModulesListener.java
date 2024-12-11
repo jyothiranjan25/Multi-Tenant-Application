@@ -30,11 +30,13 @@ public class ModulesListener implements ApplicationContextAware {
         if (modules.getModuleName() == null || modules.getModuleName().isEmpty()) {
             throw new CommonException(ModulesMessages.MODULE_NAME_MANDATORY);
         }
+        conditionsChecks(modules);
         checkForDuplicateGroupName(modules);
     }
 
     @PreUpdate
     public void preUpdate(Modules modules) {
+        conditionsChecks(modules);
         checkForDuplicateGroupName(modules);
     }
 
@@ -43,15 +45,15 @@ public class ModulesListener implements ApplicationContextAware {
         // checkIDExists(modules);
     }
 
-    private void conditionsChecks(ModulesDTO modulesDTO, Modules modules, Set<Resources> resources) {
-        if (modulesDTO.getModuleUrl() == null && resources.isEmpty()) {
+    private void conditionsChecks(Modules modules) {
+        if ((modules.getModuleUrl() == null || modules.getModuleUrl().isEmpty()) && modules.getResources().isEmpty()) {
             throw new CommonException(ModulesMessages.MODULE_URL_REQUIRED);
         }
-        if (modulesDTO.getModuleUrl() != null && !resources.isEmpty()) {
+        if (!modules.getResources().isEmpty()) {
             modules.setModuleUrl(null);
         }
         // check parent and child resources
-        checkParentHasChild(resources);
+        checkParentHasChild(modules.getResources());
     }
 
     private void checkParentHasChild(Set<Resources> resources) {
