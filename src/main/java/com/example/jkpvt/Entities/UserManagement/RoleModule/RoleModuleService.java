@@ -62,8 +62,8 @@ public class RoleModuleService {
             if (existingRoleModule == null) {
                 addList.add(createNewRoleModule(roleModuleDTO, module));
             } else {
-                if (roleModuleDTO.getModuleOrder() != null) {
-                    existingRoleModule.setModuleOrder(roleModuleDTO.getModuleOrder());
+                if (module.getModuleOrder() != null) {
+                    existingRoleModule.setModuleOrder(module.getModuleOrder());
                 }
                 updateList.add(existingRoleModule);
             }
