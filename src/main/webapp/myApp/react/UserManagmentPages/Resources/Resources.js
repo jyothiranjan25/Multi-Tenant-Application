@@ -109,12 +109,17 @@ const Resources = (props) => {
 
   return (
     <AppLayout headerTitle={'Resources'}>
-      <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { sm: '100%', md: '1700px' },
+        }}
+      >
         <Grid
           container
           spacing={2}
           columns={12}
-          sx={{ mb: (theme) => theme.spacing(2) }}
+          sx={{ mb: (theme) => theme.spacing(2), maxHeight: 500 }}
         >
           <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <SimpleTreeView
@@ -127,6 +132,7 @@ const Resources = (props) => {
               sx={{
                 overflowX: 'hidden',
                 minHeight: 270,
+                maxHeight: 600,
                 flexGrow: 1,
                 maxWidth: 500,
               }}

@@ -103,7 +103,7 @@ const UserGroup = (props) => {
           container
           spacing={2}
           columns={12}
-          sx={{ mb: (theme) => theme.spacing(2) }}
+          sx={{ mb: (theme) => theme.spacing(2), maxHeight: 500 }}
         >
           <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <SimpleTreeView
@@ -114,8 +114,9 @@ const UserGroup = (props) => {
                 endIcon: EndIcon,
               }}
               sx={{
-                overflowX: 'hidden',
+                overflowX: 'scroll',
                 minHeight: 270,
+                maxHeight: 600,
                 flexGrow: 1,
                 maxWidth: 500,
               }}
