@@ -30,19 +30,19 @@ export default function MenuContent() {
   useEffect(() => {
     const dashboardItem = {
       id: 0,
+      order: 0,
       text: 'Dashboard',
       icon: <DashboardIcon />,
       props: { module_url: '/dashboard' },
     };
     if (roleModulesData && roleModulesData.modules_resources) {
-      const roleModules = roleModulesData.modules_resources
-        .sort((a, b) => a.id - b.id) // Sort by order property
-        .map((module) => ({
-          id: module?.model_order,
-          text: module.module_name,
-          icon: <DisabledByDefaultIcon />,
-          props: module,
-        }));
+      const roleModules = roleModulesData.modules_resources.map((module) => ({
+        id: module?.id,
+        order: module?.module_order,
+        text: module.module_name,
+        icon: <DisabledByDefaultIcon />,
+        props: module,
+      }));
       setMainListItems([dashboardItem, ...roleModules]);
     }
   }, [roleModulesData]);
@@ -60,7 +60,7 @@ export default function MenuContent() {
       <List dense>
         {mainListItems && mainListItems.length > 0
           ? mainListItems
-              .sort((a, b) => a.id - b.id)
+              .sort((a, b) => a.order - b.order)
               .map((item, index) => (
                 <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                   {/*<ListItemButton selected={index === 0}>*/}
