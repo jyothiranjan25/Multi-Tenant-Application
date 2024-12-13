@@ -14,7 +14,7 @@ import {
 import Grid from '@mui/material/Grid2';
 import { FormGrid } from '../../components/UiComponents/StyledComponents';
 import { Tree } from 'antd';
-import AppDesign from '../../components/UiComponents/AntDesign';
+import AntDesign from '../../components/UiComponents/AntDesign';
 import { useState } from 'react';
 
 const steps = ['Create a Module', 'Select Resources'];
@@ -207,19 +207,24 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
         )}
         {activeStep === 1 && (
           <Box>
-            <AppDesign>
-              <Tree
-                showLine
-                checkable
-                onCheck={onCheck}
-                checkedKeys={checkedKeys}
-                treeData={treeData}
-                rootStyle={{
-                  background: 'none',
-                  backgroundColor: 'none',
-                }}
-              />
-            </AppDesign>
+            <AntDesign>
+              <Box>
+                <Tree
+                  showLine
+                  checkable
+                  onCheck={onCheck}
+                  checkedKeys={checkedKeys}
+                  treeData={treeData}
+                  rootStyle={{
+                    background: 'none',
+                    backgroundColor: 'none',
+                    overflowX: 'scroll',
+                    maxHeight: 280,
+                    flexGrow: 1,
+                  }}
+                />
+              </Box>
+            </AntDesign>
           </Box>
         )}
       </Card>
