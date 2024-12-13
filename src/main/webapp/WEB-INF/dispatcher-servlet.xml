@@ -19,5 +19,6 @@
     <mvc:view-controller path="/resources" view-name="Resources"/>
     <mvc:view-controller path="/modules" view-name="Modules"/>
     <mvc:view-controller path="/roles" view-name="Roles"/>
+    <mvc:view-controller path="/appUsers" view-name="AppUsers"/>
     <!-- End User Management -->
 </beans>
