@@ -39,7 +39,11 @@ public class RolesService {
         Roles roles = mapper.map(rolesDTO);
         roles = repository.save(roles);
         RolesDTO rolesDTO1 = mapper.map(roles);
-        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO, roles));
+        if(rolesDTO.getAddModules() != null && !rolesDTO.getAddModules().isEmpty()) {
+            roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO, roles));
+        }else{
+            throw new CommonException(RolesMessages.ROLE_MODULE_MANDATORY);
+        }
         return rolesDTO1;
     }
 

@@ -38,6 +38,7 @@ ROLES:
   ROLE_NOT_FOUND: "Role not found"
   ROLE_NAME_MANDATORY: "Role name is mandatory"
   ROLE_NAME_DUPLICATE: "Role name %1$s already exists"
+  ROLE_MODULE_MANDATORY: "Please select atleast one module"
 
 ROLE_MODULE:
   ROLE_MODULE_DUPLICATE: "Role module already exists"
