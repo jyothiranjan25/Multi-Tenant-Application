@@ -2,6 +2,7 @@ Common_Messages:
   APPLICATION_ERROR: "Something went wrong"
   USER_GROUP_NOT_FOUND: "User group not found for user"
   DATA_DELETE_SUCCESS: "Data deleted successfully"
+  DATA_SAVE_SUCCESS: "Data saved successfully"
 
 USER_GROUP:
   ID_MANDATORY: "User group ID is mandatory"
