@@ -71,7 +71,7 @@ public class ResourcesService {
                 .orElseThrow(() -> new CommonException(ResourcesMessages.RESOURCE_NOT_FOUND));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Resources> getByIds(List<Long> ids) {
         return repository.findByIdIn(ids);
     }
