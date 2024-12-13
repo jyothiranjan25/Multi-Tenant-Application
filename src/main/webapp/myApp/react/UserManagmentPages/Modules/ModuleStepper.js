@@ -21,6 +21,7 @@ const steps = ['Create a Module', 'Select Resources'];
 
 const transformDataToTreeData = (data, ParentId) => {
   return data
+    .filter((node) => node.child_resources || node.resource_url != '#')
     .sort((a, b) => a.id - b.id)
     .map((node) => {
       const key = ParentId ? `${ParentId}.${node.id}` : `${node.id}`;

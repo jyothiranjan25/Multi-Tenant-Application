@@ -213,7 +213,7 @@ const Resources = (props) => {
                       onChange={handleInputChange}
                     />
                   </FormGrid>
-                  {hideAddChild ? (
+                  {isAddingChild || hideAddChild ? (
                     <FormGrid size={{ xs: 12 }}>
                       <FormLabel>URL</FormLabel>
                       <OutlinedInput
