@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
         org.springdoc.webmvc.ui.SwaggerConfig.class,
         org.springdoc.core.properties.SwaggerUiConfigProperties.class,
         org.springdoc.core.properties.SwaggerUiOAuthProperties.class,
-        org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
+        org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration.class})
 public class OpenApiConfig {
     @Bean
     public GroupedOpenApi defaultApi() {
