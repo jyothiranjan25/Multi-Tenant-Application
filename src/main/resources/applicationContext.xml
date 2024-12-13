@@ -20,6 +20,11 @@
     <task:annotation-driven/>
     <!-- /Enable scheduling -->
 
+    <!-- Resource handler for serving static content -->
+    <mvc:resources mapping="/static/**" location="/myApp/build/static/"/>
+    <mvc:resources mapping="/public/**" location="/myApp/public/"/>
+    <mvc:resources mapping="/myApp/**" location="/myApp/"/>
+
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
 

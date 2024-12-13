@@ -44,11 +44,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                     writer.write(jsonResponse);
                     writer.flush();
                 }
-            } else {
-                // Redirect to base URL + /login
-                String contextPath = servletContext.getContextPath();
-                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + contextPath;
-                response.sendRedirect(baseUrl + "/login");
             }
         } catch (Exception e) {
             e.printStackTrace();
