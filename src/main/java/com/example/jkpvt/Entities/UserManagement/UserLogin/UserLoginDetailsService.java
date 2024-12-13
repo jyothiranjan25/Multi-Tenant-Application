@@ -1,5 +1,8 @@
 package com.example.jkpvt.Entities.UserManagement.UserLogin;
 
+import com.example.jkpvt.Core.ExceptionHandling.CommonException;
+import com.example.jkpvt.Core.Messages.CommonMessages;
+import com.example.jkpvt.Core.Messages.Messages;
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
 import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRolesDTO;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +32,13 @@ public class UserLoginDetailsService {
         return mapper.map(userLoginDetails);
     }
 
-    public void storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {
-        SessionStorageUtil.setUserGroup(appUserRolesDTO.getUserGroup());
-        SessionStorageUtil.setAppUserRole(appUserRolesDTO);
+    public String storeUserLoginDetails(AppUserRolesDTO appUserRolesDTO) {
+        try {
+            SessionStorageUtil.setUserGroup(appUserRolesDTO.getUserGroup());
+            SessionStorageUtil.setAppUserRole(appUserRolesDTO);
+            return Messages.getMessage(CommonMessages.DATA_SAVE_SUCCESS).getMessage();
+        } catch (Exception e) {
+            throw new CommonException(CommonMessages.APPLICATION_ERROR);
+        }
     }
 }
