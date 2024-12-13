@@ -41,7 +41,7 @@ public class ModulesService {
     public ModulesDTO update(ModulesDTO modulesDTO) {
         Modules modules = getById(modulesDTO.getId());
         updateModules(modules, modulesDTO);
-        modulesRepository.save(modules);
+        modulesRepository.saveAndFlush(modules);
         return mapper.map(modules);
     }
 
@@ -77,6 +77,7 @@ public class ModulesService {
     }
 
     private void updateModules(Modules modules, ModulesDTO modulesDTO) {
+        setResources(modules, modulesDTO);
         if (modulesDTO.getModuleName() != null) {
             modules.setModuleName(modulesDTO.getModuleName());
         }
@@ -86,7 +87,6 @@ public class ModulesService {
         if (modulesDTO.getModuleUrl() != null) {
             modules.setModuleUrl(modulesDTO.getModuleUrl());
         }
-        setResources(modules, modulesDTO);
     }
 
     private void setResources(Modules modules, ModulesDTO modulesDTO) {
@@ -106,7 +106,7 @@ public class ModulesService {
         return modulesDTOS;
     }
 
-    public List<ModulesDTO> MapToModelDto(List<Modules> modules,Long roleId) {
+    public List<ModulesDTO> MapToModelDto(List<Modules> modules, Long roleId) {
         List<ModulesDTO> modulesDTOS = new ArrayList<>();
         for (Modules module : modules) {
             ModulesDTO modulesDTO = mapper.map(module);

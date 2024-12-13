@@ -9,7 +9,8 @@ public enum AppUserRolesMessages implements MessagesCodes {
     USER_GROUP_IS_MANDATORY("APP_USER_ROLE.USER_GROUP_IS_MANDATORY"),
     ROLE_ALREADY_EXISTS("APP_USER_ROLE.ROLE_ALREADY_EXISTS"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     AppUserRolesMessages(String message) {
         this.message = message;

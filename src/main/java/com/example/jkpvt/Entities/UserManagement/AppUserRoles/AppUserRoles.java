@@ -3,14 +3,13 @@ package com.example.jkpvt.Entities.UserManagement.AppUserRoles;
 import com.example.jkpvt.Entities.UserManagement.AppUser.AppUser;
 import com.example.jkpvt.Entities.UserManagement.Roles.Roles;
 import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroup;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 
 @Getter
@@ -20,7 +19,7 @@ import org.hibernate.envers.Audited;
         @Index(name = "idx_app_user_roles_app_user_id", columnList = "app_user_id"),
         @Index(name = "idx_app_user_roles_role_id", columnList = "role_id"),
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uk_app_user_roles_app_user_id_role_id_user_group_id", columnNames = {"app_user_id", "role_id","user_group_id"})
+        @UniqueConstraint(name = "uk_app_user_roles_app_user_id_role_id_user_group_id", columnNames = {"app_user_id", "role_id", "user_group_id"})
 })
 @EntityListeners(AppUserRolesListener.class)
 @Cacheable
@@ -34,19 +33,16 @@ public class AppUserRoles {
     private Long id;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "app_user_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_app_user_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AppUser appUser;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_role_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Roles roles;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "user_group_id", foreignKey = @ForeignKey(name = "fk_app_user_roles_user_group_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserGroup userGroup;

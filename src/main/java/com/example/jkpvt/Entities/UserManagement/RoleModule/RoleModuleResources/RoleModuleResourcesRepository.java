@@ -11,5 +11,5 @@ import java.util.List;
 
 @Repository
 public interface RoleModuleResourcesRepository extends JpaRepository<RoleModuleResources, Long> {
-   List<RoleModuleResources> findByRoleInAndModuleInAndResourceIn(Collection<Roles> role, Collection<Modules> module, Collection<Resources> resource);
+    List<RoleModuleResources> findByRoleInAndModuleInAndResourceIn(Collection<Roles> role, Collection<Modules> module, Collection<Resources> resource);
 }

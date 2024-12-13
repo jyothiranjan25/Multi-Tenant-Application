@@ -26,7 +26,7 @@ public class RoleModuleService {
     private final RoleModuleDAO dao;
     private final RoleModuleResourcesService roleModuleResourcesService;
 
-    @Transactional(readOnly = true,propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<RoleModuleDTO> get(RoleModuleDTO roleModuleDTO) {
         List<RoleModule> roleModules = dao.get(roleModuleDTO);
         return mapper.map(roleModules);
@@ -62,19 +62,19 @@ public class RoleModuleService {
             if (existingRoleModule == null) {
                 addList.add(createNewRoleModule(roleModuleDTO, module));
             } else {
-                if(roleModuleDTO.getModuleOrder() != null) {
-                    existingRoleModule.setModuleOrder(roleModuleDTO.getModuleOrder());
+                if (module.getModuleOrder() != null) {
+                    existingRoleModule.setModuleOrder(module.getModuleOrder());
                 }
                 updateList.add(existingRoleModule);
             }
         }
 
         List<RoleModule> savedModules = new ArrayList<>();
-        if(!addList.isEmpty()){
+        if (!addList.isEmpty()) {
             roleModuleResourcesService.save(addList);
             savedModules.addAll(repository.saveAll(addList));
         }
-        if(!updateList.isEmpty())savedModules.addAll(repository.saveAll(updateList));
+        if (!updateList.isEmpty()) savedModules.addAll(repository.saveAll(updateList));
         return savedModules;
     }
 
@@ -94,7 +94,7 @@ public class RoleModuleService {
             modules.add(module);
         });
         List<RoleModule> modulesToRemove = getByRoleIdAndModulesIn(roleId, modules);
-        if(!modulesToRemove.isEmpty()){
+        if (!modulesToRemove.isEmpty()) {
             roleModuleResourcesService.delete(modulesToRemove);
             repository.deleteAll(modulesToRemove);
         }

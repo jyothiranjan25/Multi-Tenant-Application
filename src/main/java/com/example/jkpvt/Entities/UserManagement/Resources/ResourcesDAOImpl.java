@@ -22,7 +22,7 @@ public class ResourcesDAOImpl implements ResourcesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<Resources> get(ResourcesDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<Resources> cbw = new CriteriaBuilderWrapper<>(Resources.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,7 +32,7 @@ public class ResourcesDAOImpl implements ResourcesDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<Resources> cbw, ResourcesDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
         if (dto.getResourceName() != null) {
             cbw.ILike("resourceName", dto.getResourceName());

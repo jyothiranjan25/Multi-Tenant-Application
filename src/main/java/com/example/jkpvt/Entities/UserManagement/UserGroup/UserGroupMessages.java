@@ -9,7 +9,8 @@ public enum UserGroupMessages implements MessagesCodes {
     USER_GROUP_HAS_CHILDREN("USER_GROUP.USER_GROUP_HAS_CHILDREN"),
     USER_GROUP_NOT_FOUND("USER_GROUP.USER_GROUP_NOT_FOUND"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     UserGroupMessages(String message) {
         this.message = message;

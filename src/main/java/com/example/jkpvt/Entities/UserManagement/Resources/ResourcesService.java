@@ -43,7 +43,7 @@ public class ResourcesService {
     public ResourcesDTO update(ResourcesDTO resourcesDTO) {
         Resources resources = getById(resourcesDTO.getId());
         updateResourcesData(resources, resourcesDTO);
-        resources = repository.save(resources);
+        resources = repository.saveAndFlush(resources);
         return mapper.map(resources);
     }
 
@@ -71,7 +71,7 @@ public class ResourcesService {
                 .orElseThrow(() -> new CommonException(ResourcesMessages.RESOURCE_NOT_FOUND));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Resources> getByIds(List<Long> ids) {
         return repository.findByIdIn(ids);
     }

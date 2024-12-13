@@ -2,14 +2,13 @@ package com.example.jkpvt.Entities.UserManagement.RoleModule;
 
 import com.example.jkpvt.Entities.UserManagement.Modules.Modules;
 import com.example.jkpvt.Entities.UserManagement.Roles.Roles;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 
 @Getter
@@ -34,13 +33,11 @@ public class RoleModule {
     private Long id;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "fk_role_module_role_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Roles role;
 
     @ManyToOne
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "module_id", foreignKey = @ForeignKey(name = "fk_role_module_module_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Modules module;

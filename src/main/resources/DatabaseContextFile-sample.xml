@@ -5,7 +5,7 @@
 
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" primary="true">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/test"/>
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/spring"/>
         <property name="username" value="postgres"/>
         <property name="password" value="postgres"/>
 

@@ -10,7 +10,8 @@ public enum ModulesMessages implements MessagesCodes {
     MODULE_CHILD_REQUIRED_PARENT("MODULES.MODULE_CHILD_REQUIRED_PARENT"),
     MODULE_NAME_DUPLICATE("MODULES.MODULE_NAME_DUPLICATE"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     ModulesMessages(String message) {
         this.message = message;

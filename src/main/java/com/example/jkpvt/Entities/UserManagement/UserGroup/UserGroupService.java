@@ -68,7 +68,7 @@ public class UserGroupService {
             userGroup.setGroupDescription(userGroupDTO.getGroupDescription());
         }
 
-        userGroup = repository.save(userGroup);
+        userGroup = repository.saveAndFlush(userGroup);
         return mapper.map(userGroup);
     }
 

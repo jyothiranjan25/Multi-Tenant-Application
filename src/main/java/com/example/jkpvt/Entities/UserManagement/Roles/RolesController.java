@@ -24,17 +24,17 @@ public class RolesController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    private RolesDTO Create(@RequestBody RolesDTO rolesDTO) {
+    private RolesDTO create(@RequestBody RolesDTO rolesDTO) {
         return rolesService.create(rolesDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PATCH)
-    private RolesDTO Update(@RequestBody RolesDTO rolesDTO) {
+    private RolesDTO update(@RequestBody RolesDTO rolesDTO) {
         return rolesService.update(rolesDTO);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    private String Delete(@RequestBody RolesDTO rolesDTO) {
+    private String delete(@RequestBody RolesDTO rolesDTO) {
         return rolesService.delete(rolesDTO);
     }
 
