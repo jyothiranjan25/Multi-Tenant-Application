@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CustomRichTreeView from '../../components/UiComponents/CustomRichTreeView';
 import * as React from 'react';
 
-const ViewResourcesModalDialog = ({ openModal, onClose, data }) => {
+const ViewResourcesModal = ({ openModal, onClose, data }) => {
   const treeData = mapTreeData(data);
   return (
     <Dialog
@@ -57,4 +57,4 @@ const mapTreeData = (params) => {
     }));
 };
 
-export default ViewResourcesModalDialog;
+export default ViewResourcesModal;

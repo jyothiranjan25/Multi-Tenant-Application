@@ -2,7 +2,7 @@ import * as React from 'react';
 import AppLayout from '../../components/AppLayout';
 import useModules from './useModules';
 import ModuleStepper from './ModuleStepper';
-import ViewResourcesModalDialog from './ViewResourcesModalDialog';
+import ViewResourcesModal from './ViewResourcesModal';
 import AgGrid from '../../components/UiComponents/AgGridReact';
 import ActionCellRenderer from '../../components/UiComponents/ActionCell';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
@@ -156,7 +156,7 @@ const Modules = (props) => {
         onClose={handleClose}
         onModulesUpdate={handleModulesUpdate}
       />
-      <ViewResourcesModalDialog
+      <ViewResourcesModal
         openModal={openResViewModal}
         onClose={handleClose}
         data={resTreeData}
