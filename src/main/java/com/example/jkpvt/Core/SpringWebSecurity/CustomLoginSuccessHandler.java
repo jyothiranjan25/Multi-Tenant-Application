@@ -1,9 +1,9 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
-import com.example.jkpvt.UserManagement.AppUser.AppUserDTO;
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsDTO;
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsService;
+import com.example.jkpvt.Entities.UserManagement.AppUser.AppUserDTO;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetailsDTO;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetailsService;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

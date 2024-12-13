@@ -1,9 +1,7 @@
 package com.example.jkpvt.Core;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-@Slf4j
 @Service
-@EnableScheduling
 public class AuditTablesCleanupService {
 
     @Autowired
@@ -43,11 +39,12 @@ public class AuditTablesCleanupService {
                 jdbcTemplate.update(deleteAuditSql, thresholdEpochMillis);
             }
 
+            if(!auditTables.isEmpty()) {
             // Delete from REVINFO table
             String deleteRevInfoSql = "DELETE FROM REVINFO WHERE revtstmp < ?";
             System.out.println("Executing SQL: " + deleteRevInfoSql + " with thresholdEpochMillis: " + thresholdEpochMillis);
             jdbcTemplate.update(deleteRevInfoSql, thresholdEpochMillis);
-
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

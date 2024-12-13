@@ -1,30 +1,24 @@
 package com.example.jkpvt.Core.AbstractModel;
 
 import com.example.jkpvt.Core.SessionStorageData.SessionStorageUtil;
+import com.example.jkpvt.Entities.UserManagement.UserGroup.UserGroupDTO;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-
-import java.time.LocalDateTime;
 
 public class BaseEntityListener {
 
     @PrePersist
-    public void prePersist(BaseAbstractModel<?> entity) {
-        String userGroup = SessionStorageUtil.getUserGroup();
+    public void prePersist(BaseAbstractModel entity) {
+        UserGroupDTO userGroup = SessionStorageUtil.getUserGroup();
         String modifiedBy = SessionStorageUtil.getUserName();
-        LocalDateTime modifiedDate = LocalDateTime.now();
 
-        entity.setUserGroup(userGroup);
+        entity.setModifiedUserGroup(userGroup.getQualifiedName());
         entity.setModifiedBy(modifiedBy);
-        entity.setModifiedDate(modifiedDate);
     }
 
     @PreUpdate
-    public void PreUpdate(BaseAbstractModel<?> entity) {
+    public void PreUpdate(BaseAbstractModel entity) {
         String modifiedBy = SessionStorageUtil.getUserName();
-        LocalDateTime modifiedDate = LocalDateTime.now();
-
         entity.setModifiedBy(modifiedBy);
-        entity.setModifiedDate(modifiedDate);
     }
 }

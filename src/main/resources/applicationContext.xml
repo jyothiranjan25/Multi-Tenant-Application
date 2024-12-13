@@ -3,9 +3,9 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:cache="http://www.springframework.org/schema/cache"
-       xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!-- Enable autowire -->
     <context:annotation-config/>
@@ -15,6 +15,10 @@
     <!-- Enable JPA repositories -->
     <jpa:repositories base-package="com.example.jkpvt"/>
     <!-- /Enable JPA repositories -->
+
+    <!-- Enable scheduling -->
+    <task:annotation-driven/>
+    <!-- /Enable scheduling -->
 
     <!-- Importing other configuration files -->
     <import resource="classpath:DatabaseContextFile.xml"/>
@@ -29,7 +33,7 @@
         </property>
         <property name="jpaProperties">
             <props>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="format_sql">true</prop>
                 <prop key="hibernate.transaction.jta.platform">
@@ -39,8 +43,9 @@
                 <!-- EhCache configuration -->
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
-                <prop key="hibernate.default_batch_fetch_size">10</prop>
                 <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="org.hibernate.jdbc.batch_size">50</prop>
+                <prop key="org.hibernate.log_slow_query">true</prop>
                 <prop key="hibernate.cache.region.factory_class">
                     org.hibernate.cache.jcache.internal.JCacheRegionFactory
                 </prop>
@@ -71,4 +76,19 @@
 
     <!-- Enable annotation-based transaction management -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Define a TaskScheduler bean -->
+    <bean id="taskScheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+        <property name="poolSize" value="10"/>
+    </bean>
+
+    <!-- Bean for resolving placeholders in @Value -->
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="properties">
+            <util:properties>
+                <prop key="initialize.initialData.enabled">false</prop>
+                <prop key="initialize.initialData.path">classpath:/Database/InitialData.sql</prop>
+            </util:properties>
+        </property>
+    </bean>
 </beans>

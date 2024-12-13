@@ -25,17 +25,17 @@ VALUES (1, 'Super Admin', 'Admin Role','PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHht
     ON CONFLICT (name) DO NOTHING;
 
 -- Role Module Data
-INSERT INTO role_module (role_id, module_id,module_order)
-VALUES (1, 1, 1)
+INSERT INTO role_module (id,role_id, module_id,module_order)
+VALUES (1,1, 1, 1)
     ON CONFLICT (role_id, module_id) DO NOTHING;
-INSERT INTO role_module (role_id, module_id,module_order)
-VALUES (1, 2, 2)
+INSERT INTO role_module (id,role_id, module_id,module_order)
+VALUES (2,1, 2, 2)
     ON CONFLICT (role_id, module_id) DO NOTHING;
-INSERT INTO role_module (role_id, module_id,module_order)
-VALUES (1, 3, 3)
+INSERT INTO role_module (id,role_id, module_id,module_order)
+VALUES (3,1, 3, 3)
     ON CONFLICT (role_id, module_id) DO NOTHING;
-INSERT INTO role_module (role_id, module_id,module_order)
-VALUES (1, 4, 4)
+INSERT INTO role_module (id,role_id, module_id,module_order)
+VALUES (4,1, 4, 4)
     ON CONFLICT (role_id, module_id) DO NOTHING;
 
 -- App User Data
@@ -44,6 +44,6 @@ VALUES (1,'admin@example.com', '$2a$10$BwBuA2OsxYOD/uv48OVJcenwQa.01jrB6SEV58LR.
     ON CONFLICT (username) DO NOTHING;
 
 -- App User Role Data
-INSERT INTO app_user_roles (app_user_id, role_id,user_group)
-VALUES (1, 1,'JKPT')
-    ON CONFLICT (app_user_id, role_id,user_group) DO NOTHING;
+INSERT INTO app_user_roles (id,app_user_id, role_id,user_group_id)
+VALUES (1,1, 1,1)
+    ON CONFLICT (app_user_id, role_id,user_group_id) DO NOTHING;

@@ -1,7 +1,7 @@
 package com.example.jkpvt.Core.SpringWebSecurity;
 
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetails;
-import com.example.jkpvt.UserManagement.UserLogin.UserLoginDetailsRepository;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetails;
+import com.example.jkpvt.Entities.UserManagement.UserLogin.UserLoginDetailsRepository;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 import lombok.RequiredArgsConstructor;
