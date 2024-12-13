@@ -77,6 +77,7 @@ public class ModulesService {
     }
 
     private void updateModules(Modules modules, ModulesDTO modulesDTO) {
+        setResources(modules, modulesDTO);
         if (modulesDTO.getModuleName() != null) {
             modules.setModuleName(modulesDTO.getModuleName());
         }
@@ -86,7 +87,6 @@ public class ModulesService {
         if (modulesDTO.getModuleUrl() != null) {
             modules.setModuleUrl(modulesDTO.getModuleUrl());
         }
-        setResources(modules, modulesDTO);
     }
 
     private void setResources(Modules modules, ModulesDTO modulesDTO) {
