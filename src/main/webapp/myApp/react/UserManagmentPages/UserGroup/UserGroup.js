@@ -108,6 +108,7 @@ const UserGroup = (props) => {
           <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <SimpleTreeView
               aria-label="customized"
+              expansionTrigger="iconContainer"
               slots={{
                 expandIcon: ExpandIcon,
                 collapseIcon: CollapseIcon,

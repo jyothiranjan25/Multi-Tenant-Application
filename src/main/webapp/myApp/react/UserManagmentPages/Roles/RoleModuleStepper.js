@@ -236,23 +236,25 @@ const AddEditModuleForm = ({
   }, []);
 
   return (
-    <Box
-      sx={{
-        height: 320,
-        width: '100%',
-      }}
-    >
-      <AgGrid
-        rowData={updatedData}
-        columnDefs={columns}
-        rowSelection={rowSelection}
-        selectionColumnDef={selectionColumnDef}
-        onSelectionChanged={handleRowSelection}
-        onGridReady={(params) => (gridRef.current = params)}
-        onFirstDataRendered={onFirstDataRendered}
-        pageSize={10}
-      />
-    </Box>
+    <Card variant="outlined">
+      <Box
+        sx={{
+          height: 320,
+          width: '100%',
+        }}
+      >
+        <AgGrid
+          rowData={updatedData}
+          columnDefs={columns}
+          rowSelection={rowSelection}
+          selectionColumnDef={selectionColumnDef}
+          onSelectionChanged={handleRowSelection}
+          onGridReady={(params) => (gridRef.current = params)}
+          onFirstDataRendered={onFirstDataRendered}
+          pageSize={10}
+        />
+      </Box>
+    </Card>
   );
 };
 

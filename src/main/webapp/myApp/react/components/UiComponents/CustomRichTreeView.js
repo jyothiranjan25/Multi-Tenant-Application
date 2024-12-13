@@ -7,8 +7,9 @@ import {
   CustomTreeItem,
 } from './CustomSimpleTreeView';
 
-const CustomRichTreeView = ({ items }) => (
+const CustomRichTreeView = ({ items, ...props }) => (
   <RichTreeView
+    {...props}
     slots={{
       expandIcon: ExpandIcon,
       collapseIcon: CollapseIcon,
