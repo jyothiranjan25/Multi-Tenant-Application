@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.Json;
+package com.example.jkpvt.Core.Json.TypeAdapter;
 
 import com.google.gson.*;
 
@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TrimmedStringMapDeserializer implements JsonDeserializer<Map<String, String>> {
+public class MapStringDeserializer implements JsonDeserializer<Map<String, String>> {
     @Override
     public Map<String, String> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         Map<String, String> result = new HashMap<>();

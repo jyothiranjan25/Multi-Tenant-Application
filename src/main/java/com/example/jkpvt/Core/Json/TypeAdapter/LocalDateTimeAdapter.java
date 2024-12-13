@@ -1,4 +1,4 @@
-package com.example.jkpvt.Core.Json;
+package com.example.jkpvt.Core.Json.TypeAdapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
