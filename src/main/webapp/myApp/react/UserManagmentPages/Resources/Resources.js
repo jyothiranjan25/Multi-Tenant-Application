@@ -75,6 +75,7 @@ const Resources = (props) => {
     setIsFormChanged(false);
     setParentData({});
     setIsAddingChild(false);
+    setHideAddChild(false);
     event && event.preventDefault();
   };
 
@@ -206,7 +207,7 @@ const Resources = (props) => {
                       onChange={handleInputChange}
                     />
                   </FormGrid>
-                  {isAddingChild ? (
+                  {hideAddChild ? (
                     <FormGrid size={{ xs: 12 }}>
                       <FormLabel>URL</FormLabel>
                       <OutlinedInput
