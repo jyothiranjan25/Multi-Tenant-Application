@@ -45,7 +45,7 @@ public class ConnectorService {
         return mapper.map(connector);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Connector getById(Long id) {
         return repository.findById(id).orElseThrow(() -> {
             Object[] args = new Object[]{id};

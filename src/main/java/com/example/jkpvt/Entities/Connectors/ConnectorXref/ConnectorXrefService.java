@@ -67,7 +67,7 @@ public class ConnectorXrefService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ConnectorXref getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new CommonException("Connector not found"));
     }
