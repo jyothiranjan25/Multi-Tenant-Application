@@ -6,11 +6,9 @@ import useRoles from './useRoles';
 import GetAPIs from '../../components/GetApisService/GetAPIs';
 import AgGrid from '../../components/UiComponents/AgGridReact';
 import RoleModuleStepper from './RoleModuleStepper';
-import { GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ActionCellRenderer from '../../components/UiComponents/ActionCell';
+import ViewModuleResource from './ViewModuleResource';
 
 // Roles Component
 const Roles = () => {
@@ -21,6 +19,8 @@ const Roles = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [formData, setFormData] = React.useState({});
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const [viewModuleResData, setViewModuleResData] = React.useState({});
   const [pageSize, setPageSize] = React.useState(10);
   const [pageOffset, setPageOffset] = React.useState(0);
   const [totalRecords, setTotalRecords] = React.useState(0);
@@ -61,7 +61,12 @@ const Roles = () => {
     };
   };
 
-  const openViewModal = (params) => {};
+  const openModuleResourcesViewModal = (params) => {
+    return () => {
+      setOpenViewModal(true);
+      setViewModuleResData(params);
+    };
+  };
 
   const handleDeleteClick = (params) => {
     return () => {
@@ -73,6 +78,7 @@ const Roles = () => {
 
   const closeModals = () => {
     setOpenModal(false);
+    setOpenViewModal(false);
     setIsEdit(false);
   };
 
@@ -91,6 +97,7 @@ const Roles = () => {
       flex: 0.5,
       cellRenderer: (params) => (
         <ActionCellRenderer
+          onViewClick={openModuleResourcesViewModal(params.data)}
           onEditClick={openEditModal(params.data)}
           onDeleteClick={handleDeleteClick(params.data)}
         />
@@ -138,6 +145,13 @@ const Roles = () => {
           openModal={openModal}
           onClose={closeModals}
           onModulesUpdate={handleModulesUpdate}
+        />
+      )}
+      {openViewModal && (
+        <ViewModuleResource
+          openModal={openViewModal}
+          onClose={closeModals}
+          viewData={viewModuleResData}
         />
       )}
     </AppLayout>

@@ -12,7 +12,6 @@ import {
   EndIcon,
   CustomTreeItem,
 } from '../../components/UiComponents/CustomSimpleTreeView';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import useUserGroup from './useUserGroup';
 

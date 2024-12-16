@@ -207,26 +207,22 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
           </Box>
         )}
         {activeStep === 1 && (
-          <Box>
-            <AntDesign>
-              <Box>
-                <Tree
-                  showLine
-                  checkable
-                  onCheck={onCheck}
-                  checkedKeys={checkedKeys}
-                  treeData={treeData}
-                  rootStyle={{
-                    background: 'none',
-                    backgroundColor: 'none',
-                    overflowX: 'scroll',
-                    maxHeight: 280,
-                    flexGrow: 1,
-                  }}
-                />
-              </Box>
-            </AntDesign>
-          </Box>
+          <AntDesign>
+            <Tree
+              showLine
+              checkable
+              onCheck={onCheck}
+              checkedKeys={checkedKeys}
+              treeData={treeData}
+              rootStyle={{
+                background: 'none',
+                backgroundColor: 'none',
+                overflowX: 'scroll',
+                maxHeight: 280,
+                flexGrow: 1,
+              }}
+            />
+          </AntDesign>
         )}
       </Card>
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
