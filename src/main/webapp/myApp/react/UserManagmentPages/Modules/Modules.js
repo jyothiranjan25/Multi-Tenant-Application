@@ -2,7 +2,7 @@ import * as React from 'react';
 import AppLayout from '../../components/AppLayout';
 import useModules from './useModules';
 import ModuleStepper from './ModuleStepper';
-import ViewResourcesModalDialog from './ViewResourcesModalDialog';
+import ViewResourcesModal from './ViewResourcesModal';
 import AgGrid from '../../components/UiComponents/AgGridReact';
 import ActionCellRenderer from '../../components/UiComponents/ActionCell';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
@@ -22,25 +22,25 @@ import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
 
 const Modules = (props) => {
-  const { getModules } = useGetAPIs();
-  const {
-    modules,
-    onchangePage,
-    pageSize,
-    pageOffset,
-    totalCount,
-    getModulesData,
-    deleteModules,
-  } = useModules();
+  const { getModulesData, deleteModules } = useModules();
+  const [modules, setModules] = React.useState([]);
   const [isEdit, setIsEdit] = React.useState(false);
   const [editData, setEditData] = React.useState({});
   const [resTreeData, setResTreeData] = React.useState([]);
   const [openStepperModal, setOpenStepperModal] = React.useState(false);
   const [openResViewModal, setOpenResViewModal] = React.useState(false);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageOffset, setPageOffset] = React.useState(0);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+
+  const paginationFilter = {
+    page_offset: pageOffset,
+    page_size: pageSize,
+  };
 
   React.useEffect(() => {
-    handleModulesUpdate();
-  }, []);
+    handleModulesUpdate(paginationFilter);
+  }, [pageSize, pageOffset]);
 
   const handleClickOpen = () => {
     setIsEdit(false);
@@ -76,8 +76,15 @@ const Modules = (props) => {
     setOpenResViewModal(false);
   };
 
-  const handleModulesUpdate = () => {
-    getModulesData();
+  const handleModulesUpdate = (data) => {
+    const filterData = {
+      ...data,
+      ...paginationFilter,
+    };
+    getModulesData(filterData).then((data) => {
+      setModules(data.data);
+      setTotalRecords(data.total_count);
+    });
   };
 
   const columns = [
@@ -133,12 +140,12 @@ const Modules = (props) => {
           <AgGrid
             rowData={modules}
             columnDefs={columns}
-            totalCount={totalCount}
+            pagination={true}
+            totalRecords={totalRecords}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
             pageOffset={pageOffset}
-            PageSize={pageSize}
-            onChange={() => {
-              onchangePage();
-            }}
+            setPageOffset={setPageOffset}
           />
         </Box>
       </>
@@ -149,7 +156,7 @@ const Modules = (props) => {
         onClose={handleClose}
         onModulesUpdate={handleModulesUpdate}
       />
-      <ViewResourcesModalDialog
+      <ViewResourcesModal
         openModal={openResViewModal}
         onClose={handleClose}
         data={resTreeData}

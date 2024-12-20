@@ -16,7 +16,7 @@ public class ConnectorXrefService {
     private final ConnectorXrefMapper mapper;
     private final ConnectorXrefRepository repository;
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<ConnectorXrefDTO> get(ConnectorXrefDTO connectorDTO) {
         List<ConnectorXref> connector = connectorDAO.get(connectorDTO);
         return mapper.map(connector);
@@ -35,18 +35,18 @@ public class ConnectorXrefService {
 
     @Transactional
     public ConnectorXrefDTO update(ConnectorXrefDTO connectorDTO) {
-        try{
+        try {
             ConnectorXref connector = getById(connectorDTO.getId());
-            if(connectorDTO.getName() != null) {
+            if (connectorDTO.getName() != null) {
                 connector.setName(connectorDTO.getName());
             }
-            if(connectorDTO.getDescription() != null) {
+            if (connectorDTO.getDescription() != null) {
                 connector.setDescription(connectorDTO.getDescription());
             }
-            if(connectorDTO.getStatus() != null) {
+            if (connectorDTO.getStatus() != null) {
                 connector.setStatus(connectorDTO.getStatus());
             }
-            connector = repository.save(connector);
+            connector = repository.saveAndFlush(connector);
             return mapper.map(connector);
         } catch (Exception e) {
             throw new CommonException(e.getMessage());
@@ -67,7 +67,7 @@ public class ConnectorXrefService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ConnectorXref getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new CommonException("Connector not found"));
     }

@@ -11,7 +11,8 @@ public enum AppUserMessages implements MessagesCodes {
     EMAIL_DUPLICATE("APP_USER.EMAIL_DUPLICATE"),
     USER_NOT_FOUND("APP_USER.USER_NOT_FOUND"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     AppUserMessages(String message) {
         this.message = message;

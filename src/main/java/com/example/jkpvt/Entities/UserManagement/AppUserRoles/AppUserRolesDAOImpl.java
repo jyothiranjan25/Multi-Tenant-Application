@@ -22,7 +22,7 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public List<AppUserRoles> get(AppUserRolesDTO dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CriteriaBuilderWrapper<AppUserRoles> cbw = new CriteriaBuilderWrapper<>(AppUserRoles.class, session, dto);
             addPredicate(cbw, dto);
             return cbw.getResultList();
@@ -32,15 +32,15 @@ public class AppUserRolesDAOImpl implements AppUserRolesDAO {
     }
 
     private void addPredicate(CriteriaBuilderWrapper<AppUserRoles> cbw, AppUserRolesDTO dto) {
-        if(dto.getId() != null)
+        if (dto.getId() != null)
             cbw.Equal("id", dto.getId());
 
         cbw.join("appUser");
-        if(dto.getAppUserId() != null)
+        if (dto.getAppUserId() != null)
             cbw.Equal("appUser.id", dto.getAppUserId());
 
         cbw.join("roles");
-        if(dto.getRolesId() != null)
+        if (dto.getRolesId() != null)
             cbw.Equal("roles.id", dto.getRolesId());
     }
 }

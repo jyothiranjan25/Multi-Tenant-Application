@@ -8,7 +8,7 @@ const useUserGroup = () => {
 
   const get = async (data) => {
     getUserGroup(data).then((data) => {
-      setUserGroup(data.map((item) => item.data));
+      setUserGroup(data.data);
     });
   };
 

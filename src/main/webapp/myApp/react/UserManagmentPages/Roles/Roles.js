@@ -1,15 +1,14 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Box, CardHeader, CardContent, Tooltip, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import AppLayout from '../../components/AppLayout';
 import useRoles from './useRoles';
 import GetAPIs from '../../components/GetApisService/GetAPIs';
-import AgGrid from '../../components/UiComponents/MUIDataTable';
+import AgGrid from '../../components/UiComponents/AgGridReact';
 import RoleModuleStepper from './RoleModuleStepper';
-import { GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ActionCellRenderer from '../../components/UiComponents/ActionCell';
+import ViewModuleResource from './ViewModuleResource';
 
 // Roles Component
 const Roles = () => {
@@ -20,14 +19,34 @@ const Roles = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [formData, setFormData] = React.useState({});
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const [viewModuleResData, setViewModuleResData] = React.useState({});
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageOffset, setPageOffset] = React.useState(0);
+  const [totalRecords, setTotalRecords] = React.useState(0);
+
+  const paginationFilter = {
+    page_offset: pageOffset,
+    page_size: pageSize,
+  };
 
   React.useEffect(() => {
-    handleModulesUpdate();
-  }, []);
+    handleModulesUpdate(paginationFilter);
+  }, [pageSize, pageOffset]);
 
-  const handleModulesUpdate = React.useCallback(() => {
-    getRoles().then((data) => setRoles(data.map((item) => item.data)));
-  }, [getRoles]);
+  const handleModulesUpdate = React.useCallback(
+    (data) => {
+      const filterData = {
+        ...paginationFilter,
+        ...data,
+      };
+      getRoles(filterData).then((data) => {
+        setRoles(data.data);
+        setTotalRecords(data.total_count);
+      });
+    },
+    [getRoles]
+  );
 
   const openAddModal = () => {
     setOpenModal(true);
@@ -35,19 +54,31 @@ const Roles = () => {
   };
 
   const openEditModal = (params) => {
-    setIsEdit(true);
-    setFormData(params);
-    setOpenModal(true);
+    return () => {
+      setIsEdit(true);
+      setFormData(params);
+      setOpenModal(true);
+    };
   };
 
-  const openViewModal = (params) => {};
+  const openModuleResourcesViewModal = (params) => {
+    return () => {
+      setOpenViewModal(true);
+      setViewModuleResData(params);
+    };
+  };
 
   const handleDeleteClick = (params) => {
-    deleteRoles(params).then(handleModulesUpdate);
+    return () => {
+      deleteRoles(params).then(() => {
+        handleModulesUpdate(paginationFilter);
+      });
+    };
   };
 
   const closeModals = () => {
     setOpenModal(false);
+    setOpenViewModal(false);
     setIsEdit(false);
   };
 
@@ -61,26 +92,16 @@ const Roles = () => {
     },
     {
       field: 'actions',
-      type: 'actions',
       headerName: 'Actions',
+      filter: false,
       flex: 0.5,
-      cellClassName: 'actions',
-      getActions: (params) => {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={() => openEditModal(params.row)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => handleDeleteClick(params.row)}
-            color="inherit"
-          />,
-        ];
-      },
+      cellRenderer: (params) => (
+        <ActionCellRenderer
+          onViewClick={openModuleResourcesViewModal(params.data)}
+          onEditClick={openEditModal(params.data)}
+          onDeleteClick={handleDeleteClick(params.data)}
+        />
+      ),
     },
   ];
 
@@ -102,13 +123,20 @@ const Roles = () => {
     >
       <Box
         sx={{
-          height: 590,
+          height: 570,
           width: '100%',
-          '& .actions': { color: 'text.secondary' },
-          '& .textPrimary': { color: 'text.primary' },
         }}
       >
-        <AgGrid rows={roles} columns={columns} />
+        <AgGrid
+          rowData={roles}
+          columnDefs={columns}
+          pagination={true}
+          totalRecords={totalRecords}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          pageOffset={pageOffset}
+          setPageOffset={setPageOffset}
+        />
       </Box>
       {openModal && (
         <RoleModuleStepper
@@ -117,6 +145,13 @@ const Roles = () => {
           openModal={openModal}
           onClose={closeModals}
           onModulesUpdate={handleModulesUpdate}
+        />
+      )}
+      {openViewModal && (
+        <ViewModuleResource
+          openModal={openViewModal}
+          onClose={closeModals}
+          viewData={viewModuleResData}
         />
       )}
     </AppLayout>

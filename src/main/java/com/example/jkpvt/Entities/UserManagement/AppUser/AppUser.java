@@ -2,13 +2,11 @@ package com.example.jkpvt.Entities.UserManagement.AppUser;
 
 import com.example.jkpvt.Entities.UserManagement.AppUserRoles.AppUserRoles;
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.envers.Audited;
 
 import java.util.Set;
@@ -16,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "app_user" , indexes = {
+@Table(name = "app_user", indexes = {
         @Index(name = "idx_app_user_username", columnList = "username"),
         @Index(name = "idx_app_user_email", columnList = "email"),
         @Index(name = "idx_app_user_is_admin", columnList = "is_admin"),
@@ -52,7 +50,5 @@ public class AppUser {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(FetchMode.SUBSELECT)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AppUserRoles> appUserRoles;
 }

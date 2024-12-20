@@ -2,14 +2,17 @@ import {
   Box,
   Dialog,
   DialogContent,
+  DialogActions,
   DialogTitle,
   IconButton,
+  Card,
+  Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomRichTreeView from '../../components/UiComponents/CustomRichTreeView';
 import * as React from 'react';
 
-const ViewResourcesModalDialog = ({ openModal, onClose, data }) => {
+const ViewResourcesModal = ({ openModal, onClose, data }) => {
   const treeData = mapTreeData(data);
   return (
     <Dialog
@@ -37,9 +40,19 @@ const ViewResourcesModalDialog = ({ openModal, onClose, data }) => {
       </DialogTitle>
       <DialogContent dividers>
         <Box sx={{ height: 300 }}>
-          <CustomRichTreeView items={treeData} />
+          <Card variant="outlined">
+            <CustomRichTreeView
+              items={treeData}
+              sx={{ overflowX: 'scroll', maxHeight: 290, flexGrow: 1 }}
+            />
+          </Card>
         </Box>
       </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={onClose}>
+          Close
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
@@ -57,4 +70,4 @@ const mapTreeData = (params) => {
     }));
 };
 
-export default ViewResourcesModalDialog;
+export default ViewResourcesModal;

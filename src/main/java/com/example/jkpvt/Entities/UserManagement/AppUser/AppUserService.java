@@ -27,7 +27,7 @@ public class AppUserService {
     }
 
     @Transactional
-    public AppUserDTO createAppUser(AppUserDTO appUserDTO) {
+    public AppUserDTO create(AppUserDTO appUserDTO) {
 
         if (appUserDTO.getPassword() != null) {
             appUserDTO.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
@@ -40,15 +40,15 @@ public class AppUserService {
     }
 
     @Transactional
-    public AppUserDTO updateAppUser(AppUserDTO appUserDTO) {
+    public AppUserDTO update(AppUserDTO appUserDTO) {
         AppUser appUser = getById(appUserDTO.getId());
         updateAppUserData(appUserDTO, appUser);
-        appUser = repository.save(appUser);
+        appUser = repository.saveAndFlush(appUser);
         return mapper.map(appUser);
     }
 
     @Transactional
-    public String deleteAppUser(AppUserDTO appUserDTO) {
+    public String delete(AppUserDTO appUserDTO) {
         if (repository.existsById(appUserDTO.getId())) {
             repository.deleteById(appUserDTO.getId());
             return Messages.getMessage(CommonMessages.DATA_DELETE_SUCCESS).getMessage();

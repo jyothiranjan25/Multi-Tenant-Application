@@ -39,7 +39,11 @@ public class RolesService {
         Roles roles = mapper.map(rolesDTO);
         roles = repository.save(roles);
         RolesDTO rolesDTO1 = mapper.map(roles);
-        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
+        if(rolesDTO.getAddModules() != null && !rolesDTO.getAddModules().isEmpty()) {
+            roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO, roles));
+        }else{
+            throw new CommonException(RolesMessages.ROLE_MODULE_MANDATORY);
+        }
         return rolesDTO1;
     }
 
@@ -48,8 +52,8 @@ public class RolesService {
     public RolesDTO update(RolesDTO rolesDTO) {
         Roles roles = getById(rolesDTO.getId());
         updateRoleData(roles, rolesDTO);
-        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO,roles));
-        roles = repository.save(roles);
+        roleModuleService.addOrRemove(setRoleModuleDTO(rolesDTO, roles));
+        roles = repository.saveAndFlush(roles);
         return mapper.map(roles);
     }
 
@@ -80,7 +84,7 @@ public class RolesService {
         }
     }
 
-    private RoleModuleDTO setRoleModuleDTO(RolesDTO rolesDTO,Roles roles) {
+    private RoleModuleDTO setRoleModuleDTO(RolesDTO rolesDTO, Roles roles) {
         RoleModuleDTO roleModuleDTO = new RoleModuleDTO();
         roleModuleDTO.setRoleId(roles.getId());
         roleModuleDTO.setAddModules(rolesDTO.getAddModules());
@@ -102,7 +106,7 @@ public class RolesService {
     private List<Modules> getModulesByRole(Roles role) {
         Map<Long, Modules> moduleMap = new HashMap<>();
 
-        if(!role.getRoleModuleResources().isEmpty()) {
+        if (!role.getRoleModuleResources().isEmpty()) {
             // group resources by module
             Map<Long, List<RoleModuleResources>> moduleResources = new HashMap<>();
             for (RoleModuleResources roleModuleResources : role.getRoleModuleResources()) {
@@ -120,7 +124,7 @@ public class RolesService {
                 Modules module = entry.getValue().getFirst().getModule();
                 Set<Resources> resources = new HashSet<>();
                 for (RoleModuleResources roleModuleResources : entry.getValue()) {
-                    if(!roleModuleResources.getIsVisible()){
+                    if (!roleModuleResources.getIsVisible()) {
                         continue;
                     }
                     resources.add(roleModuleResources.getResource());
@@ -132,7 +136,7 @@ public class RolesService {
 
         if (!role.getRoleModule().isEmpty()) {
             for (RoleModule roleModule : role.getRoleModule()) {
-                if(!moduleMap.containsKey(roleModule.getModule().getId())) {
+                if (!moduleMap.containsKey(roleModule.getModule().getId())) {
                     moduleMap.put(roleModule.getModule().getId(), roleModule.getModule());
                 }
             }

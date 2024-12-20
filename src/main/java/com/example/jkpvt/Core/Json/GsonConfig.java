@@ -1,5 +1,8 @@
 package com.example.jkpvt.Core.Json;
 
+import com.example.jkpvt.Core.Json.TypeAdapter.LocalDateTimeAdapter;
+import com.example.jkpvt.Core.Json.TypeAdapter.MapStringDeserializer;
+import com.example.jkpvt.Core.Json.TypeAdapter.StringTrimmerDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +30,9 @@ public class GsonConfig {
         // Register custom TypeAdapter for LocalDateTime
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         // Register the custom deserializer for Map<String, String> to trim all values
-        gsonBuilder.registerTypeAdapter(Map.class, new TrimmedStringMapDeserializer());
+        gsonBuilder.registerTypeAdapter(Map.class, new MapStringDeserializer());
+        // Register the custom deserializer for String to trim all values
+        gsonBuilder.registerTypeAdapter(String.class, new StringTrimmerDeserializer());
 
         // Create and return the custom Gson instance
         return gsonBuilder.create();

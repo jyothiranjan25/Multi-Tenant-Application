@@ -21,7 +21,7 @@ public class SearchFilterService {
 
     @Transactional(readOnly = true)
     public <T, U> List<T> search(Class<T> entityClass, String searchTerm, U dto) {
-        try(Session session = entityManager.unwrap(Session.class)) {
+        try (Session session = entityManager.unwrap(Session.class)) {
             CommonFilterDTO commonFilterDTO = (CommonFilterDTO) dto;
             // Get the criteria builder
             CriteriaBuilderWrapper<T> cbw = new CriteriaBuilderWrapper<>(entityClass, session, commonFilterDTO);
@@ -52,7 +52,7 @@ public class SearchFilterService {
     private void addStringTermPredicates(CriteriaBuilderWrapper cbw, String searchTerm, Field[] entityFields) {
         for (var field : entityFields) {
             if (field.getType().equals(String.class) || Number.class.isAssignableFrom(field.getType()) || field.getType().equals(Boolean.class) || field.getType().isEnum()) {
-                cbw.ILike(field.getName(), "%" + searchTerm + "%",false);
+                cbw.ILike(field.getName(), "%" + searchTerm + "%", false);
             }
         }
     }
@@ -62,11 +62,11 @@ public class SearchFilterService {
                 .filter(field -> field.getType().equals(String.class) || Number.class.isAssignableFrom(field.getType())
                         || field.getType().equals(Boolean.class) || field.getType().isEnum())
                 .forEach(field -> {
-                    cbw.ILike(field.getName(), "%" + searchTerm + "%",false);
+                    cbw.ILike(field.getName(), "%" + searchTerm + "%", false);
                 });
     }
 
-    private <U> void addDtoPredicates(CriteriaBuilderWrapper cbw, Field[] entityFields,Field[] dtoFields,U dto) {
+    private <U> void addDtoPredicates(CriteriaBuilderWrapper cbw, Field[] entityFields, Field[] dtoFields, U dto) {
         try {
             for (Field dtoField : dtoFields) {
                 dtoField.setAccessible(true);
@@ -74,7 +74,7 @@ public class SearchFilterService {
                     if (entityField.getName().equals(dtoField.getName()) && entityField.getType().equals(dtoField.getType())) {
                         Object value = dtoField.get(dto);
                         if (value != null && !value.toString().isEmpty()) {
-                            if(entityField.getType().equals(String.class))
+                            if (entityField.getType().equals(String.class))
                                 cbw.ILike(entityField.getName(), value.toString());
                             else
                                 cbw.Equal(entityField.getName(), value);
@@ -87,15 +87,15 @@ public class SearchFilterService {
         }
     }
 
-    private <U> void buildDtoPredicate(CriteriaBuilderWrapper cbw, Field[] entityFields,Field[] dtoFields,U dto) {
+    private <U> void buildDtoPredicate(CriteriaBuilderWrapper cbw, Field[] entityFields, Field[] dtoFields, U dto) {
         try {
             Arrays.stream(dtoFields).forEach(
-                    dtoField ->{
+                    dtoField -> {
                         dtoField.setAccessible(true);
                         Arrays.stream(entityFields)
                                 .filter(entityField -> entityField.getName().equals(dtoField.getName())
                                         && entityField.getType().equals(dtoField.getType()))
-                                .forEach(entityField ->{
+                                .forEach(entityField -> {
                                     try {
                                         Object value = dtoField.get(dto);
                                         if (value != null && !value.toString().isEmpty()) {

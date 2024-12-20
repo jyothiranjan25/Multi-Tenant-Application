@@ -12,7 +12,6 @@ import {
   EndIcon,
   CustomTreeItem,
 } from '../../components/UiComponents/CustomSimpleTreeView';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import useUserGroup from './useUserGroup';
 
@@ -103,19 +102,21 @@ const UserGroup = (props) => {
           container
           spacing={2}
           columns={12}
-          sx={{ mb: (theme) => theme.spacing(2) }}
+          sx={{ mb: (theme) => theme.spacing(2), maxHeight: 500 }}
         >
           <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <SimpleTreeView
               aria-label="customized"
+              expansionTrigger="iconContainer"
               slots={{
                 expandIcon: ExpandIcon,
                 collapseIcon: CollapseIcon,
                 endIcon: EndIcon,
               }}
               sx={{
-                overflowX: 'hidden',
+                overflowX: 'scroll',
                 minHeight: 270,
+                maxHeight: 600,
                 flexGrow: 1,
                 maxWidth: 500,
               }}

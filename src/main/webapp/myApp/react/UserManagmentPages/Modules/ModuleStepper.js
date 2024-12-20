@@ -14,13 +14,14 @@ import {
 import Grid from '@mui/material/Grid2';
 import { FormGrid } from '../../components/UiComponents/StyledComponents';
 import { Tree } from 'antd';
-import AppDesign from '../../components/UiComponents/AntDesign';
+import AntDesign from '../../components/UiComponents/AntDesign';
 import { useState } from 'react';
 
 const steps = ['Create a Module', 'Select Resources'];
 
 const transformDataToTreeData = (data, ParentId) => {
   return data
+    .filter((node) => node.child_resources || node.resource_url != '#')
     .sort((a, b) => a.id - b.id)
     .map((node) => {
       const key = ParentId ? `${ParentId}.${node.id}` : `${node.id}`;
@@ -48,7 +49,7 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
       show_in_menu: true,
     };
     getResources(filterParams).then((data) => {
-      setResources(data.map((item) => item.data));
+      setResources(data.data);
     });
 
     if (isEdit) {
@@ -206,21 +207,22 @@ function ModuleStepper({ isEdit, params, onClose, onModulesUpdate }) {
           </Box>
         )}
         {activeStep === 1 && (
-          <Box>
-            <AppDesign>
-              <Tree
-                showLine
-                checkable
-                onCheck={onCheck}
-                checkedKeys={checkedKeys}
-                treeData={treeData}
-                rootStyle={{
-                  background: 'none',
-                  backgroundColor: 'none',
-                }}
-              />
-            </AppDesign>
-          </Box>
+          <AntDesign>
+            <Tree
+              showLine
+              checkable
+              onCheck={onCheck}
+              checkedKeys={checkedKeys}
+              treeData={treeData}
+              rootStyle={{
+                background: 'none',
+                backgroundColor: 'none',
+                overflowX: 'scroll',
+                maxHeight: 280,
+                flexGrow: 1,
+              }}
+            />
+          </AntDesign>
         )}
       </Card>
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

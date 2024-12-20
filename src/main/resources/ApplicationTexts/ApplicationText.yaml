@@ -27,7 +27,7 @@ MODULES:
   ID_MANDATORY: "Module ID is mandatory"
   MODULE_NOT_FOUND: "Module not found"
   MODULE_NAME_MANDATORY: "Module name is mandatory"
-  MODULE_URL_REQUIRED: "Module URL is required"
+  MODULE_URL_REQUIRED: "Module URL is required or Resources must not be empty"
   MODULE_PARENT_REQUIRED_CHILD: "Parent resource should have child resource"
   MODULE_CHILD_REQUIRED_PARENT: "Child resource should have parent resource"
   MODULE_NAME_DUPLICATE: "Module name %1$s already exists"
@@ -38,6 +38,7 @@ ROLES:
   ROLE_NOT_FOUND: "Role not found"
   ROLE_NAME_MANDATORY: "Role name is mandatory"
   ROLE_NAME_DUPLICATE: "Role name %1$s already exists"
+  ROLE_MODULE_MANDATORY: "Please select atleast one module"
 
 ROLE_MODULE:
   ROLE_MODULE_DUPLICATE: "Role module already exists"

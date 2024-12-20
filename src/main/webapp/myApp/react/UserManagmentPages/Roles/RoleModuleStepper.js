@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useCallback } from 'react';
 import useRoles from './useRoles';
 import useGetAPIs from '../../components/GetApisService/GetAPIs';
 import MUIModal from '../../components/UiComponents/Modal';
@@ -22,11 +22,12 @@ function RoleModuleStepper({
   const [modules, setModules] = React.useState([]);
   const { createRoles, updateRoles } = useRoles();
   const selectedRowsRef = useRef([]);
+  const removedRowsRef = useRef([]);
   const { getModules } = useGetAPIs();
 
   React.useEffect(() => {
     getModules().then((data) => {
-      setModules(data.map((item) => item.data));
+      setModules(data.data);
     });
   }, []);
 
@@ -49,7 +50,10 @@ function RoleModuleStepper({
         id: item.id,
         module_order: item?.module_order,
       })),
+      remove_modules: removedRowsRef.current.map((item) => item.id),
     };
+
+    delete data.modules_resources;
 
     if (isEdit) {
       data.id = formData.id;
@@ -71,9 +75,13 @@ function RoleModuleStepper({
       handleInputChange={handleInputChange}
     />,
     <AddEditModuleForm
+      formData={formData}
       data={modules}
       onSelectedRowsChange={(rows) => {
         selectedRowsRef.current = rows;
+      }}
+      onRemovedRowsChange={(rows) => {
+        removedRowsRef.current = rows;
       }}
     />,
   ];
@@ -143,8 +151,24 @@ const AddEditRoleForm = ({ formData, handleInputChange }) => {
   );
 };
 
-const AddEditModuleForm = ({ data, onSelectedRowsChange }) => {
+const AddEditModuleForm = ({
+  formData,
+  data,
+  onSelectedRowsChange,
+  onRemovedRowsChange,
+}) => {
   const gridRef = useRef();
+
+  // Update data with module_order from formData if they match
+  const updatedData = data.map((item) => {
+    const matchedModule = formData.modules_resources?.find(
+      (module) => module.id === item.id
+    );
+    if (matchedModule) {
+      return { ...item, module_order: matchedModule.module_order };
+    }
+    return item;
+  });
 
   const columns = [
     {
@@ -187,35 +211,50 @@ const AddEditModuleForm = ({ data, onSelectedRowsChange }) => {
   }, []);
 
   const handleRowSelection = () => {
-    if (gridRef.current && gridRef.current.api) {
-      const selectedRows = gridRef.current.api.getSelectedRows();
-      onSelectedRowsChange(selectedRows);
-    }
+    const selectedNodes = gridRef.current.api.getSelectedNodes();
+    const selectedRows = selectedNodes.map((node) => node.data);
+
+    onSelectedRowsChange(selectedRows);
+
+    const unselectedRows = formData?.modules_resources.filter(
+      (module) => !selectedRows.some((row) => row.id === module.id)
+    );
+    onRemovedRowsChange(unselectedRows);
   };
 
+  const onFirstDataRendered = useCallback((params) => {
+    const nodesToSelect = [];
+    params.api.forEachNode((node) => {
+      const matchedModule = formData.modules_resources?.find(
+        (module) => module.id === node.data.id
+      );
+      if (matchedModule) {
+        nodesToSelect.push(node);
+      }
+    });
+    params.api.setNodesSelected({ nodes: nodesToSelect, newValue: true });
+  }, []);
+
   return (
-    <Box
-      sx={{
-        height: 320,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
-      <AgGrid
-        ref={gridRef}
-        rowData={data}
-        columnDefs={columns}
-        rowSelection={rowSelection}
-        selectionColumnDef={selectionColumnDef}
-        onSelectionChanged={handleRowSelection}
-        onGridReady={(params) => (gridRef.current = params)}
-      />
-    </Box>
+    <Card variant="outlined">
+      <Box
+        sx={{
+          height: 320,
+          width: '100%',
+        }}
+      >
+        <AgGrid
+          rowData={updatedData}
+          columnDefs={columns}
+          rowSelection={rowSelection}
+          selectionColumnDef={selectionColumnDef}
+          onSelectionChanged={handleRowSelection}
+          onGridReady={(params) => (gridRef.current = params)}
+          onFirstDataRendered={onFirstDataRendered}
+          pageSize={10}
+        />
+      </Box>
+    </Card>
   );
 };
 

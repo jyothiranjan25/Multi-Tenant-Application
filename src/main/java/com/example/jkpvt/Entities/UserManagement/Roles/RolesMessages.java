@@ -7,8 +7,10 @@ public enum RolesMessages implements MessagesCodes {
     ROLE_NAME_MANDATORY("ROLES.ROLE_NAME_MANDATORY"),
     ROLE_NAME_DUPLICATE("ROLES.ROLE_NAME_DUPLICATE"),
     ROLE_NOT_FOUND("ROLES.ROLE_NOT_FOUND"),
+    ROLE_MODULE_MANDATORY("ROLES.ROLE_MODULE_MANDATORY"),
 
-    ;private final String message;
+    ;
+    private final String message;
 
     RolesMessages(String message) {
         this.message = message;

@@ -7,7 +7,7 @@ const useResources = () => {
 
   const get = async (data) => {
     getResources(data).then((result) => {
-      setResources(result.map((item) => item.data));
+      setResources(result.data);
     });
   };
 

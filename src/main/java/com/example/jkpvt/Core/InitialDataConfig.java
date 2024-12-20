@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
-//@PropertySource("classpath:application.properties")
 public class InitialDataConfig {
 
     private final DataSource dataSource;

@@ -75,6 +75,7 @@ const Resources = (props) => {
     setIsFormChanged(false);
     setParentData({});
     setIsAddingChild(false);
+    setHideAddChild(false);
     event && event.preventDefault();
   };
 
@@ -108,16 +109,22 @@ const Resources = (props) => {
 
   return (
     <AppLayout headerTitle={'Resources'}>
-      <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: { sm: '100%', md: '1700px' },
+        }}
+      >
         <Grid
           container
           spacing={2}
           columns={12}
-          sx={{ mb: (theme) => theme.spacing(2) }}
+          sx={{ mb: (theme) => theme.spacing(2), maxHeight: 500 }}
         >
           <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <SimpleTreeView
               aria-label="customized"
+              expansionTrigger="iconContainer"
               slots={{
                 expandIcon: ExpandIcon,
                 collapseIcon: CollapseIcon,
@@ -126,6 +133,7 @@ const Resources = (props) => {
               sx={{
                 overflowX: 'hidden',
                 minHeight: 270,
+                maxHeight: 600,
                 flexGrow: 1,
                 maxWidth: 500,
               }}
@@ -206,19 +214,21 @@ const Resources = (props) => {
                       onChange={handleInputChange}
                     />
                   </FormGrid>
-                  <FormGrid size={{ xs: 12 }}>
-                    <FormLabel>URL</FormLabel>
-                    <OutlinedInput
-                      id="url"
-                      name="resource_url"
-                      type="text"
-                      placeholder="URL"
-                      autoComplete="off"
-                      size="small"
-                      value={formData.resource_url || ''}
-                      onChange={handleInputChange}
-                    />
-                  </FormGrid>
+                  {isAddingChild || hideAddChild ? (
+                    <FormGrid size={{ xs: 12 }}>
+                      <FormLabel>URL</FormLabel>
+                      <OutlinedInput
+                        id="url"
+                        name="resource_url"
+                        type="text"
+                        placeholder="URL"
+                        autoComplete="off"
+                        size="small"
+                        value={formData.resource_url || ''}
+                        onChange={handleInputChange}
+                      />
+                    </FormGrid>
+                  ) : null}
                   <FormGrid size={{ xs: 6 }}>
                     <FormLabel>Order</FormLabel>
                     <OutlinedInput
