@@ -12,7 +12,7 @@ const useSwitchRoles = () => {
 
   const get = async (data) => {
     getAppUserRoles(data).then((data) => {
-      setAppUserRoles(data.map((item) => item.data));
+      setAppUserRoles(data.data);
     });
   };
 
